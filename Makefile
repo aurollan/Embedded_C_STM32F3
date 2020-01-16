@@ -15,10 +15,11 @@ NAME = blinking_leds-$(CORE)
 CC = arm-none-eabi-gcc
 
 # STM32 library path
-DIR_STM = ./STM32F30x_DSP_StdPeriph_Lib_V1.23
+DIR_STM = STM32F30x_DSP_StdPeriph_Lib_V1.2.3
 
 DIR_INC = inc
 DIR_INC += $(DIR_STM)/Libraries/CMSIS/Include
+DIR_INC += $(DIR_STM)/Libraries/STM32F30x_StdPeriph_Driver/inc
 DIR_INC += $(DIR_STM)/Libraries/CMSIS/Device/ST/STM32F30x/Include
 		  
 DIR_ASM = asm
