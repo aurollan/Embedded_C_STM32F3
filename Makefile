@@ -37,7 +37,7 @@ FILE_SRC = main.c \
 		   system_stm32f30x.c
 
 FILE_OBJ = $(FILE_SRC:.c=.o)
-FILE_OBJ += $(FILE_ASM:.S=.o)
+# FILE_OBJ += $(FILE_ASM:.S=.o)
 OBJ = $(addprefix $(DIR_OBJ)/, $(FILE_OBJ))
 
 ASM = $(addprefix $(DIR_ASM)/, $(FILE_ASM))
@@ -102,7 +102,7 @@ debug:
 	@echo $(ASM)
 	@echo $(INCLUDE)
 	@echo "---------------------------------------------------------------------"
-$(NAME): $(OBJ)
+$(NAME): $(OBJ) $(ASM)
 	$(CC) $(OBJ) $(CFLAGS) $(LFLAGS) -o $@
 	# @echo "\033[33;32m=== Compilation $(NAME)...\t\t\tDONE"
 	@echo "---------------------------------------------------------------------"
@@ -114,15 +114,13 @@ $(DIR_OBJ)/%.o: $(DIR_SRC)/%.c
 	@echo "---------------------------------------------------------------------"
 
 clean: 
-	rm -rf *.map
-	rm -rf *.o
-	# @echo "\033[33;32m=== Cleaning project $(OBJ_DIR)...\t\tDONE"
-	@echo "---------------------------------------------------------------------"
+	@rm -rf *.map
+	@rm -rf obj
+	@echo "\033[33;32m=== Cleaning project $(DIR_OBJ) directory and $(NAME).map...\t\tDONE"
 
 fclean: clean
-	rm -rf $(NAME)	
-	# @echo "\033[33;32m=== Cleaning executable $(NAME)...\t\t\tDONE"
-	@echo "---------------------------------------------------------------------"
+	@rm -rf $(NAME)	
+	@echo "\033[33;32m=== Cleaning executable $(NAME)...\t\t\tDONE"
 
 re: fclean all
 
