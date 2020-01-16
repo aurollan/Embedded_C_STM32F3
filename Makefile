@@ -2,42 +2,45 @@
 .PHONY: all clean fclean
 
 ################################################################################
-#							CONFIG PROJECT									   #
+#								PROJECT	CONFIG 								   #
 ################################################################################
 
-# Project name
-NAME = blinking_leds
-# Selecting Core (STM32 DISCOVERY IS ARM M4)
+# Selecting Core (STM32F303VC DISCOVERY IS ARM M4)
 CORTEX_M = 4
 CORE = CM$(CORTEX_M)
+# Project name
+NAME = blinking_leds-$(CORE)
+
 # Compiler & Linker
 CC = arm-none-eabi-gcc
-# Startup code
-STARTUP = startup_ARM$(CORE).S
-STM_DIR = STM32F30x_DSP_StdPeriph_Lib_V1.2.3
 
-SRC_DIRS = $(STM_DIR)/Libraries/STM32F3xx_StdPeriph_Driver/src \
-		   $(STM_DIR)/Libraries/STM32F30x_I2C_CPAL_Driver/src \
-		   src \
+# STM32 library path
+DIR_STM = ./STM32F30x_DSP_StdPeriph_Lib_V1.23
 
-INC_DIRS = $(STM_DIR)/Libraries/STM32F3xx_StdPeriph_Driver/inc \
-		   $(STM_DIR)/Libraries/STM32F30x_I2C_CPAL_Driver/inc \
-		   $(STM_DIR)/Libraries/CMSIS/Include \
-		   $(STM_DIR)/Libraries/CMSIS/Device/ST/STM32F30x \
-		   inc \
-
-OBJ_DIR = obj
-
-vpath %.c  $(SRC_DIRS)
+DIR_INC = inc
+DIR_INC += $(DIR_STM)/Libraries/CMSIS/Include
+DIR_INC += $(DIR_STM)/Libraries/CMSIS/Device/ST/STM32F30x/Include
+		  
+DIR_ASM = asm
+DIR_SRC = src
+DIR_OBJ = obj
 
 ################################################################################
 #							PROJECT FILES									   #
 ################################################################################
 
-INC = $(addprefix -I, $(INC_DIRS))
-SRC = blinking_leds.c
-OBJ = $(addprefix $(OBJ_DIR)/, $(SRC:.c:.o))
+FILE_ASM = startup_stm32f303xc.S
 
+FILE_SRC = main.c \
+		   stm32f30x_it.c \
+		   system_stm32f30x.c
+
+FILE_OBJ = $(FILE_SRC:.c=.o)
+FILE_OBJ += $(FILE_ASM:.S=.o)
+OBJ = $(addprefix $(DIR_OBJ)/, $(FILE_OBJ))
+
+ASM = $(addprefix $(DIR_ASM)/, $(FILE_ASM))
+SRC = $(addprefix $(DIR_SRC)/, $(FILE_SRC))
 
 ################################################################################
 #							GCC COMPILATION FLAGS							   #
@@ -46,63 +49,79 @@ OBJ = $(addprefix $(OBJ_DIR)/, $(SRC:.c:.o))
 # Optimization flag (-O0 = no compiler optimization)
 OPTI = -O0
 # Debug flag including symbols for gdb
-DEBUG= -g
+DEBUG = -g
 # Catching all warning and making them error
 WE_FLAGS = -Werror -Wall -Wextra
-# Use semihosting or not
-USE_SEMIHOST=--specs=rdimon.specs
-USE_NOHOST=--specs=nosys.specs
 # Extra flags (explained in Readme.md)
 EX_FLAGS = -mlittle-endian -mthumb-interwork -mfloat-abi=hard -mfpu=fpv4-sp-d16
+# TODO : FIND EXPLAINATION
+EX_FLAGS2 =  -Os -flto -ffunction-sections -fdata-sections
 #Startup definition
-STARTUP_DEFS=-D__STARTUP_CLEAR_BSS -D__START=main
+# TODO : FIND EXPLAINATION
+STARTUP_DEFS =-D__STARTUP_CLEAR_BSS -D__START=main
 # Options for specific architecture
-ARCH_FLAGS=-mthumb -mcpu=cortex-m$(CORTEX_M)
+ARCH_FLAGS =-mthumb -mcpu=cortex-m$(CORTEX_M)
 
-CFLAGS=$(ARCH_FLAGS) $(STARTUP_DEFS) -Os -flto -ffunction-sections -fdata-sections
+# Include path
+INCLUDE = $(addprefix -I , $(DIR_INC))
+
+CFLAGS = $(ARCH_FLAGS) $(STARTUP_DEFS) $(EX_FLAGS) $(EX_FLAGS2) $(OPTI) $(DEBUG)
 
 ################################################################################
 #								LINKING										   #
 ################################################################################
 
 # Link for code size
+# TODO : FIND EXPLAINATION
 GC=-Wl,--gc-sections
 # Use newlib-nano. To disable it, specify USE_NANO=
+# TODO : FIND EXPLAINATION
 # USE_NANO=--specs=nano.specs
 USE_NANO=
-LDSCRIPTS=-L. -L$(BASE)/ldscripts -T nokeep.ld
+# Use semihosting or not
+USE_SEMIHOST =--specs=rdimon.specs
+USE_NOHOST =--specs=nosys.specs
+LDSCRIPTS= -L./ldscripts -T ld_script/STM32F303VC_FLASH.ld
+# Create map file
+# TODO : FIND EXPLAINATION
+MAP=-Wl,-Map=$(NAME).map
 
 LFLAGS=$(USE_NANO) $(USE_NOHOST) $(LDSCRIPTS) $(GC) $(MAP)
 
-################################################################################
-#								MAPPING										   #
-################################################################################
-
-# Create map file
-MAP=-Wl,-Map=$(NAME).map
 
 ################################################################################
 #								MAKE RULES									   #
 ################################################################################
 
-all: $(NAME)-$(CORE).axf
+all:debug $(NAME)
 
-$(NAME)-$(CORE).axf: $(OBJ) $(STARTUP)
-	$(CC) $(OBJ) $(CFLAGS) $(DEBUG) $(OPTI) $(LFLAGS) -o $@
-	@echo "\033[33;32m=== Compilation $(NAME)...\t\t\tDONE"
+debug:
+	@echo $(OBJ)
+	@echo $(SRC)
+	@echo $(ASM)
+	@echo $(INCLUDE)
+	@echo "---------------------------------------------------------------------"
+$(NAME): $(OBJ)
+	$(CC) $(OBJ) $(CFLAGS) $(LFLAGS) -o $@
+	# @echo "\033[33;32m=== Compilation $(NAME)...\t\t\tDONE"
+	@echo "---------------------------------------------------------------------"
 
-$(OBJ_DIR)%.o: %.c
-	$(CC) $(CFLAGS) $(DEBUG) $(OPTI) $(LFLAGS) -o $@ -c $< $(INC)
-	@echo "\033[0;32m [OK] \033[0m       \033[0;33m Compiling:\033[0m" $<
+$(DIR_OBJ)/%.o: $(DIR_SRC)/%.c
+	mkdir -p obj
+	$(CC) $(CFLAGS) $(LFLAGS) -o $@ -c $< $(INCLUDE)
+	#@echo "\033[0;32m [OK] \033[0m       \033[0;33m Compiling:\033[0m" $<
+	@echo "---------------------------------------------------------------------"
 
 clean: 
 	rm -rf *.map
 	rm -rf *.o
-	@echo "\033[33;32m=== Cleaning project $(OBJ_DIR)...\t\tDONE"
+	# @echo "\033[33;32m=== Cleaning project $(OBJ_DIR)...\t\tDONE"
+	@echo "---------------------------------------------------------------------"
 
 fclean: clean
-	rm -rf $(NAME)-$(CORE).axf	
-	@echo "\033[33;32m=== Cleaning executable $(NAME)$(CORE)...\t\t\tDONE"
+	rm -rf $(NAME)	
+	# @echo "\033[33;32m=== Cleaning executable $(NAME)...\t\t\tDONE"
+	@echo "---------------------------------------------------------------------"
 
 re: fclean all
 
