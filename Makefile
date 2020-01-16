@@ -23,6 +23,7 @@ SRC_DIRS = $(STM_DIR)/Libraries/STM32F3xx_StdPeriph_Driver/src \
 INC_DIRS = $(STM_DIR)/Libraries/STM32F3xx_StdPeriph_Driver/inc \
 		   $(STM_DIR)/Libraries/STM32F30x_I2C_CPAL_Driver/inc \
 		   $(STM_DIR)/Libraries/CMSIS/Include \
+		   $(STM_DIR)/Libraries/CMSIS/Device/ST/STM32F30x \
 		   inc \
 
 OBJ_DIR = obj
@@ -48,17 +49,17 @@ OPTI = -O0
 DEBUG= -g
 # Catching all warning and making them error
 WE_FLAGS = -Werror -Wall -Wextra
-# Extra flags (explained in Readme.md)
-EX_FLAGS = -mlittle-endian -mthumb-interwork -mfloat-abi=hard -mfpu=fpv4-sp-d16
-# Use newlib-nano. To disable it, specify USE_NANO=
-USE_NANO=--specs=nano.specs
 # Use semihosting or not
 USE_SEMIHOST=--specs=rdimon.specs
 USE_NOHOST=--specs=nosys.specs
+# Extra flags (explained in Readme.md)
+EX_FLAGS = -mlittle-endian -mthumb-interwork -mfloat-abi=hard -mfpu=fpv4-sp-d16
 #Startup definition
 STARTUP_DEFS=-D__STARTUP_CLEAR_BSS -D__START=main
 # Options for specific architecture
 ARCH_FLAGS=-mthumb -mcpu=cortex-m$(CORTEX_M)
+
+CFLAGS=$(ARCH_FLAGS) $(STARTUP_DEFS) -Os -flto -ffunction-sections -fdata-sections
 
 ################################################################################
 #								LINKING										   #
@@ -66,7 +67,12 @@ ARCH_FLAGS=-mthumb -mcpu=cortex-m$(CORTEX_M)
 
 # Link for code size
 GC=-Wl,--gc-sections
+# Use newlib-nano. To disable it, specify USE_NANO=
+# USE_NANO=--specs=nano.specs
+USE_NANO=
 LDSCRIPTS=-L. -L$(BASE)/ldscripts -T nokeep.ld
+
+LFLAGS=$(USE_NANO) $(USE_NOHOST) $(LDSCRIPTS) $(GC) $(MAP)
 
 ################################################################################
 #								MAPPING										   #
@@ -76,22 +82,16 @@ LDSCRIPTS=-L. -L$(BASE)/ldscripts -T nokeep.ld
 MAP=-Wl,-Map=$(NAME).map
 
 ################################################################################
-#							COMPILATION FLAGS CAT							   #
-################################################################################
-
-LFLAGS=$(USE_NANO) $(USE_NOHOST) $(LDSCRIPTS) $(GC) $(MAP)
-CFLAGS=$(ARCH_FLAGS) $(STARTUP_DEFS) -Os -flto -ffunction-sections -fdata-sections
-
-################################################################################
 #								MAKE RULES									   #
 ################################################################################
 
-all: $(NAME)
+all: $(NAME)-$(CORE).axf
 
-$(NAME)-$(CORE).axf: $(OBJ) # $(STARTUP)
-	$(CC) $(OBJ) $(CFLAGS) $(DEBUG) $(OPTI) $(LFLAGS) -o $@ # remplacer $(OBJ) par $^
+$(NAME)-$(CORE).axf: $(OBJ) $(STARTUP)
+	$(CC) $(OBJ) $(CFLAGS) $(DEBUG) $(OPTI) $(LFLAGS) -o $@
+	@echo "\033[33;32m=== Compilation $(NAME)...\t\t\tDONE"
 
-$(OBJ_DIR)%.o: %.c:
+$(OBJ_DIR)%.o: %.c
 	$(CC) $(CFLAGS) $(DEBUG) $(OPTI) $(LFLAGS) -o $@ -c $< $(INC)
 	@echo "\033[0;32m [OK] \033[0m       \033[0;33m Compiling:\033[0m" $<
 
@@ -101,8 +101,10 @@ clean:
 	@echo "\033[33;32m=== Cleaning project $(OBJ_DIR)...\t\tDONE"
 
 fclean: clean
-	rm -rf $(NAME).axf	
+	rm -rf $(NAME)-$(CORE).axf	
 	@echo "\033[33;32m=== Cleaning executable $(NAME)$(CORE)...\t\t\tDONE"
+
+re: fclean all
 
 ################################################################################
 #							FIND HOW THIS WORKS								   #
