@@ -27,9 +27,8 @@
 
 
 /* Includes ------------------------------------------------------------------*/
-#include "stm32f30x.h"
-#include "stm32f30x_gpio.h"
-#include "stm32f30x_rcc.h"
+#include "stm32f30x_it.h"
+#include "stm32f30x_conf.h"
 
 /** @addtogroup STM32F30x_StdPeriph_Examples
   * @{
@@ -143,6 +142,8 @@ int main(void)
   */
 void assert_failed(uint8_t* file, uint32_t line)
 { 
+	(void)file;
+	(void)line;
   /* User can add his own implementation to report the file name and line number,
      ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
 
