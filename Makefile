@@ -13,6 +13,7 @@ NAME = blinking_leds-$(CORE)
 
 # Compiler & Linker
 CC = arm-none-eabi-gcc
+LD = arm-none-eabi-ld
 
 # STM32 library path
 DIR_STM = STM32F30x_DSP_StdPeriph_Lib_V1.2.3
@@ -50,75 +51,66 @@ SRC = $(addprefix $(DIR_SRC)/, $(FILE_SRC))
 #							GCC COMPILATION FLAGS							   #
 ################################################################################
 
-# Optimization flag (-O0 = no compiler optimization)
-OPTI = -O2
-# Debug flag including symbols for gdb
-DEBUG = -g3
-# Catching all warning and making them error
+# Architecture flags (ARM)
+A_FLAGS =-mthumb -mcpu=cortex-m$(CORTEX_M) -mlittle-endian -mthumb-interwork
+# Debug flags
+D_FLAGS = -g3
+# Floating point flags (ARM)
+F_FLAGS =  -mfloat-abi=softfp -mfpu=fpv4-sp-d16
+# Include path flags
+I_FLAGS = $(addprefix -I , $(DIR_INC))
+# DEFINE/Macro flags
+# DM_FLAGS =-D__STARTUP_CLEAR_BSS -D__START=main
+DM_FLAGS =
+# Optimization flags
+O_FLAGS = -Os -ffunction-sections -fdata-sections
+# Warning flags
 W_FLAGS = -Werror -Wall -Wextra
-# Extra flags (explained in Readme.md)
-EX_FLAGS = -mlittle-endian -mthumb-interwork -mfloat-abi=hard \
-		   -mfpu=fpv4-sp-d16 -Os -ffunction-sections -fdata-sections
-#Startup definition
-# STARTUP_DEFS =-D__STARTUP_CLEAR_BSS -D__START=main
-STARTUP_DEFS =
-# Options for specific ARM architecture
-ARCH_FLAGS =-mthumb -mcpu=cortex-m$(CORTEX_M)
+# Spec file flags (--specs=nano.specs --specs=rdimon.specs --specs=nosys.specs)
+SP_FLAGS = --specs=nosys.specs
 
-# Include path
-INCLUDE = $(addprefix -I , $(DIR_INC))
-
-CFLAGS = $(ARCH_FLAGS) $(STARTUP_DEFS) $(EX_FLAGS) $(OPTI) $(DEBUG) $(W_FLAGS)
+C_FLAGS = $(A_FLAGS) $(D_FLAGS) $(F_FLAGS) $(I_FLAGS) \
+		  $(DM_FLAGS) $(O_FLAGS) $(W_FLAGS) $(SP_FLAGS)
 
 ################################################################################
 #								LINKING										   #
 ################################################################################
 
-# remove all unused code
-GC = -Wl,--gc-sections
+# Optimization flags
+LO_FLAGS = --gc-sections
 # Create map file
-# TODO : FIND EXPLAINATION
-MAP=-Wl,-Map=$(NAME).map
+CMF_FLAGS = -Map=$(NAME).map
+# linking script flags
+SC_FLAGS = -T ld_scripts/STM32F303VC_FLASH.ld
 
-# Use newlib-nano. C library for embedded
-# USE_NANO=--specs=nano.specs
-USE_NANO=
-# Use semihosting or not
-USE_SEMIHOST =--specs=rdimon.specs
-USE_NOHOST =--specs=nosys.specs
-LDSCRIPTS= -L./ld_scripts -T ld_scripts/STM32F303VC_FLASH.ld
-
-LFLAGS=$(USE_NANO) $(USE_NOHOST) $(LDSCRIPTS) $(GC) $(MAP)
+L_FLAGS = $(SC_FLAGS) $(LO_FLAGS) $(CMF_FLAGS)
 
 ################################################################################
 #								MAKE RULES									   #
 ################################################################################
 
-all: debug $(NAME)
+all: $(NAME)
 
 debug:
-	@echo $(LFLAGS)
+	@echo $(L_FLAGS)
 	@echo $(INCLUDE)
-	@echo $(CFLAGS)
+	@echo $(C_FLAGS)
 	@echo $(ASM)
 
 $(NAME): $(OBJ)
-	@echo "---------------------------------------------------------------------"
-	@echo $^
-	@echo "---------------------------------------------------------------------"
-	$(CC) $^ $(CFLAGS) $(LFLAGS) -o $@
+	$(LD) $^ $(L_FLAGS) -o $@
 	@echo "\033[33;32m=== Compilation $(NAME)...\t\t\tDONE"
 	@echo "---------------------------------------------------------------------"
 
 $(DIR_OBJ)/%.o: $(DIR_SRC)/%.c
 	@mkdir -p obj
-	$(CC) $(CFLAGS) $(LFLAGS) -o $@ -c $< $(INCLUDE)
+	$(CC) $(C_FLAGS) -o $@ -c $<
 	@echo "\033[0;32m [OK] \033[0m       \033[0;33m Compiling:\033[0m" $<
 	@echo "---------------------------------------------------------------------"
 
 $(DIR_OBJ)/%.o: $(DIR_ASM)/%.s
 	@mkdir -p obj
-	$(CC) $(CFLAGS) $(LFLAGS) -o $@ -c $< $(INCLUDE)
+	$(CC) $(C_FLAGS) -o $@ -c $<
 	@echo "\033[0;32m [OK] \033[0m       \033[0;33m Compiling:\033[0m" $<
 	@echo "---------------------------------------------------------------------"
 

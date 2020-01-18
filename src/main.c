@@ -1,57 +1,12 @@
-/**
-  ******************************************************************************
-  * @file    GPIO/GPIO_Toggle/main.c 
-  * @author  MCD Application Team
-  * @version V1.1.2
-  * @date    14-August-2015
-  * @brief   Main program body
-  ******************************************************************************
-  * @attention
-  *
-  * <h2><center>&copy; COPYRIGHT 2015 STMicroelectronics</center></h2>
-  *
-  * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
-  * You may not use this file except in compliance with the License.
-  * You may obtain a copy of the License at:
-  *
-  *        http://www.st.com/software_license_agreement_liberty_v2
-  *
-  * Unless required by applicable law or agreed to in writing, software 
-  * distributed under the License is distributed on an "AS IS" BASIS, 
-  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  * See the License for the specific language governing permissions and
-  * limitations under the License.
-  *
-  ******************************************************************************
-  */
-
-
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f30x_it.h"
 #include "stm32f30x_conf.h"
 
-/** @addtogroup STM32F30x_StdPeriph_Examples
-  * @{
-  */
 
-/** @addtogroup GPIO_Toggle
-  * @{
-  */
-
-/* Private typedef -----------------------------------------------------------*/
-/* Private define ------------------------------------------------------------*/
 #define BSRR_VAL 0xC000
-/* Private macro -------------------------------------------------------------*/
-/* Private variables ---------------------------------------------------------*/
-GPIO_InitTypeDef        GPIO_InitStructure;
-/* Private function prototypes -----------------------------------------------*/
-/* Private functions ---------------------------------------------------------*/
 
-/**
-  * @brief  Main program.
-  * @param  None
-  * @retval None
-  */
+GPIO_InitTypeDef        GPIO_InitStructure;
+
 int main(void)
 {
   /*!< At this stage the microcontroller clock setting is already configured, 
