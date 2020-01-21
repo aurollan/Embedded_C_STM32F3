@@ -16,12 +16,12 @@ CC = arm-none-eabi-gcc
 LD = arm-none-eabi-ld
 
 # STM32 library path
-DIR_STM = STM32F30x_DSP_StdPeriph_Lib_V1.2.3
+DIR_STM = STM32Cube_FW_F3_V1.11.0
 
 DIR_INC = inc
-DIR_INC += $(DIR_STM)/Libraries/CMSIS/Include
-DIR_INC += $(DIR_STM)/Libraries/STM32F30x_StdPeriph_Driver/inc
-DIR_INC += $(DIR_STM)/Libraries/CMSIS/Device/ST/STM32F30x/Include
+DIR_INC += $(DIR_STM)/Drivers/CMSIS/Include
+DIR_INC += $(DIR_STM)/Drivers/STM32F3xx_HAL_Driver/Inc
+DIR_INC += $(DIR_STM)/Drivers/CMSIS/Device/ST/STM32F3xx/Include
 		  
 DIR_ASM = asm
 DIR_SRC = src
@@ -36,8 +36,7 @@ FILE_ASM = startup_stm32f30x.s
 FILE_SRC = main.c \
 		   stm32f30x_it.c \
 		   system_stm32f30x.c \
-		   stm32f30x_gpio.c \
-		   stm32f30x_rcc.c
+		   stm32f3xx_ll_rcc.c
 
 
 FILE_OBJ = $(FILE_SRC:.c=.o)
