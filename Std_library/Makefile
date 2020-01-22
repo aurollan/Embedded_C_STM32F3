@@ -34,6 +34,7 @@ DIR_OBJ = obj
 FILE_ASM = startup_stm32f30x.s
 
 FILE_SRC = main.c \
+		   setup.c \
 		   stm32f30x_it.c \
 		   system_stm32f30x.c \
 		   stm32f30x_gpio.c \
@@ -61,7 +62,7 @@ F_FLAGS =  -mfloat-abi=softfp -mfpu=fpv4-sp-d16
 I_FLAGS = $(addprefix -I , $(DIR_INC))
 # DEFINE/Macro flags
 # DM_FLAGS =-D__STARTUP_CLEAR_BSS -D__START=main
-DM_FLAGS =
+DM_FLAGS =  -DSTM32F303xC
 # Optimization flags
 O_FLAGS = -Os -ffunction-sections -fdata-sections
 # Warning flags
@@ -132,7 +133,6 @@ re: fclean all
 # -DUSE_FULL_ASSERT
 #  -DDEBUG
 #  -DTRACE
-#  -DSTM32F10X_CL
 #  -DUSE_STDPERIPH_DRIVER
 #  -DHSE_VALUE=12000000
 #  -UOS_USE_SEMIHOSTING
