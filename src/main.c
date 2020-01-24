@@ -6,7 +6,7 @@
 /*   By: aurollan <aurollan@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2020/01/22 11:11:06 by aurollan     #+#   ##    ##    #+#       */
-/*   Updated: 2020/01/22 18:11:14 by aurollan    ###    #+. /#+    ###.fr     */
+/*   Updated: 2020/01/24 14:42:39 by aurollan    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -15,12 +15,29 @@
 #include "stm32f30x.h"
 #include "stm32f30x_conf.h"
 #include "drone.h"
+#include <stdio.h>
+
+int _write(int32_t file, char* ptr, int32_t len)
+{
+	(void)file;
+	int i=0;
+	for(i=0 ; i<len ; i++)
+		ITM_SendChar((*ptr++));
+	return len;
+
+	return -1;
+}
 
 int main(void)
 {
 	TIM6_enable();
+	RCC->AHBENR |= RCC_AHBENR_GPIOEEN;
 	GPIOE_enable();
 	GPIOE_full_init();
+	ITM_init();
+
+	_write(0, "bonjour\n", 8);
+	_write(0, "Hello World!\n", 13);
 
 	while (1)
 	{

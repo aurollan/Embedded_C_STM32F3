@@ -63,8 +63,8 @@ I_FLAGS = $(addprefix -I , $(DIR_INC))
 # DEFINE/Macro flags
 # DM_FLAGS =-D__STARTUP_CLEAR_BSS -D__START=main
 DM_FLAGS =  -DSTM32F303xC
-# Optimization flags
-O_FLAGS = -Os -ffunction-sections -fdata-sections
+# Optimization flags TODO: remettre -Os
+O_FLAGS = -ffunction-sections -fdata-sections
 # Warning flags
 W_FLAGS = -Werror -Wall -Wextra
 # Spec file flags (--specs=nano.specs --specs=rdimon.specs --specs=nosys.specs)
