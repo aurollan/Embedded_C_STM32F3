@@ -34,6 +34,7 @@ DIR_OBJ = obj
 FILE_ASM = startup_stm32f30x.s
 
 FILE_SRC = main.c \
+		   leds.c \
 		   setup.c \
 		   stm32f30x_it.c \
 		   system_stm32f30x.c \
@@ -61,10 +62,10 @@ F_FLAGS =  -mfloat-abi=softfp -mfpu=fpv4-sp-d16
 # Include path flags
 I_FLAGS = $(addprefix -I , $(DIR_INC))
 # DEFINE/Macro flags
-# DM_FLAGS =-D__STARTUP_CLEAR_BSS -D__START=main
-DM_FLAGS =  -DSTM32F303xC
-# Optimization flags TODO: remettre -Os
-O_FLAGS = -ffunction-sections -fdata-sections
+# DM_FLAGS =-D__STARTUP_CLEAR_BSS
+DM_FLAGS =  -DSTM32F303xC -DUSE_FULL_ASSERT
+# Optimization flags
+O_FLAGS = -Os -ffunction-sections -fdata-sections
 # Warning flags
 W_FLAGS = -Werror -Wall -Wextra
 # Spec file flags (--specs=nano.specs --specs=rdimon.specs --specs=nosys.specs)
@@ -125,15 +126,3 @@ fclean: clean
 	@echo "\033[33;32m=== Cleaning executable $(NAME)...\t\t\tDONE\033[0m"
 
 re: fclean all
-
-################################################################################
-#							FIND HOW THIS WORKS								   #
-################################################################################
-
-# -DUSE_FULL_ASSERT
-#  -DDEBUG
-#  -DTRACE
-#  -DUSE_STDPERIPH_DRIVER
-#  -DHSE_VALUE=12000000
-#  -UOS_USE_SEMIHOSTING
-#  -UOS_USE_TRACE_SEMIHOSTING_STDOUT

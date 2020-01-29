@@ -124,3 +124,29 @@ first)
 To use the serial wire DP to release some GPIOs, the user software must change the GPIO
 (PA15, PB3 and PB4) configuration mode in the GPIO_MODER register.This releases
 PA15, PB3 and PB4 which now become available as GPIOs.
+
+
+
+
+
+  // 	 (		0x07		) << ((						0x09		  &   0x07		  ) * 4)
+  temp = ((uint32_t)(GPIO_AF) << ((uint32_t)((uint32_t)GPIO_PinSource & (uint32_t)0x07) * 4));
+  //temp = (	0x07		) << ((						0x01						  ) * 4)
+  //temp = (	0x07		) << (							0x04						   )
+  //temp = 0x070
+
+  // GPIOA->AFR[		1		   ] &= ~(	0xF			<< ((		0x09						&		0x07	) * 4)
+  GPIOx->AFR[GPIO_PinSource >> 0x03] &= ~((uint32_t)0xF << ((uint32_t)((uint32_t)GPIO_PinSource & (uint32_t)0x07) * 4));
+  // GPIOA->AFR[		1		   ] &= ~(	0xF			<< ((					0x01							) * 4)
+  // GPIOA->AFR[		1		   ] &= ~(	0xF			<< ( 					0x04								))
+  // GPIOA->AFR[		1		   ] &= ~(								0x0F0										 )
+  // GPIOA->AFR[		1		   ] &= 0xFFFFFF0F
+
+  // GPIOA->AFR		 [ 			1			] | temp
+  temp_2 = GPIOx->AFR[GPIO_PinSource >> 0x03] | temp;
+  // GPIOA->AFR		 [ 			1			] | 0x070
+  // temp2 = GPIOA->AFR		 [ 			1			] | 0x070
+
+  // GPIOA->AFR		 [ 			1			] = temp2
+  GPIOx->AFR[GPIO_PinSource >> 0x03] = temp_2;
+  // GPIOA->AFR		 [ 			1			] = temp2
