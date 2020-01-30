@@ -6,7 +6,7 @@
 /*   By: aurollan <aurollan@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2020/01/22 11:11:06 by aurollan     #+#   ##    ##    #+#       */
-/*   Updated: 2020/01/29 10:55:44 by aurollan    ###    #+. /#+    ###.fr     */
+/*   Updated: 2020/01/30 16:56:04 by aurollan    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -29,10 +29,11 @@ int main(void)
 {
 	ITM_init();
 	TIM6_enable();
+	//USART_enable();
 
 	_write(0, "Hello World!\n", 13);
+	//OutString("Bonjour aurollan");
 	leds();
-	OutString("Bonjour aurollan");
 	return (0);
 
 }
