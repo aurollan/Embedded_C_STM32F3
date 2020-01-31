@@ -39,6 +39,7 @@ FILE_SRC = main.c \
 		   stm32f30x_it.c \
 		   system_stm32f30x.c \
 		   stm32f30x_gpio.c \
+		   stm32f30x_usart.c \
 		   stm32f30x_rcc.c
 
 

@@ -6,7 +6,7 @@
 /*   By: aurollan <aurollan@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2020/01/22 12:53:25 by aurollan     #+#   ##    ##    #+#       */
-/*   Updated: 2020/01/30 14:27:27 by aurollan    ###    #+. /#+    ###.fr     */
+/*   Updated: 2020/01/31 17:21:51 by aurollan    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -25,4 +25,7 @@ void ITM_init(void);
 void leds(void);
 int _write(int32_t file, char* ptr, int32_t len);
 void USART_enable();
+void GPIOA_connect_PIN9_PIN10();
+void GPIOA_config();
+void RCC_USART1_enable();
 #endif

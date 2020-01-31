@@ -6,7 +6,7 @@
 /*   By: aurollan <aurollan@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2020/01/22 11:33:45 by aurollan     #+#   ##    ##    #+#       */
-/*   Updated: 2020/01/30 18:05:29 by aurollan    ###    #+. /#+    ###.fr     */
+/*   Updated: 2020/01/31 17:37:35 by aurollan    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -22,22 +22,17 @@
 void RCC_USART1_enable()
 {
 	RCC->AHBENR |= RCC_AHBENR_GPIOAEN;
-	//GPIOA->MODER   |= (0x0BUL  << 4);                  // Tx (PA9) alt. out push-pull
-	//GPIOA->MODER   |= (0x04UL  << 8);                  // Rx (PA10) in floating
 	RCC->APB2ENR |= RCC_APB2ENR_USART1EN;            /*!< USART1 clock enable */
 }
 
 void GPIOA_connect_PIN9_PIN10()
 {
-	uint32_t alternate_function;
-	/* Par rapport a son nombre on regarde sa position */
-	alternate_function = GPIO_AF_7; // 0111 = 0x07
 	/* Cleaning bits */
 	GPIOA->AFR[1] &= ~(0xF << ((9 % 8) * 4)); // le mask est sur 4 bits
 	GPIOA->AFR[1] &= ~(0xF << ((10 % 8) * 4)); // le mask est sur 4 bits
 	/* Setting bits */
-	GPIOA->AFR[1] |= (alternate_function << (9 % 8) * 4);
-	GPIOA->AFR[1] |= (alternate_function << (10 % 8) * 4);
+	GPIOA->AFR[1] |= (GPIO_AF_7 << (9 % 8) * 4);
+	GPIOA->AFR[1] |= (GPIO_AF_7 << (10 % 8) * 4);
 }
 
 void GPIOA_config()
@@ -46,26 +41,24 @@ void GPIOA_config()
 	GPIOA->MODER |= GPIO_Mode_AF << 10 * 2; // alternate function mode
 	GPIOA->OTYPER |= GPIO_OType_PP << 9;       /*!< GPIO port output type register in push pull mode  0x00 */
 	GPIOA->OTYPER |= GPIO_OType_PP << 10;       /*!< GPIO port output type register in push pull mode  0x00 */
-	GPIOA->OSPEEDR = GPIO_Speed_Level_3 << 9 * 2;      /*!< GPIO port output speed register to maximum speed */
-	GPIOA->OSPEEDR = GPIO_Speed_Level_3 << 10 * 2;      /*!< GPIO port output speed register to maximum speed */
-	GPIOA->PUPDR = GPIO_PuPd_NOPULL << 9 * 2;        /*!< GPIO port pull-up/pull-down register,                      */
-	GPIOA->PUPDR = GPIO_PuPd_NOPULL << 10 * 2;        /*!< GPIO port pull-up/pull-down register,                      */
+	GPIOA->OSPEEDR |= GPIO_Speed_Level_3 << 9 * 2;      /*!< GPIO port output speed register to maximum speed */
+	GPIOA->OSPEEDR |= GPIO_Speed_Level_3 << 10 * 2;      /*!< GPIO port output speed register to maximum speed */
+	// PUPD_UP ? A VERIFIER
+	GPIOA->PUPDR |= GPIO_PuPd_NOPULL << 9 * 2;        /*!< GPIO port pull-up/pull-down register,                      */
+	GPIOA->PUPDR |= GPIO_PuPd_NOPULL << 10 * 2;        /*!< GPIO port pull-up/pull-down register,                      */
 }
 
 void USART_enable()
 {
-	/* Enable  USARTx_RX_GPIO_CLK ? aka GPIOE ???! */
-	RCC_USART1_enable();
-	GPIOA_connect_PIN9_PIN10();
-	GPIOA_config();
 
   /* Clear M, PCE, PS, TE and RE bits */
-	USART1->CR1= (uint32_t)~((uint32_t)CR1_CLEAR_MASK);
-	/* 8 bit words, no changes needed m0 = 0 and m1 = 0  */
-	/* oversampling to 16 */
+	USART1->CR1 &= (uint32_t)~((uint32_t)CR1_CLEAR_MASK);
 	/* Parity control disabled  */
-	USART1->CR1 |= USART_WordLength_8b;
-	USART1->CR1 |= USART_Parity_No;
+	USART1->CR1 &= ~USART_CR1_PCE;
+	/* oversampling to 16 */
+	USART1->CR1 &= ~USART_CR1_OVER8;
+	/* 8 bit words, no changes needed m0 = 0 and m1 = 0  */
+	USART1->CR1 &= ~USART_CR1_M;
 	/* tx enabled */
 	USART1->CR1 |= USART_CR1_TE;
 	/* rx enabled */
@@ -74,6 +67,7 @@ void USART_enable()
 	USART1->BRR = 72000000/115200;
 	/* USART enable  */ 
 	USART1->CR1 |= USART_CR1_UE; // 0x1 
+	// USART1->CR2 &= ~(USART_CR2_STOP_1 | USART_CR2_STOP_0);
 }
 
 void TIM6_enable(void)
