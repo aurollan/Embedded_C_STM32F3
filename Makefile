@@ -34,8 +34,11 @@ DIR_OBJ = obj
 FILE_ASM = startup_stm32f30x.s
 
 FILE_SRC = main.c \
+		   i2c.c \
+		   itm.c \
 		   leds.c \
-		   setup.c \
+		   delay.c \
+		   usart.c \
 		   stm32f30x_it.c \
 		   system_stm32f30x.c \
 		   stm32f30x_gpio.c \

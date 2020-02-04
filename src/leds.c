@@ -1,17 +1,34 @@
 /* ************************************************************************** */
 /*                                                          LE - /            */
 /*                                                              /             */
-/*   Leds.c                                           .::    .:/ .      .::   */
+/*   leds.c                                           .::    .:/ .      .::   */
 /*                                                 +:+:+   +:    +:  +:+:+    */
 /*   By: aurollan <aurollan@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2020/01/24 17:14:31 by aurollan     #+#   ##    ##    #+#       */
-/*   Updated: 2020/01/24 17:16:04 by aurollan    ###    #+. /#+    ###.fr     */
+/*   Updated: 2020/02/04 17:45:31 by aurollan    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
 #include "drone.h"
+
+/* Enable led-compass led */
+/* REFERENCE MANUAL P166 RCC register map */
+void GPIOE_enable(void)
+{
+	RCC->AHBENR |= RCC_AHBENR_GPIOEEN;
+}
+
+/* Initialize all led form led-compass */
+/* REFERENCE MANUAL P228 General-purpose I/Os (GPIO)*/
+void GPIOE_full_init(void)
+{
+  GPIOE->MODER = 0x55555555;      /*!< GPIO port mode register,                                   */
+  GPIOE->OTYPER = 0x0000;       /*!< GPIO port output type register,                            */
+  GPIOE->OSPEEDR = 0xFFFFFFFF;      /*!< GPIO port output speed register,                           */
+  GPIOE->PUPDR = 0x0000;        /*!< GPIO port pull-up/pull-down register,                      */
+}
 
 void	leds(void)
 {

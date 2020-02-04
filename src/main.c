@@ -6,7 +6,7 @@
 /*   By: aurollan <aurollan@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2020/01/22 11:11:06 by aurollan     #+#   ##    ##    #+#       */
-/*   Updated: 2020/01/31 18:16:31 by aurollan    ###    #+. /#+    ###.fr     */
+/*   Updated: 2020/02/04 17:56:06 by aurollan    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -15,18 +15,6 @@
 #include "stm32f30x.h"
 #include "stm32f30x_conf.h"
 #include "drone.h"
-
-void echo_back()
-{
-	while(1) // Don't want to exit
-	{
-		uint16_t ch;
-		while(!(USART1->ISR & USART_ISR_RXNE)); // Wait for Empty
-		ch = (USART1->RDR & (uint16_t)0x01FF);
-		while(!(USART1->ISR & USART_ISR_TXE)); // Wait for Empty
-		USART1->TDR = ch & 0x01FF;
-	}
-}
 
 void USART1_Configuration(void)
 {
@@ -50,15 +38,6 @@ void USART1_Configuration(void)
 	USART_Init(USART1, &USART_InitStructure);
 	/* Enable USART */
 	USART_Cmd(USART1, ENABLE);
-}
-
-void USART_output(char *s)
-{
-	while(*s)
-	{
-		while(!(USART1->ISR & USART_ISR_TXE)); // Wait for Empty
-		USART1->TDR = *s++;
-	}
 }
 
 int main(void)

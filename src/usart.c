@@ -1,23 +1,22 @@
 /* ************************************************************************** */
 /*                                                          LE - /            */
 /*                                                              /             */
-/*   setup.c                                          .::    .:/ .      .::   */
+/*   usart.c                                          .::    .:/ .      .::   */
 /*                                                 +:+:+   +:    +:  +:+:+    */
 /*   By: aurollan <aurollan@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
-/*   Created: 2020/01/22 11:33:45 by aurollan     #+#   ##    ##    #+#       */
-/*   Updated: 2020/01/31 17:37:35 by aurollan    ###    #+. /#+    ###.fr     */
+/*   Created: 2020/02/04 17:47:04 by aurollan     #+#   ##    ##    #+#       */
+/*   Updated: 2020/02/04 17:53:25 by aurollan    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
+
+#include "drone.h"
 
 /*!< USART CR1 register clear Mask ((~(uint32_t)0xFFFFE6F3)) */
 #define CR1_CLEAR_MASK            ((uint32_t)(USART_CR1_M | USART_CR1_PCE | \
                                               USART_CR1_PS | USART_CR1_TE | \
                                               USART_CR1_RE))
-
-#include "stm32f30x_it.h"
-#include "stm32f30x_conf.h"
 
 void RCC_USART1_enable()
 {
@@ -64,76 +63,29 @@ void USART_enable()
 	/* rx enabled */
 	USART1->CR1 |= USART_CR1_RE;
 	//default settings give you no hardware flow control, 8 data bits, no parity and one stop bit
-	USART1->BRR = 72000000/115200;
+	USART1->BRR = 72000000/9600;
 	/* USART enable  */ 
 	USART1->CR1 |= USART_CR1_UE; // 0x1 
 	// USART1->CR2 &= ~(USART_CR2_STOP_1 | USART_CR2_STOP_0);
 }
 
-void TIM6_enable(void)
+void USART_output(char *s)
 {
-	/* Enable TIM6 */
-	RCC->APB1ENR |= RCC_APB1ENR_TIM6EN;
-	// SET OPM
-	TIM6->CR1 |= (uint16_t)(1 << 3);
+	while(*s)
+	{
+		while(!(USART1->ISR & USART_ISR_TXE)); // Wait for Empty
+		USART1->TDR = *s++;
+	}
 }
 
-/* Delay function using system clock */
-/* SR, the status register. */
-/* EGR, the event generation register. */
-/* CNT, the counter register. */
-/* PSC, the prescaler register. */
-/* ARR, the autoreload register. */
-void delay(uint16_t ms)
+void echo_back()
 {
-	/* Set PSC frequency */
-	TIM6->PSC = (uint16_t)799;
-	/* Value to reach */
-	TIM6->ARR = ms;
-	/* enable clock */
-	TIM6->CR1 |= (uint16_t)1;
-	/* wait event signaling that counter has reach value */
-	while (TIM6->SR == 0);
-	/* Reset event */
-	TIM6->SR = 0;
-}
-
-/* Enable led-compass led */
-/* REFERENCE MANUAL P166 RCC register map */
-void GPIOE_enable(void)
-{
-	RCC->AHBENR |= RCC_AHBENR_GPIOEEN;
-}
-
-void ITM_init(void)
-{
-	CoreDebug->DEMCR |= CoreDebug_DEMCR_TRCENA_Msk;
-	TPI->ACPR = 72000000 / 2000000 - 1;
-	TPI->FFCR |= 0x100; // default value bti 8 always at 1 and bit 2 activate formatter
-	TPI->SPPR = 2; // other asynchronous value : NRZ
-	DBGMCU->CR |= DBGMCU_CR_TRACE_IOEN;
-	ITM->TPR = ITM_TPR_PRIVMASK_Msk;
-	ITM->LAR = 0xC5ACCE55;						/* ITM Lock Access Register */
-	TPI->CSPSR |= (1 << 0); // 0x1 for 1 pin (default)
-	ITM->TCR |= ITM_TCR_ITMENA_Msk | (1 << 3) | (1 << 16);     /* ITM enabled */
-	ITM->TER |= (1UL << 0); 			/* ITM Port #0 enabled */
-}
-
-/* Initialize all led form led-compass */
-/* REFERENCE MANUAL P228 General-purpose I/Os (GPIO)*/
-void GPIOE_full_init(void)
-{
-  GPIOE->MODER = 0x55555555;      /*!< GPIO port mode register,                                   */
-  GPIOE->OTYPER = 0x0000;       /*!< GPIO port output type register,                            */
-  GPIOE->OSPEEDR = 0xFFFFFFFF;      /*!< GPIO port output speed register,                           */
-  GPIOE->PUPDR = 0x0000;        /*!< GPIO port pull-up/pull-down register,                      */
-}
-
-int _write(int32_t file, char* ptr, int32_t len)
-{
-	(void)file;
-	int i=0;
-	for(i=0 ; i<len ; i++)
-		ITM_SendChar((*ptr++));
-	return i;
+	while(1) // Don't want to exit
+	{
+		uint16_t ch;
+		while(!(USART1->ISR & USART_ISR_RXNE)); // Wait for Empty
+		ch = (USART1->RDR & (uint16_t)0x01FF);
+		while(!(USART1->ISR & USART_ISR_TXE)); // Wait for Empty
+		USART1->TDR = ch & 0x01FF;
+	}
 }
