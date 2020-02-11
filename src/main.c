@@ -6,7 +6,7 @@
 /*   By: aurollan <aurollan@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2020/01/22 11:11:06 by aurollan     #+#   ##    ##    #+#       */
-/*   Updated: 2020/02/04 17:56:06 by aurollan    ###    #+. /#+    ###.fr     */
+/*   Updated: 2020/02/11 18:25:00 by aurollan    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -16,28 +16,28 @@
 #include "stm32f30x_conf.h"
 #include "drone.h"
 
-void USART1_Configuration(void)
+void			ft_print_hexa(uint32_t nb)
 {
-	USART_InitTypeDef USART_InitStructure;
-	/* USART resources configuration (Clock, GPIO pins and USART registers) ----*/
-	/* USART configured as follow:
-	   - BaudRate = 9600 baud
-	   - Word Length = 8 Bits
-	   - One Stop Bit
-	   - No parity
-	   - Hardware flow control disabled (RTS and CTS signals)
-	   - Receive and transmit enabled
-	   */
-	USART_InitStructure.USART_BaudRate = 115200;
-	USART_InitStructure.USART_WordLength = USART_WordLength_8b;
-	USART_InitStructure.USART_StopBits = USART_StopBits_1;
-	USART_InitStructure.USART_Parity = USART_Parity_No;
-	USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
-	USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;
-	/* USART configuration */
-	USART_Init(USART1, &USART_InitStructure);
-	/* Enable USART */
-	USART_Cmd(USART1, ENABLE);
+	int		index;
+	char	hex_char;
+	int		bit_offset;
+
+	index = 0;
+	bit_offset = sizeof(uint32_t) * 8 - 4;
+	_write(0, "0x", 2);
+	while (bit_offset >= 0)
+	{
+		if (((nb >> bit_offset) & 0b1111) > 9)
+			hex_char = ((nb >> bit_offset) & 0b1111) + 55;
+		else
+			hex_char = ((nb >> bit_offset) & 0b1111) + 48;
+		if (index != 0 || hex_char != '0')
+		{
+			_write(0, &hex_char, 1);
+			index++;
+		}
+		bit_offset -= 4;
+	}
 }
 
 int main(void)
@@ -48,10 +48,12 @@ int main(void)
 	GPIOA_connect_PIN9_PIN10();
 	GPIOA_config();
 	USART_enable();
-	// USART1_Configuration();
+
 
 	_write(0, "Hello World\n", 13);
+	ft_print_hexa((uint32_t) 10);
 	USART_output("bonjour monsieur");
+	I2C_enable();
 	echo_back();
 	leds();
 	return (0);

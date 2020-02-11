@@ -6,7 +6,7 @@
 /*   By: aurollan <aurollan@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2020/01/22 12:53:25 by aurollan     #+#   ##    ##    #+#       */
-/*   Updated: 2020/02/04 17:55:18 by aurollan    ###    #+. /#+    ###.fr     */
+/*   Updated: 2020/02/11 18:25:35 by aurollan    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -46,5 +46,15 @@ void	GPIOA_config();
 void	RCC_USART1_enable();
 void	USART_output(char *s);
 void	echo_back();
+
+/*
+** i2c.c
+*/
+void I2C_enable();
+
+/*
+** main.c
+*/
+void	ft_print_hexa(uint32_t nb);
 
 #endif

@@ -41,10 +41,6 @@ FILE_SRC = main.c \
 		   usart.c \
 		   stm32f30x_it.c \
 		   system_stm32f30x.c \
-		   stm32f30x_gpio.c \
-		   stm32f30x_usart.c \
-		   stm32f30x_rcc.c
-
 
 FILE_OBJ = $(FILE_SRC:.c=.o)
 FILE_OBJ += $(FILE_ASM:.s=.o)
