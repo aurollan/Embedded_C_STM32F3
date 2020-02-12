@@ -6,17 +6,14 @@
 /*   By: aurollan <aurollan@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2020/02/04 17:52:07 by aurollan     #+#   ##    ##    #+#       */
-/*   Updated: 2020/02/11 18:42:21 by aurollan    ###    #+. /#+    ###.fr     */
+/*   Updated: 2020/02/12 18:31:21 by aurollan    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
 #include "drone.h"
-#define CR1_CLEAR_MASK          ((uint32_t)0x00CFE0FF)  /*<! I2C CR1 clear register Mask */
 #define CR2_CLEAR_MASK          ((uint32_t)0x07FF7FFF)  /*<! I2C CR2 clear register Mask */
 #define TIMING_CLEAR_MASK       ((uint32_t)0xF0FFFFFF)  /*<! I2C TIMING clear register Mask */
-#define ERROR_IT_MASK           ((uint32_t)0x00003F00)  /*<! I2C Error interrupt register Mask */
-#define TC_IT_MASK              ((uint32_t)0x000000C0)  /*<! I2C TC interrupt register Mask */
 
 // pb6 => SCL
 // pb7 => SDA
@@ -53,49 +50,56 @@ void GPIOB_config()
 
 void I2C_enable()
 {
+	RCC_I2C_enable();
+	GPIOB_connect_PIN6_PIN7();
+	GPIOB_config();
+
+	// I2C1SW enabled  why ?
+	RCC->CFGR3 |= RCC_I2C1CLK_SYSCLK;
+	/* Clearing to reset value setting PE to 0 ensure a software reset (need 3 apb clock cycle to be effective) */
+	I2C1->CR1 = 0x00000000;
+	/* Clearing to reset value */
+	I2C1->TIMINGR = 0x00000000;
+
+	I2C1->TIMINGR = 0xC062121F & TIMING_CLEAR_MASK; // find the right value
+	I2C1->TIMINGR = 0xB0420F13 & TIMING_CLEAR_MASK; // for clock at 48 Mhz
+	I2C1->TIMINGR = 0x00902025 & TIMING_CLEAR_MASK; // for clock at 72 Mhz ?
+
+	I2C1->CR1 |= I2C_CR1_PE; // ici pour la fonction init()
+	I2C1->OAR1 = 0x00000000;
+	I2C1->OAR2 = 0x00000000;
+	I2C1->OAR1 |= I2C_OAR1_OA1EN;
+	I2C2->CR2 = 0x00000000;
+}
+
+void I2C_communicate(void)
+{
+// (DeviceAddr & 0x7f) << 1
+// 
+// tmpreg &= (uint32_t)~((uint32_t)(I2C_CR2_SADD | I2C_CR2_NBYTES | I2C_CR2_RELOAD | I2C_CR2_AUTOEND | I2C_CR2_RD_WRN | I2C_CR2_START | I2C_CR2_STOP));
+// /* update tmpreg */
+// tmpreg |= (uint32_t)(((uint32_t)Address & I2C_CR2_SADD) | (((uint32_t)Number_Bytes << 16 ) & I2C_CR2_NBYTES) | \
+//           (uint32_t)ReloadEndMode | (uint32_t)StartStopMode);
+
 	const uint32_t magnetic_field_addr = 0x03;
 	//const linear_acceleration_addr = 0x28;
-// a trouver I2C_Mode_I2C
-// enable SCL/SDA
-/* 
- *	RCC->I2CCLK
- *
- *	COnfigure ANFOFF and DNF[3:0] in I2C_CR1
- *	configure  PRESC/SDADEL/SCLDEL/SCLH/SCLL in I2C_TIMINGR
- *	end
- *
- *	I2C->ISR->txe
- */
-	/* CLEARING */
-	I2C1->CR1 &= CR1_CLEAR_MASK;
-	I2C1->TIMINGR &= TIMING_CLEAR_MASK;
-	// Start with disabling CR1 to conf
-	I2C1->CR1 &= ~I2C_CR1_PE;
-	// Enabled only in slave mode, make sure disabled
-	I2C1->CR1 &= ~I2C_CR1_NOSTRETCH;
-	// No smb
-	I2C1->CR1 &= ~(uint32_t)(3 << 20);
 
-	// I2C1->TIMINGR |= I2C_TIMINGR_SCLL;
-	// I2C1->TIMINGR |= I2C_TIMINGR_SCLH;
-	I2C1->CR1 |= I2C_CR1_PE;
-
-//  1. Send the START bit (S).
+	//  1. Send the START bit (S).
 	I2C1->CR2 |= I2C_CR2_START; // I2C_CR2_START [13]
-//  2. Send the slave address (ADDR). Usually 7 bits.
-	I2C1->CR2 |= magnetic_field_addr; // I2C_CR2_SADD [0;9]
-//  3. Send the Read(R)-1 / Write(W)-0 bit.
+	//  2. Send the slave address (ADDR). Usually 7 bits.
+	I2C1->CR2 |= (magnetic_field_addr << 1); // I2C_CR2_SADD [0;9]
+	//  3. Send the Read(R)-1 / Write(W)-0 bit.
 	I2C1->CR2 |= I2C_CR2_RD_WRN; // (read)I2C_CR2_RD_WRN [10]
-//  4. Ensure 7bit mode
+	//  4. Ensure 7bit mode
 	I2C1->CR2 &= ~I2C_CR2_ADD10; // ensure disabled I2C_CR2_ADD10 [11]
-//  5. Only 1 byte send
+	//  5. Only 1 byte send
 	I2C1->CR2 |= (1 << 16); // 1 byte send with addr I2C_CR2_NBYTES [16;23]
-//  7. Send the STOP bit (P).
+	//  7. Send the STOP bit (P).
 	I2C1->CR2 &= ~I2C_CR2_AUTOEND; // I2C_CR2_STOP [14]
 	// I2C1->CR2 |= I2C_CR2_STOP; // (enable stop)I2C_CR2_STOP [14]
 
 	while ((I2C1->ISR & I2C_ISR_TXIS) == 0) {};
-	
+
 	I2C1->TXDR = magnetic_field_addr & I2C_TXDR_TXDATA;
 
 	while ((I2C1->ISR & I2C_ISR_TC) == 0)  {};
@@ -104,9 +108,8 @@ void I2C_enable()
 	I2C1->CR2 &= ~I2C_CR2_RD_WRN; // I2C_CR2_RD_WRN [10]
 	I2C1->CR2 |= 6 << 16; // I2C_CR2_NBYTES [16;23]
 	I2C1->CR2 |= I2C_CR2_START; // I2C_CR2_START [13]
-	// AUTOEND [25]
 	I2C1->CR2 |= I2C_CR2_AUTOEND; // I2C_CR2_STOP [14]
-	
+
 	uint8_t a;
 	uint8_t data[6];
 

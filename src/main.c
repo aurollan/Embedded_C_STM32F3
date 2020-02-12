@@ -6,7 +6,7 @@
 /*   By: aurollan <aurollan@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2020/01/22 11:11:06 by aurollan     #+#   ##    ##    #+#       */
-/*   Updated: 2020/02/11 18:25:00 by aurollan    ###    #+. /#+    ###.fr     */
+/*   Updated: 2020/02/12 10:45:04 by aurollan    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -54,6 +54,7 @@ int main(void)
 	ft_print_hexa((uint32_t) 10);
 	USART_output("bonjour monsieur");
 	I2C_enable();
+	I2C_communicate();
 	echo_back();
 	leds();
 	return (0);
