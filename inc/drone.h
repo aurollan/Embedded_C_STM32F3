@@ -6,7 +6,7 @@
 /*   By: aurollan <aurollan@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2020/01/22 12:53:25 by aurollan     #+#   ##    ##    #+#       */
-/*   Updated: 2020/02/12 10:45:35 by aurollan    ###    #+. /#+    ###.fr     */
+/*   Updated: 2020/02/14 17:42:11 by aurollan    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -51,7 +51,9 @@ void	echo_back();
 ** i2c.c
 */
 void	I2C_enable();
-void	I2C_communicate();
+int	I2C_communicate();
+int  i2c_read();
+void i2c1_init(void);
 
 /*
 ** main.c

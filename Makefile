@@ -101,7 +101,7 @@ debug:
 
 $(NAME): $(OBJ)
 	$(LD) $^ $(L_FLAGS) -o $@
-	@echo "\033[33;32m=== Compilation $(NAME)...\t\t\tDONE"
+	@echo "\033[33;32m=== Compilation $(NAME)...\t\t\tDONE\033[0m"
 	@echo "---------------------------------------------------------------------"
 
 $(DIR_OBJ)/%.o: $(DIR_SRC)/%.c

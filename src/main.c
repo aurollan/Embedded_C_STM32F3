@@ -6,7 +6,7 @@
 /*   By: aurollan <aurollan@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2020/01/22 11:11:06 by aurollan     #+#   ##    ##    #+#       */
-/*   Updated: 2020/02/12 10:45:04 by aurollan    ###    #+. /#+    ###.fr     */
+/*   Updated: 2020/02/14 17:49:25 by aurollan    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -52,9 +52,13 @@ int main(void)
 
 	_write(0, "Hello World\n", 13);
 	ft_print_hexa((uint32_t) 10);
+	_write(0, "\n", 1);
 	USART_output("bonjour monsieur");
 	I2C_enable();
-	I2C_communicate();
+	if (!I2C_communicate())
+		_write(0, "ERROR READ\n", 11);
+	else
+		_write(0, "TOUT EST OK\n", 12);
 	echo_back();
 	leds();
 	return (0);
