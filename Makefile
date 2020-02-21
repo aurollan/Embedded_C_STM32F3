@@ -40,6 +40,9 @@ FILE_SRC = main.c \
 		   delay.c \
 		   usart.c \
 		   stm32f30x_it.c \
+		   stm32f30x_rcc.c \
+		   stm32f30x_i2c.c \
+		   stm32f30x_gpio.c \
 		   system_stm32f30x.c \
 
 FILE_OBJ = $(FILE_SRC:.c=.o)

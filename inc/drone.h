@@ -1,12 +1,11 @@
 /* ************************************************************************** */
 /*                                                          LE - /            */
 /*                                                              /             */
-/*   drone.h                                          .::    .:/ .      .::   */
-/*                                                 +:+:+   +:    +:  +:+:+    */
+/*   drone.h                                          .::    .:/ .      .::   */ /*                                                 +:+:+   +:    +:  +:+:+    */
 /*   By: aurollan <aurollan@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2020/01/22 12:53:25 by aurollan     #+#   ##    ##    #+#       */
-/*   Updated: 2020/02/14 17:42:11 by aurollan    ###    #+. /#+    ###.fr     */
+/*   Updated: 2020/02/18 13:11:40 by aurollan    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -52,12 +51,12 @@ void	echo_back();
 */
 void	I2C_enable();
 int	I2C_communicate();
-int  i2c_read();
-void i2c1_init(void);
+void i2c1_initp(void);
+uint8_t i2c_read(uint8_t DeviceAddr, uint8_t RegAddr, uint8_t* data, uint16_t len);
 
 /*
 ** main.c
 */
-void	ft_print_hexa(uint32_t nb);
+void			ft_print_hexa(uint8_t data);
 
 #endif

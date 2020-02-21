@@ -6,7 +6,7 @@
 /*   By: aurollan <aurollan@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2020/02/04 17:52:07 by aurollan     #+#   ##    ##    #+#       */
-/*   Updated: 2020/02/14 18:01:40 by aurollan    ###    #+. /#+    ###.fr     */
+/*   Updated: 2020/02/21 11:17:44 by aurollan    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -16,8 +16,6 @@
 #define TIMING_CLEAR_MASK       ((uint32_t)0xF0FFFFFF)  /*<! I2C TIMING clear register Mask */
 #define I2C_TIMEOUT         ((uint32_t)0x3FFFF) /*!< I2C Time out */
 
-// pb6 => SCL
-// pb7 => SDA
 
 void RCC_I2C_enable()
 {
@@ -63,6 +61,7 @@ void I2C_enable()
 	I2C1->TIMINGR = 0x00000000;
 
 	I2C1->TIMINGR = 0xC062121F & TIMING_CLEAR_MASK; // find the right value
+    // I2C1->TIMINGR = 0xF0001317 | ((4 & 0x0F) << 20) | ((5 & 0x0F) << 16);
 	// I2C1->TIMINGR = 0xB0420F13 & TIMING_CLEAR_MASK; // for clock at 48 Mhz
 	// I2C1->TIMINGR = 0x00902025 & TIMING_CLEAR_MASK; // for clock at 72 Mhz ?
 
@@ -77,7 +76,8 @@ void I2C_enable()
 int I2C_communicate(void)
 {
 	uint32_t timeout = I2C_TIMEOUT;
-	const uint32_t magnetic_field_addr = 0x1E;
+	const uint32_t magnetic_field_addr = 0b0011110;
+	const uint8_t OUT_X_H_M = 0x03;
 	//const linear_acceleration_addr = 0x28;
 	
 	// Wait if communication
@@ -89,26 +89,14 @@ int I2C_communicate(void)
 			return 0;
 		}
 	}
-	// //  2. Send the slave address (ADDR). Usually 7 bits.
-	// I2C1->CR2 |= (magnetic_field_addr << 1); // I2C_CR2_SADD [0;9]
-	// //  3. Send the Read(R)-1 / Write(W)-0 bit.
-	// I2C1->CR2 |= I2C_CR2_RD_WRN; // (read)I2C_CR2_RD_WRN [10]
-	// //  4. Ensure 7bit mode
-	// I2C1->CR2 &= ~I2C_CR2_ADD10; // ensure disabled I2C_CR2_ADD10 [11]
-	// //  5. Only 1 byte send
-	// I2C1->CR2 |= (1 << 16); // 1 byte send with addr I2C_CR2_NBYTES [16;23]
-	// //  7. Send the STOP bit (P).
-	// I2C1->CR2 |= I2C_CR2_AUTOEND; // I2C_CR2_STOP [14]
-	// // I2C1->CR2 |= I2C_CR2_STOP; // (enable stop)I2C_CR2_STOP [14]
-	// //  1. Send the START bit (S).
-	// I2C1->CR2 |= I2C_CR2_START; // I2C_CR2_START [13]
-	// I2C_TransferHandling(I2C1, magnetic_field_addr << 1, 1, I2C_SoftEnd_Mode, I2C_Generate_Start_Write);
+	I2C1->CR2 |= (magnetic_field_addr << 1); // I2C_CR2_SADD [0;9]
+	I2C1->CR2 &= ~I2C_CR2_RD_WRN; // (write)I2C_CR2_RD_WRN [10]
+	I2C1->CR2 &= ~I2C_CR2_ADD10; // ensure disabled I2C_CR2_ADD10 [11]
+	I2C1->CR2 |= (1 << 16); // 1 byte send with addr I2C_CR2_NBYTES [16;23]
+	I2C1->CR2 |= I2C_CR2_START; // I2C_CR2_START [13]
 
-	I2C1->CR2 &= (uint32_t)~((uint32_t)(I2C_CR2_SADD | I2C_CR2_NBYTES | I2C_CR2_RELOAD | I2C_CR2_AUTOEND | I2C_CR2_RD_WRN | I2C_CR2_START | I2C_CR2_STOP));
 
-	I2C1->CR2 |= (uint32_t)(((uint32_t)(magnetic_field_addr << 1) & I2C_CR2_SADD) | (((uint32_t)1 << 16 ) & I2C_CR2_NBYTES) | (uint32_t)I2C_SoftEnd_Mode | (uint32_t)I2C_Generate_Start_Write);
 
-	/* !!! Wait until TXIS flag is set !!! */
 	timeout = I2C_TIMEOUT;
 	while ((I2C1->ISR & I2C_ISR_TXIS) == 0)
 	{
@@ -119,29 +107,144 @@ int I2C_communicate(void)
 		}
 	}
 
+	I2C1->TXDR = (uint8_t)OUT_X_H_M & I2C_TXDR_TXDATA;
+
+	timeout = I2C_TIMEOUT;
+	while ((I2C1->ISR & I2C_ISR_TC) == 0)
+	{
+		if((timeout--) == 0)
+		{
+			_write(0, "ERROR READ_TC\n", 14);
+			return 0;
+		}
+	}
+
+	I2C1->CR2 &= ~I2C_CR2_ADD10; // ensure disabled I2C_CR2_ADD10 [11] (default 7bits)
+	I2C1->CR2 |= I2C_CR2_RD_WRN; // I2C_CR2_RD_WRN [10]
+	I2C1->CR2 &= ~(0xFF << 16); // I2C_CR2_NBYTES [16;23]
+	I2C1->CR2 |= 6 << 16; // I2C_CR2_NBYTES [16;23]
+	I2C1->CR2 |= I2C_CR2_AUTOEND; // I2C_CR2_STOP [14]
+	I2C1->CR2 |= I2C_CR2_START; // I2C_CR2_START [13]
+
+	volatile uint8_t a;
+	volatile uint8_t data[6];
+	volatile char		c;
+
+	a = 0;
+	_write(0, "DATA\n", 5);
+	_write(0, "0x", 2);
+	while (a < 6)
+	{
+		while ((I2C1->ISR & I2C_ISR_RXNE) == 0) 
+		{
+			if((timeout--) == 0)
+			{
+				_write(0, "ERROR READRXNE\n", 15);
+				return 0;
+			}
+		}
+		(void)data;
+		c = I2C1->RXDR;
+		ft_print_hexa((uint8_t)c);
+		_write(0, "\n", 1);
+		a++;
+	}
+	_write(0, "\n", 1);
+	return (1);
+}
 
 
-	//I2C1->TXDR = magnetic_field_addr & I2C_TXDR_TXDATA;
+void i2c1_initp(void)
+{
+  GPIO_InitTypeDef GPIO_InitStructure;
+  I2C_InitTypeDef  I2C_InitStructure;
 
-	//while ((I2C1->ISR & I2C_ISR_TC) == 0)  {};
+  RCC_I2CCLKConfig(RCC_I2C1CLK_SYSCLK);
 
-	//I2C1->CR2 &= ~I2C_CR2_ADD10; // ensure disabled I2C_CR2_ADD10 [11] (default 7bits)
-	//I2C1->CR2 &= ~I2C_CR2_RD_WRN; // I2C_CR2_RD_WRN [10]
-	//I2C1->CR2 |= 6 << 16; // I2C_CR2_NBYTES [16;23]
-	//I2C1->CR2 |= I2C_CR2_START; // I2C_CR2_START [13]
-	//I2C1->CR2 |= I2C_CR2_AUTOEND; // I2C_CR2_STOP [14]
+  RCC_APB1PeriphClockCmd(RCC_APB1Periph_I2C1, ENABLE);
+  RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOB, ENABLE);
 
-//	uint8_t a;
-//	uint8_t data[6];
-//
-//	a = 0;
-//	while (a < 6)
-//	{
-//		while ((I2C1->ISR & I2C_ISR_TXIS) == 0) {};
-//		data[a] = I2C1->RXDR & I2C_RXDR_RXDATA;
-//		while ((I2C1->ISR & I2C_ISR_RXNE) == 0) {};
-//		a++;
-//	}
-//	_write(0, (char *)&data, 6);
+  GPIO_PinAFConfig(GPIOB, GPIO_PinSource6, GPIO_AF_4);
+  GPIO_PinAFConfig(GPIOB, GPIO_PinSource7, GPIO_AF_4);
+
+  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
+  GPIO_InitStructure.GPIO_OType = GPIO_OType_OD;
+  GPIO_InitStructure.GPIO_PuPd  = GPIO_PuPd_NOPULL;
+  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+
+  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6;
+  GPIO_Init(GPIOB, &GPIO_InitStructure);
+
+  GPIO_InitStructure.GPIO_Pin =  GPIO_Pin_7;
+  GPIO_Init(GPIOB, &GPIO_InitStructure);
+
+  I2C_DeInit(I2C1);
+  I2C_InitStructure.I2C_Mode = I2C_Mode_I2C;
+  I2C_InitStructure.I2C_AnalogFilter = I2C_AnalogFilter_Enable;
+  I2C_InitStructure.I2C_DigitalFilter = 0x00;
+  I2C_InitStructure.I2C_Ack = I2C_Ack_Enable;
+  I2C_InitStructure.I2C_AcknowledgedAddress = I2C_AcknowledgedAddress_7bit;
+  I2C_InitStructure.I2C_Timing = 0x2000090E;
+  I2C_InitStructure.I2C_OwnAddress1 = 0x00;
+
+  I2C_Init(I2C1, &I2C_InitStructure);
+  I2C_Cmd(I2C1, ENABLE);
+}
+
+uint8_t i2c_read(uint8_t DeviceAddr, uint8_t RegAddr, uint8_t* data, uint16_t len)
+{
+	int index;
+	uint32_t timeout;
+
+	index = 0;
+	timeout = I2C_TIMEOUT;
+	while(I2C_GetFlagStatus(I2C1, I2C_ISR_BUSY) != RESET)
+	{
+		if((timeout--) == 0)
+		{
+			_write(0, "ERROR ISR BUSY\n", 15);
+			return 0;
+		}
+	}
+	I2C_TransferHandling(I2C1, DeviceAddr << 1, 1, I2C_SoftEnd_Mode, I2C_Generate_Start_Write);
+
+	timeout = I2C_TIMEOUT;
+	while(I2C_GetFlagStatus(I2C1, I2C_ISR_TXIS) == RESET)
+	{
+		if((timeout--) == 0)
+		{
+			_write(0, "ERROR ISR TXIS\n", 15);
+			return 0;
+		}
+	}
+
+	I2C_SendData(I2C1, RegAddr);
+
+	timeout = I2C_TIMEOUT;
+	while ((I2C1->ISR & I2C_ISR_TC) == 0)
+	{
+		if((timeout--) == 0)
+		{
+			_write(0, "ERROR ISR TC\n", 13);
+			return 0;
+		}
+	}
+
+	I2C_TransferHandling(I2C1, DeviceAddr << 1, len, I2C_AutoEnd_Mode, I2C_Generate_Start_Read);
+	while (index < len)
+	{
+		while ((I2C1->ISR & I2C_ISR_RXNE) == 0) 
+		{
+			if((timeout--) == 0)
+			{
+				_write(0, "ERROR ISR RXNE\n", 15);
+				return 0;
+			}
+		}
+		data[index] = I2C_ReceiveData(I2C1);
+		ft_print_hexa(data[index]);
+		_write(0, "\n", 1);
+		index++;
+	}
 	return (1);
 }
