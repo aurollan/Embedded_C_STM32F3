@@ -1,3 +1,9 @@
+#define LSM303DLHC_OUT_X_L_A                 0x28  /* Output Register X acceleration */
+#define LSM303DLHC_OUT_X_H_A                 0x29  /* Output Register X acceleration */
+#define LSM303DLHC_OUT_Y_L_A                 0x2A  /* Output Register Y acceleration */
+#define LSM303DLHC_OUT_Y_H_A                 0x2B  /* Output Register Y acceleration */
+#define LSM303DLHC_OUT_Z_L_A                 0x2C  /* Output Register Z acceleration */
+#define LSM303DLHC_OUT_Z_H_A                 0x2D  /* Output Register Z acceleration */ 
 #define  GPIO_SPEED_FREQ_HIGH     (0x00000003U)  /*!< range 10 MHz to 50 MHz, please refer to the product datasheet */
 #define TIMING_CLEAR_MASK       ((uint32_t)0xF0FFFFFF)  /*<! I2C TIMING clear register Mask */
 #define I2C_NOSTRETCH_DISABLE           (0x00000000U)
@@ -230,12 +236,6 @@ void BSP_ACCELERO_GetXYZ(uint8_t *pDataXYZ)
 {
 
 	// const uint8_t MAGNETOMETER = 0x1E; // 0x1E
-	const uint8_t OUT_X_H_A = 0x20;
-	const uint8_t OUT_X_L_A = 0x21;
-	const uint8_t OUT_Y_H_A = 0x22;
-	const uint8_t OUT_Y_L_A = 0x23;
-	const uint8_t OUT_Z_H_A = 0x24;
-	const uint8_t OUT_Z_L_A = 0x25;
 	int16_t pnRawData[3];
 	uint8_t ctrlx[2]={0,0};
 	int8_t buffer[6];
@@ -254,12 +254,12 @@ void BSP_ACCELERO_GetXYZ(uint8_t *pDataXYZ)
 	// buffer[4] = COMPASSACCELERO_READ_REGISTER(ACC_I2C_ADDRESS, OUT_Z_L_A);
 	// buffer[5] = COMPASSACCELERO_READ_REGISTER(ACC_I2C_ADDRESS, OUT_Z_H_A);
 
-	pDataXYZ[0] = COMPASSACCELERO_READ_REGISTER(ACC_I2C_ADDRESS, OUT_X_L_A); 
-	pDataXYZ[1] = COMPASSACCELERO_READ_REGISTER(ACC_I2C_ADDRESS, OUT_X_H_A);
-	pDataXYZ[2] = COMPASSACCELERO_READ_REGISTER(ACC_I2C_ADDRESS, OUT_Y_L_A);
-	pDataXYZ[3] = COMPASSACCELERO_READ_REGISTER(ACC_I2C_ADDRESS, OUT_Y_H_A);
-	pDataXYZ[4] = COMPASSACCELERO_READ_REGISTER(ACC_I2C_ADDRESS, OUT_Z_L_A);
-	pDataXYZ[5] = COMPASSACCELERO_READ_REGISTER(ACC_I2C_ADDRESS, OUT_Z_H_A);
+	pDataXYZ[0] = COMPASSACCELERO_READ_REGISTER(ACC_I2C_ADDRESS, LSM303DLHC_OUT_X_L_A); 
+	pDataXYZ[1] = COMPASSACCELERO_READ_REGISTER(ACC_I2C_ADDRESS, LSM303DLHC_OUT_X_H_A);
+	pDataXYZ[2] = COMPASSACCELERO_READ_REGISTER(ACC_I2C_ADDRESS, LSM303DLHC_OUT_Y_L_A);
+	pDataXYZ[3] = COMPASSACCELERO_READ_REGISTER(ACC_I2C_ADDRESS, LSM303DLHC_OUT_Y_H_A);
+	pDataXYZ[4] = COMPASSACCELERO_READ_REGISTER(ACC_I2C_ADDRESS, LSM303DLHC_OUT_Z_L_A);
+	pDataXYZ[5] = COMPASSACCELERO_READ_REGISTER(ACC_I2C_ADDRESS, LSM303DLHC_OUT_Z_H_A);
 	return ;
 	/* Check in the control register4 the data alignment*/
 	if(!(ctrlx[0] & LSM303DLHC_BLE_MSB)) 
