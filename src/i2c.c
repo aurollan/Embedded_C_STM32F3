@@ -6,7 +6,7 @@
 /*   By: aurollan <aurollan@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2020/02/04 17:52:07 by aurollan     #+#   ##    ##    #+#       */
-/*   Updated: 2020/02/21 11:17:44 by aurollan    ###    #+. /#+    ###.fr     */
+/*   Updated: 2020/02/26 17:53:23 by aurollan    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -45,6 +45,9 @@ void GPIOB_config()
 	// PUPD_UP ? A VERIFIER
 	GPIOB->PUPDR |= GPIO_PuPd_NOPULL << 6 * 2;        /*!< GPIO port pull-up/pull-down register,                      */
 	GPIOB->PUPDR |= GPIO_PuPd_NOPULL << 7 * 2;        /*!< GPIO port pull-up/pull-down register,                      */
+	// To test
+	// GPIOB->PUPDR |= GPIO_PuPd_DOWN << 6 * 2;        /*!< GPIO port pull-up/pull-down register,                      */
+	// GPIOB->PUPDR |= GPIO_PuPd_DOWN << 7 * 2;        /*!< GPIO port pull-up/pull-down register,                      */
 }
 
 void I2C_enable()
@@ -70,6 +73,13 @@ void I2C_enable()
 	I2C1->OAR2 = 0x00000000;
 	I2C1->OAR1 |= I2C_OAR1_OA1EN;
 	I2C1->CR2 = 0x00000000;
+	// hi2c->Instance->TIMINGR = hi2c->Init.Timing & TIMING_CLEAR_MASK;
+	// hi2c->Instance->OAR1 &= ~I2C_OAR1_OA1EN;
+	// hi2c->Instance->OAR1 = (I2C_OAR1_OA1EN | hi2c->Init.OwnAddress1);
+	// hi2c->Instance->CR2 |= (I2C_CR2_AUTOEND | I2C_CR2_NACK);
+	// hi2c->Instance->OAR2 &= ~I2C_DUALADDRESS_ENABLE;
+	// hi2c->Instance->OAR2 = (hi2c->Init.DualAddressMode | hi2c->Init.OwnAddress2 | (hi2c->Init.OwnAddress2Masks << 8));
+	// hi2c->Instance->CR1 = (hi2c->Init.GeneralCallMode | hi2c->Init.NoStretchMode);
 }
 
 
@@ -187,16 +197,19 @@ void i2c1_initp(void)
   I2C_InitStructure.I2C_Timing = 0x2000090E;
   I2C_InitStructure.I2C_OwnAddress1 = 0x00;
 
+
   I2C_Init(I2C1, &I2C_InitStructure);
   I2C_Cmd(I2C1, ENABLE);
+
+  // init_register();
 }
 
-uint8_t i2c_read(uint8_t DeviceAddr, uint8_t RegAddr, uint8_t* data, uint16_t len)
+uint8_t i2c_set(uint8_t DeviceAddr, uint8_t RegAddr)
 {
-	int index;
 	uint32_t timeout;
 
-	index = 0;
+	// Auto increment register when multiple read
+	// RegAddr |= 0b10000000;
 	timeout = I2C_TIMEOUT;
 	while(I2C_GetFlagStatus(I2C1, I2C_ISR_BUSY) != RESET)
 	{
@@ -206,7 +219,8 @@ uint8_t i2c_read(uint8_t DeviceAddr, uint8_t RegAddr, uint8_t* data, uint16_t le
 			return 0;
 		}
 	}
-	I2C_TransferHandling(I2C1, DeviceAddr << 1, 1, I2C_SoftEnd_Mode, I2C_Generate_Start_Write);
+	// TRY I2C_CR2_RELOAD instead of  I2C_SoftEnd_mode 
+	I2C_TransferHandling(I2C1, DeviceAddr, 1, I2C_SoftEnd_Mode, I2C_Generate_Start_Write);
 
 	timeout = I2C_TIMEOUT;
 	while(I2C_GetFlagStatus(I2C1, I2C_ISR_TXIS) == RESET)
@@ -229,22 +243,36 @@ uint8_t i2c_read(uint8_t DeviceAddr, uint8_t RegAddr, uint8_t* data, uint16_t le
 			return 0;
 		}
 	}
-
-	I2C_TransferHandling(I2C1, DeviceAddr << 1, len, I2C_AutoEnd_Mode, I2C_Generate_Start_Read);
-	while (index < len)
-	{
-		while ((I2C1->ISR & I2C_ISR_RXNE) == 0) 
-		{
-			if((timeout--) == 0)
-			{
-				_write(0, "ERROR ISR RXNE\n", 15);
-				return 0;
-			}
-		}
-		data[index] = I2C_ReceiveData(I2C1);
-		ft_print_hexa(data[index]);
-		_write(0, "\n", 1);
-		index++;
-	}
 	return (1);
 }
+
+uint8_t i2c_read(uint8_t DeviceAddr, uint8_t* data)
+{
+	uint32_t timeout;
+
+	I2C_TransferHandling(I2C1, DeviceAddr, 1, I2C_AutoEnd_Mode, I2C_Generate_Start_Read);
+	// I2C_TransferHandling(I2C1, DeviceAddr, 1, I2C_AutoEnd_Mode, I2C_No_StartStop);
+	timeout = I2C_TIMEOUT;
+	while ((I2C1->ISR & I2C_ISR_RXNE) == 0) 
+	{
+		if((timeout--) == 0)
+		{
+			_write(0, "ERROR ISR RXNE\n", 15);
+			return 0;
+		}
+	}
+	*data = I2C_ReceiveData(I2C1);
+	I2C1->CR2 |= I2C_CR2_NACK;
+	while ((I2C1->CR2 & I2C_CR2_NACK) == 0) {};
+	I2C1->CR2 |= I2C_CR2_STOP;
+	while ((I2C1->CR2 & I2C_CR2_STOP) == 0) {};
+	return (1);
+}
+
+
+
+
+// void	init_register(void)
+// {
+// 
+// }

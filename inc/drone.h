@@ -52,7 +52,16 @@ void	echo_back();
 void	I2C_enable();
 int	I2C_communicate();
 void i2c1_initp(void);
-uint8_t i2c_read(uint8_t DeviceAddr, uint8_t RegAddr, uint8_t* data, uint16_t len);
+uint8_t i2c_read(uint8_t DeviceAddr, uint8_t* data);
+uint8_t i2c_set(uint8_t DeviceAddr, uint8_t RegAddr);
+uint8_t BSP_ACCELERO_Init(void);
+void BSP_ACCELERO_GetXYZ(uint8_t *pDataXYZ);
+void  COMPASSACCELERO_WRITE_REGISTER(uint16_t DeviceAddr, uint16_t RegisterAddr, uint8_t RegisterConfig);
+uint8_t  COMPASSACCELERO_READ_REGISTER(uint16_t DeviceAddr, uint16_t RegisterAddr);
+void HAL_I2C_Init();
+void I2Cx_MspInit();
+void I2Cx_Init(void);
+void COMPASSACCELERO_IO_Init(void);
 
 /*
 ** main.c

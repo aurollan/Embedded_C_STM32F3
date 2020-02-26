@@ -35,6 +35,7 @@ FILE_ASM = startup_stm32f30x.s
 
 FILE_SRC = main.c \
 		   i2c.c \
+		   hal_i2c.c \
 		   itm.c \
 		   leds.c \
 		   delay.c \
@@ -67,8 +68,8 @@ I_FLAGS = $(addprefix -I , $(DIR_INC))
 # DEFINE/Macro flags
 # DM_FLAGS =-D__STARTUP_CLEAR_BSS
 DM_FLAGS =  -DSTM32F303xC -DUSE_FULL_ASSERT
-# Optimization flags
-O_FLAGS = -Os -ffunction-sections -fdata-sections
+# Optimization flags (add -0s for optimization flag)
+O_FLAGS = -ffunction-sections -fdata-sections
 # Warning flags
 W_FLAGS = -Werror -Wall -Wextra
 # Spec file flags (--specs=nano.specs --specs=rdimon.specs --specs=nosys.specs)

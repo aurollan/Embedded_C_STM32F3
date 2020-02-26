@@ -44,7 +44,7 @@ How to end after n bytes are transfered:
 NEED CALCUL FOR CLOCK
 
 ### Master communication initialization
-MUST program I2C_CR2:
+MUST program I2C_CR2 before start:
 => adressing mode (7bits or 10 bits)
 => Slave adress to be send: SADD[9:0]
 => Transfert direction: read == 1, write == 0
@@ -54,7 +54,7 @@ MUST program I2C_CR2:
 
 => Wait bus is free BUSY == 0 
 
-=> start bit is reset after adress has been send
+=> start bit is reset after address has been send
 
 ### Master transmitter
 the TXIS flag is set after each byte transmission
@@ -83,7 +83,7 @@ sent after the NACK reception. the NACKF flag is set in the I2C_ISR register, an
 interrupt is generated if the NACKIE bit is set.
 
 
-Master receiver
+### Master receiver
 In the case of a read transfer, the RXNE flag is set after each byte reception, after the 8th
 SCL pulse. An RXNE event generates an interrupt if the RXIE bit is set in the I2C_CR1
 register. The flag is cleared when I2C_RXDR is read.
@@ -106,3 +106,7 @@ register. Setting the STOP bit clears the TC flag and the STOP condition is sent
 the bus.
 
 
+After the START condition (ST) a slave address is sent, once a
+slave acknowledge (SAK) has been returned, an 8-bit sub-address (SUB) is transmitted; the
+7 LSBs represent the actual register address while the MSB enables address autoincrement. If the MSB of the SUB field is ‘1’, the SUB (register address) is automatically
+increased to allow multiple data Read/Write.
