@@ -1,0 +1,1149 @@
+
+Discarded input sections
+
+ .group         0x0000000000000000        0xc obj/main.o
+ .group         0x0000000000000000        0xc obj/main.o
+ .group         0x0000000000000000        0xc obj/main.o
+ .group         0x0000000000000000        0xc obj/main.o
+ .group         0x0000000000000000        0xc obj/main.o
+ .group         0x0000000000000000        0xc obj/main.o
+ .group         0x0000000000000000        0xc obj/main.o
+ .group         0x0000000000000000        0xc obj/main.o
+ .group         0x0000000000000000        0xc obj/main.o
+ .group         0x0000000000000000        0xc obj/main.o
+ .group         0x0000000000000000        0xc obj/main.o
+ .group         0x0000000000000000        0xc obj/main.o
+ .group         0x0000000000000000        0xc obj/main.o
+ .group         0x0000000000000000        0xc obj/main.o
+ .group         0x0000000000000000        0xc obj/main.o
+ .group         0x0000000000000000        0xc obj/main.o
+ .group         0x0000000000000000        0xc obj/main.o
+ .text          0x0000000000000000        0x0 obj/main.o
+ .data          0x0000000000000000        0x0 obj/main.o
+ .bss           0x0000000000000000        0x0 obj/main.o
+ .text.assert_failed
+                0x0000000000000000        0xc obj/main.o
+ .group         0x0000000000000000        0xc obj/i2c.o
+ .group         0x0000000000000000        0xc obj/i2c.o
+ .group         0x0000000000000000        0xc obj/i2c.o
+ .group         0x0000000000000000        0xc obj/i2c.o
+ .group         0x0000000000000000        0xc obj/i2c.o
+ .group         0x0000000000000000        0xc obj/i2c.o
+ .group         0x0000000000000000        0xc obj/i2c.o
+ .group         0x0000000000000000        0xc obj/i2c.o
+ .group         0x0000000000000000        0xc obj/i2c.o
+ .group         0x0000000000000000        0xc obj/i2c.o
+ .group         0x0000000000000000        0xc obj/i2c.o
+ .group         0x0000000000000000        0xc obj/i2c.o
+ .group         0x0000000000000000        0xc obj/i2c.o
+ .group         0x0000000000000000        0xc obj/i2c.o
+ .group         0x0000000000000000        0xc obj/i2c.o
+ .group         0x0000000000000000        0xc obj/i2c.o
+ .group         0x0000000000000000        0xc obj/i2c.o
+ .text          0x0000000000000000        0x0 obj/i2c.o
+ .data          0x0000000000000000        0x0 obj/i2c.o
+ .bss           0x0000000000000000        0x0 obj/i2c.o
+ .text.RCC_I2C_enable
+                0x0000000000000000       0x2c obj/i2c.o
+ .text.GPIOB_connect_PIN6_PIN7
+                0x0000000000000000       0x44 obj/i2c.o
+ .text.GPIOB_config
+                0x0000000000000000       0x74 obj/i2c.o
+ .text.I2C_enable
+                0x0000000000000000       0x68 obj/i2c.o
+ .rodata        0x0000000000000000       0x90 obj/i2c.o
+ .text.I2C_communicate
+                0x0000000000000000      0x1bc obj/i2c.o
+ .text.i2c1_initp
+                0x0000000000000000       0xb4 obj/i2c.o
+ .text.i2c_set  0x0000000000000000       0xd0 obj/i2c.o
+ .text.i2c_read
+                0x0000000000000000       0xa4 obj/i2c.o
+ .debug_info    0x0000000000000000      0x6d0 obj/i2c.o
+ .debug_abbrev  0x0000000000000000      0x1c0 obj/i2c.o
+ .debug_aranges
+                0x0000000000000000       0x58 obj/i2c.o
+ .debug_ranges  0x0000000000000000       0x48 obj/i2c.o
+ .debug_macro   0x0000000000000000      0x105 obj/i2c.o
+ .debug_macro   0x0000000000000000      0xaa2 obj/i2c.o
+ .debug_macro   0x0000000000000000       0x78 obj/i2c.o
+ .debug_macro   0x0000000000000000       0x3b obj/i2c.o
+ .debug_macro   0x0000000000000000       0x22 obj/i2c.o
+ .debug_macro   0x0000000000000000       0x8e obj/i2c.o
+ .debug_macro   0x0000000000000000       0x51 obj/i2c.o
+ .debug_macro   0x0000000000000000       0xef obj/i2c.o
+ .debug_macro   0x0000000000000000       0x6a obj/i2c.o
+ .debug_macro   0x0000000000000000      0x1df obj/i2c.o
+ .debug_macro   0x0000000000000000       0x2d obj/i2c.o
+ .debug_macro   0x0000000000000000       0x26 obj/i2c.o
+ .debug_macro   0x0000000000000000      0xd39 obj/i2c.o
+ .debug_macro   0x0000000000000000     0xae16 obj/i2c.o
+ .debug_macro   0x0000000000000000      0x1bd obj/i2c.o
+ .debug_macro   0x0000000000000000      0x29a obj/i2c.o
+ .debug_macro   0x0000000000000000      0x70b obj/i2c.o
+ .debug_macro   0x0000000000000000      0x364 obj/i2c.o
+ .debug_line    0x0000000000000000      0x663 obj/i2c.o
+ .debug_str     0x0000000000000000    0x4feea obj/i2c.o
+ .comment       0x0000000000000000       0x7a obj/i2c.o
+ .debug_frame   0x0000000000000000      0x124 obj/i2c.o
+ .ARM.attributes
+                0x0000000000000000       0x32 obj/i2c.o
+ .group         0x0000000000000000        0xc obj/hal_i2c.o
+ .group         0x0000000000000000        0xc obj/hal_i2c.o
+ .group         0x0000000000000000        0xc obj/hal_i2c.o
+ .group         0x0000000000000000        0xc obj/hal_i2c.o
+ .group         0x0000000000000000        0xc obj/hal_i2c.o
+ .group         0x0000000000000000        0xc obj/hal_i2c.o
+ .group         0x0000000000000000        0xc obj/hal_i2c.o
+ .group         0x0000000000000000        0xc obj/hal_i2c.o
+ .group         0x0000000000000000        0xc obj/hal_i2c.o
+ .group         0x0000000000000000        0xc obj/hal_i2c.o
+ .group         0x0000000000000000        0xc obj/hal_i2c.o
+ .group         0x0000000000000000        0xc obj/hal_i2c.o
+ .group         0x0000000000000000        0xc obj/hal_i2c.o
+ .group         0x0000000000000000        0xc obj/hal_i2c.o
+ .group         0x0000000000000000        0xc obj/hal_i2c.o
+ .group         0x0000000000000000        0xc obj/hal_i2c.o
+ .group         0x0000000000000000        0xc obj/hal_i2c.o
+ .text          0x0000000000000000        0x0 obj/hal_i2c.o
+ .data          0x0000000000000000        0x0 obj/hal_i2c.o
+ .bss           0x0000000000000000        0x0 obj/hal_i2c.o
+ .debug_macro   0x0000000000000000      0xaa2 obj/hal_i2c.o
+ .debug_macro   0x0000000000000000       0x78 obj/hal_i2c.o
+ .debug_macro   0x0000000000000000       0x3b obj/hal_i2c.o
+ .debug_macro   0x0000000000000000       0x22 obj/hal_i2c.o
+ .debug_macro   0x0000000000000000       0x8e obj/hal_i2c.o
+ .debug_macro   0x0000000000000000       0x51 obj/hal_i2c.o
+ .debug_macro   0x0000000000000000       0xef obj/hal_i2c.o
+ .debug_macro   0x0000000000000000       0x6a obj/hal_i2c.o
+ .debug_macro   0x0000000000000000      0x1df obj/hal_i2c.o
+ .debug_macro   0x0000000000000000       0x2d obj/hal_i2c.o
+ .debug_macro   0x0000000000000000       0x26 obj/hal_i2c.o
+ .debug_macro   0x0000000000000000      0xd39 obj/hal_i2c.o
+ .debug_macro   0x0000000000000000     0xae16 obj/hal_i2c.o
+ .debug_macro   0x0000000000000000      0x1bd obj/hal_i2c.o
+ .debug_macro   0x0000000000000000      0x29a obj/hal_i2c.o
+ .debug_macro   0x0000000000000000      0x70b obj/hal_i2c.o
+ .debug_macro   0x0000000000000000      0x364 obj/hal_i2c.o
+ .group         0x0000000000000000        0xc obj/itm.o
+ .group         0x0000000000000000        0xc obj/itm.o
+ .group         0x0000000000000000        0xc obj/itm.o
+ .group         0x0000000000000000        0xc obj/itm.o
+ .group         0x0000000000000000        0xc obj/itm.o
+ .group         0x0000000000000000        0xc obj/itm.o
+ .group         0x0000000000000000        0xc obj/itm.o
+ .group         0x0000000000000000        0xc obj/itm.o
+ .group         0x0000000000000000        0xc obj/itm.o
+ .group         0x0000000000000000        0xc obj/itm.o
+ .group         0x0000000000000000        0xc obj/itm.o
+ .group         0x0000000000000000        0xc obj/itm.o
+ .group         0x0000000000000000        0xc obj/itm.o
+ .group         0x0000000000000000        0xc obj/itm.o
+ .group         0x0000000000000000        0xc obj/itm.o
+ .group         0x0000000000000000        0xc obj/itm.o
+ .group         0x0000000000000000        0xc obj/itm.o
+ .text          0x0000000000000000        0x0 obj/itm.o
+ .data          0x0000000000000000        0x0 obj/itm.o
+ .bss           0x0000000000000000        0x0 obj/itm.o
+ .debug_macro   0x0000000000000000      0xaa2 obj/itm.o
+ .debug_macro   0x0000000000000000       0x78 obj/itm.o
+ .debug_macro   0x0000000000000000       0x3b obj/itm.o
+ .debug_macro   0x0000000000000000       0x22 obj/itm.o
+ .debug_macro   0x0000000000000000       0x8e obj/itm.o
+ .debug_macro   0x0000000000000000       0x51 obj/itm.o
+ .debug_macro   0x0000000000000000       0xef obj/itm.o
+ .debug_macro   0x0000000000000000       0x6a obj/itm.o
+ .debug_macro   0x0000000000000000      0x1df obj/itm.o
+ .debug_macro   0x0000000000000000       0x2d obj/itm.o
+ .debug_macro   0x0000000000000000       0x26 obj/itm.o
+ .debug_macro   0x0000000000000000      0xd39 obj/itm.o
+ .debug_macro   0x0000000000000000     0xae16 obj/itm.o
+ .debug_macro   0x0000000000000000      0x1bd obj/itm.o
+ .debug_macro   0x0000000000000000      0x29a obj/itm.o
+ .debug_macro   0x0000000000000000      0x70b obj/itm.o
+ .debug_macro   0x0000000000000000      0x364 obj/itm.o
+ .group         0x0000000000000000        0xc obj/leds.o
+ .group         0x0000000000000000        0xc obj/leds.o
+ .group         0x0000000000000000        0xc obj/leds.o
+ .group         0x0000000000000000        0xc obj/leds.o
+ .group         0x0000000000000000        0xc obj/leds.o
+ .group         0x0000000000000000        0xc obj/leds.o
+ .group         0x0000000000000000        0xc obj/leds.o
+ .group         0x0000000000000000        0xc obj/leds.o
+ .group         0x0000000000000000        0xc obj/leds.o
+ .group         0x0000000000000000        0xc obj/leds.o
+ .group         0x0000000000000000        0xc obj/leds.o
+ .group         0x0000000000000000        0xc obj/leds.o
+ .group         0x0000000000000000        0xc obj/leds.o
+ .group         0x0000000000000000        0xc obj/leds.o
+ .group         0x0000000000000000        0xc obj/leds.o
+ .group         0x0000000000000000        0xc obj/leds.o
+ .group         0x0000000000000000        0xc obj/leds.o
+ .text          0x0000000000000000        0x0 obj/leds.o
+ .data          0x0000000000000000        0x0 obj/leds.o
+ .bss           0x0000000000000000        0x0 obj/leds.o
+ .text.GPIOE_enable
+                0x0000000000000000       0x20 obj/leds.o
+ .text.GPIOE_full_init
+                0x0000000000000000       0x30 obj/leds.o
+ .text.leds     0x0000000000000000       0xd4 obj/leds.o
+ .debug_info    0x0000000000000000      0x2d4 obj/leds.o
+ .debug_abbrev  0x0000000000000000       0xef obj/leds.o
+ .debug_aranges
+                0x0000000000000000       0x30 obj/leds.o
+ .debug_ranges  0x0000000000000000       0x20 obj/leds.o
+ .debug_macro   0x0000000000000000       0xf3 obj/leds.o
+ .debug_macro   0x0000000000000000      0xaa2 obj/leds.o
+ .debug_macro   0x0000000000000000       0x78 obj/leds.o
+ .debug_macro   0x0000000000000000       0x3b obj/leds.o
+ .debug_macro   0x0000000000000000       0x22 obj/leds.o
+ .debug_macro   0x0000000000000000       0x8e obj/leds.o
+ .debug_macro   0x0000000000000000       0x51 obj/leds.o
+ .debug_macro   0x0000000000000000       0xef obj/leds.o
+ .debug_macro   0x0000000000000000       0x6a obj/leds.o
+ .debug_macro   0x0000000000000000      0x1df obj/leds.o
+ .debug_macro   0x0000000000000000       0x2d obj/leds.o
+ .debug_macro   0x0000000000000000       0x26 obj/leds.o
+ .debug_macro   0x0000000000000000      0xd39 obj/leds.o
+ .debug_macro   0x0000000000000000     0xae16 obj/leds.o
+ .debug_macro   0x0000000000000000      0x1bd obj/leds.o
+ .debug_macro   0x0000000000000000      0x29a obj/leds.o
+ .debug_macro   0x0000000000000000      0x70b obj/leds.o
+ .debug_macro   0x0000000000000000      0x364 obj/leds.o
+ .debug_line    0x0000000000000000      0x54a obj/leds.o
+ .debug_str     0x0000000000000000    0x4fbbb obj/leds.o
+ .comment       0x0000000000000000       0x7a obj/leds.o
+ .debug_frame   0x0000000000000000       0x6c obj/leds.o
+ .ARM.attributes
+                0x0000000000000000       0x32 obj/leds.o
+ .group         0x0000000000000000        0xc obj/delay.o
+ .group         0x0000000000000000        0xc obj/delay.o
+ .group         0x0000000000000000        0xc obj/delay.o
+ .group         0x0000000000000000        0xc obj/delay.o
+ .group         0x0000000000000000        0xc obj/delay.o
+ .group         0x0000000000000000        0xc obj/delay.o
+ .group         0x0000000000000000        0xc obj/delay.o
+ .group         0x0000000000000000        0xc obj/delay.o
+ .group         0x0000000000000000        0xc obj/delay.o
+ .group         0x0000000000000000        0xc obj/delay.o
+ .group         0x0000000000000000        0xc obj/delay.o
+ .group         0x0000000000000000        0xc obj/delay.o
+ .group         0x0000000000000000        0xc obj/delay.o
+ .group         0x0000000000000000        0xc obj/delay.o
+ .group         0x0000000000000000        0xc obj/delay.o
+ .group         0x0000000000000000        0xc obj/delay.o
+ .group         0x0000000000000000        0xc obj/delay.o
+ .text          0x0000000000000000        0x0 obj/delay.o
+ .data          0x0000000000000000        0x0 obj/delay.o
+ .bss           0x0000000000000000        0x0 obj/delay.o
+ .debug_macro   0x0000000000000000      0xaa2 obj/delay.o
+ .debug_macro   0x0000000000000000       0x78 obj/delay.o
+ .debug_macro   0x0000000000000000       0x3b obj/delay.o
+ .debug_macro   0x0000000000000000       0x22 obj/delay.o
+ .debug_macro   0x0000000000000000       0x8e obj/delay.o
+ .debug_macro   0x0000000000000000       0x51 obj/delay.o
+ .debug_macro   0x0000000000000000       0xef obj/delay.o
+ .debug_macro   0x0000000000000000       0x6a obj/delay.o
+ .debug_macro   0x0000000000000000      0x1df obj/delay.o
+ .debug_macro   0x0000000000000000       0x2d obj/delay.o
+ .debug_macro   0x0000000000000000       0x26 obj/delay.o
+ .debug_macro   0x0000000000000000      0xd39 obj/delay.o
+ .debug_macro   0x0000000000000000     0xae16 obj/delay.o
+ .debug_macro   0x0000000000000000      0x1bd obj/delay.o
+ .debug_macro   0x0000000000000000      0x29a obj/delay.o
+ .debug_macro   0x0000000000000000      0x70b obj/delay.o
+ .debug_macro   0x0000000000000000      0x364 obj/delay.o
+ .group         0x0000000000000000        0xc obj/usart.o
+ .group         0x0000000000000000        0xc obj/usart.o
+ .group         0x0000000000000000        0xc obj/usart.o
+ .group         0x0000000000000000        0xc obj/usart.o
+ .group         0x0000000000000000        0xc obj/usart.o
+ .group         0x0000000000000000        0xc obj/usart.o
+ .group         0x0000000000000000        0xc obj/usart.o
+ .group         0x0000000000000000        0xc obj/usart.o
+ .group         0x0000000000000000        0xc obj/usart.o
+ .group         0x0000000000000000        0xc obj/usart.o
+ .group         0x0000000000000000        0xc obj/usart.o
+ .group         0x0000000000000000        0xc obj/usart.o
+ .group         0x0000000000000000        0xc obj/usart.o
+ .group         0x0000000000000000        0xc obj/usart.o
+ .group         0x0000000000000000        0xc obj/usart.o
+ .group         0x0000000000000000        0xc obj/usart.o
+ .group         0x0000000000000000        0xc obj/usart.o
+ .text          0x0000000000000000        0x0 obj/usart.o
+ .data          0x0000000000000000        0x0 obj/usart.o
+ .bss           0x0000000000000000        0x0 obj/usart.o
+ .text.RCC_USART1_enable
+                0x0000000000000000       0x2c obj/usart.o
+ .text.GPIOA_connect_PIN9_PIN10
+                0x0000000000000000       0x4e obj/usart.o
+ .text.GPIOA_config
+                0x0000000000000000       0x82 obj/usart.o
+ .text.USART_enable
+                0x0000000000000000       0x74 obj/usart.o
+ .text.USART_output
+                0x0000000000000000       0x40 obj/usart.o
+ .text.echo_back
+                0x0000000000000000       0x40 obj/usart.o
+ .debug_info    0x0000000000000000      0x4da obj/usart.o
+ .debug_abbrev  0x0000000000000000      0x159 obj/usart.o
+ .debug_aranges
+                0x0000000000000000       0x48 obj/usart.o
+ .debug_ranges  0x0000000000000000       0x38 obj/usart.o
+ .debug_macro   0x0000000000000000       0xf9 obj/usart.o
+ .debug_macro   0x0000000000000000      0xaa2 obj/usart.o
+ .debug_macro   0x0000000000000000       0x78 obj/usart.o
+ .debug_macro   0x0000000000000000       0x3b obj/usart.o
+ .debug_macro   0x0000000000000000       0x22 obj/usart.o
+ .debug_macro   0x0000000000000000       0x8e obj/usart.o
+ .debug_macro   0x0000000000000000       0x51 obj/usart.o
+ .debug_macro   0x0000000000000000       0xef obj/usart.o
+ .debug_macro   0x0000000000000000       0x6a obj/usart.o
+ .debug_macro   0x0000000000000000      0x1df obj/usart.o
+ .debug_macro   0x0000000000000000       0x2d obj/usart.o
+ .debug_macro   0x0000000000000000       0x26 obj/usart.o
+ .debug_macro   0x0000000000000000      0xd39 obj/usart.o
+ .debug_macro   0x0000000000000000     0xae16 obj/usart.o
+ .debug_macro   0x0000000000000000      0x1bd obj/usart.o
+ .debug_macro   0x0000000000000000      0x29a obj/usart.o
+ .debug_macro   0x0000000000000000      0x70b obj/usart.o
+ .debug_macro   0x0000000000000000      0x364 obj/usart.o
+ .debug_line    0x0000000000000000      0x4e8 obj/usart.o
+ .debug_str     0x0000000000000000    0x4fd51 obj/usart.o
+ .comment       0x0000000000000000       0x7a obj/usart.o
+ .debug_frame   0x0000000000000000       0xd4 obj/usart.o
+ .ARM.attributes
+                0x0000000000000000       0x32 obj/usart.o
+ .group         0x0000000000000000        0xc obj/stm32f30x_it.o
+ .group         0x0000000000000000        0xc obj/stm32f30x_it.o
+ .group         0x0000000000000000        0xc obj/stm32f30x_it.o
+ .group         0x0000000000000000        0xc obj/stm32f30x_it.o
+ .group         0x0000000000000000        0xc obj/stm32f30x_it.o
+ .group         0x0000000000000000        0xc obj/stm32f30x_it.o
+ .group         0x0000000000000000        0xc obj/stm32f30x_it.o
+ .group         0x0000000000000000        0xc obj/stm32f30x_it.o
+ .group         0x0000000000000000        0xc obj/stm32f30x_it.o
+ .group         0x0000000000000000        0xc obj/stm32f30x_it.o
+ .group         0x0000000000000000        0xc obj/stm32f30x_it.o
+ .group         0x0000000000000000        0xc obj/stm32f30x_it.o
+ .group         0x0000000000000000        0xc obj/stm32f30x_it.o
+ .text          0x0000000000000000        0x0 obj/stm32f30x_it.o
+ .data          0x0000000000000000        0x0 obj/stm32f30x_it.o
+ .bss           0x0000000000000000        0x0 obj/stm32f30x_it.o
+ .debug_macro   0x0000000000000000      0xaa2 obj/stm32f30x_it.o
+ .debug_macro   0x0000000000000000       0x78 obj/stm32f30x_it.o
+ .debug_macro   0x0000000000000000       0x3b obj/stm32f30x_it.o
+ .debug_macro   0x0000000000000000       0x22 obj/stm32f30x_it.o
+ .debug_macro   0x0000000000000000       0x8e obj/stm32f30x_it.o
+ .debug_macro   0x0000000000000000       0x51 obj/stm32f30x_it.o
+ .debug_macro   0x0000000000000000       0xef obj/stm32f30x_it.o
+ .debug_macro   0x0000000000000000       0x6a obj/stm32f30x_it.o
+ .debug_macro   0x0000000000000000      0x1df obj/stm32f30x_it.o
+ .debug_macro   0x0000000000000000       0x2d obj/stm32f30x_it.o
+ .debug_macro   0x0000000000000000       0x26 obj/stm32f30x_it.o
+ .debug_macro   0x0000000000000000      0xd39 obj/stm32f30x_it.o
+ .debug_macro   0x0000000000000000     0xae16 obj/stm32f30x_it.o
+ .group         0x0000000000000000        0xc obj/stm32f30x_rcc.o
+ .group         0x0000000000000000        0xc obj/stm32f30x_rcc.o
+ .group         0x0000000000000000        0xc obj/stm32f30x_rcc.o
+ .group         0x0000000000000000        0xc obj/stm32f30x_rcc.o
+ .group         0x0000000000000000        0xc obj/stm32f30x_rcc.o
+ .group         0x0000000000000000        0xc obj/stm32f30x_rcc.o
+ .group         0x0000000000000000        0xc obj/stm32f30x_rcc.o
+ .group         0x0000000000000000        0xc obj/stm32f30x_rcc.o
+ .group         0x0000000000000000        0xc obj/stm32f30x_rcc.o
+ .group         0x0000000000000000        0xc obj/stm32f30x_rcc.o
+ .group         0x0000000000000000        0xc obj/stm32f30x_rcc.o
+ .group         0x0000000000000000        0xc obj/stm32f30x_rcc.o
+ .group         0x0000000000000000        0xc obj/stm32f30x_rcc.o
+ .group         0x0000000000000000        0xc obj/stm32f30x_rcc.o
+ .group         0x0000000000000000        0xc obj/stm32f30x_rcc.o
+ .group         0x0000000000000000        0xc obj/stm32f30x_rcc.o
+ .group         0x0000000000000000        0xc obj/stm32f30x_rcc.o
+ .text          0x0000000000000000        0x0 obj/stm32f30x_rcc.o
+ .data          0x0000000000000000        0x0 obj/stm32f30x_rcc.o
+ .bss           0x0000000000000000        0x0 obj/stm32f30x_rcc.o
+ .data.APBAHBPrescTable
+                0x0000000000000000       0x10 obj/stm32f30x_rcc.o
+ .data.ADCPrescTable
+                0x0000000000000000       0x20 obj/stm32f30x_rcc.o
+ .text.RCC_DeInit
+                0x0000000000000000       0x7c obj/stm32f30x_rcc.o
+ .rodata        0x0000000000000000       0x14 obj/stm32f30x_rcc.o
+ .text.RCC_HSEConfig
+                0x0000000000000000       0x40 obj/stm32f30x_rcc.o
+ .text.RCC_WaitForHSEStartUp
+                0x0000000000000000       0x50 obj/stm32f30x_rcc.o
+ .text.RCC_AdjustHSICalibrationValue
+                0x0000000000000000       0x4c obj/stm32f30x_rcc.o
+ .text.RCC_HSICmd
+                0x0000000000000000       0x38 obj/stm32f30x_rcc.o
+ .text.RCC_LSEConfig
+                0x0000000000000000       0x58 obj/stm32f30x_rcc.o
+ .text.RCC_LSEDriveConfig
+                0x0000000000000000       0x54 obj/stm32f30x_rcc.o
+ .text.RCC_LSICmd
+                0x0000000000000000       0x38 obj/stm32f30x_rcc.o
+ .text.RCC_PLLConfig
+                0x0000000000000000       0xd8 obj/stm32f30x_rcc.o
+ .text.RCC_PLLCmd
+                0x0000000000000000       0x38 obj/stm32f30x_rcc.o
+ .text.RCC_PREDIV1Config
+                0x0000000000000000       0xa4 obj/stm32f30x_rcc.o
+ .text.RCC_ClockSecuritySystemCmd
+                0x0000000000000000       0x38 obj/stm32f30x_rcc.o
+ .text.RCC_MCOConfig
+                0x0000000000000000       0x78 obj/stm32f30x_rcc.o
+ .text.RCC_SYSCLKConfig
+                0x0000000000000000       0x54 obj/stm32f30x_rcc.o
+ .text.RCC_GetSYSCLKSource
+                0x0000000000000000       0x20 obj/stm32f30x_rcc.o
+ .text.RCC_HCLKConfig
+                0x0000000000000000       0x78 obj/stm32f30x_rcc.o
+ .text.RCC_PCLK1Config
+                0x0000000000000000       0x68 obj/stm32f30x_rcc.o
+ .text.RCC_PCLK2Config
+                0x0000000000000000       0x6c obj/stm32f30x_rcc.o
+ .text.RCC_GetClocksFreq
+                0x0000000000000000      0x55c obj/stm32f30x_rcc.o
+ .text.RCC_ADCCLKConfig
+                0x0000000000000000      0x158 obj/stm32f30x_rcc.o
+ .text.RCC_I2CCLKConfig
+                0x0000000000000000       0xb4 obj/stm32f30x_rcc.o
+ .text.RCC_TIMCLKConfig
+                0x0000000000000000      0x16c obj/stm32f30x_rcc.o
+ .text.RCC_HRTIM1CLKConfig
+                0x0000000000000000       0x48 obj/stm32f30x_rcc.o
+ .text.RCC_USARTCLKConfig
+                0x0000000000000000      0x17c obj/stm32f30x_rcc.o
+ .text.RCC_USBCLKConfig
+                0x0000000000000000       0x34 obj/stm32f30x_rcc.o
+ .text.RCC_RTCCLKConfig
+                0x0000000000000000       0x48 obj/stm32f30x_rcc.o
+ .text.RCC_I2SCLKConfig
+                0x0000000000000000       0x34 obj/stm32f30x_rcc.o
+ .text.RCC_RTCCLKCmd
+                0x0000000000000000       0x38 obj/stm32f30x_rcc.o
+ .text.RCC_BackupResetCmd
+                0x0000000000000000       0x38 obj/stm32f30x_rcc.o
+ .text.RCC_AHBPeriphClockCmd
+                0x0000000000000000       0x74 obj/stm32f30x_rcc.o
+ .text.RCC_APB2PeriphClockCmd
+                0x0000000000000000       0x74 obj/stm32f30x_rcc.o
+ .text.RCC_APB1PeriphClockCmd
+                0x0000000000000000       0x74 obj/stm32f30x_rcc.o
+ .text.RCC_AHBPeriphResetCmd
+                0x0000000000000000       0x74 obj/stm32f30x_rcc.o
+ .text.RCC_APB2PeriphResetCmd
+                0x0000000000000000       0x74 obj/stm32f30x_rcc.o
+ .text.RCC_APB1PeriphResetCmd
+                0x0000000000000000       0x74 obj/stm32f30x_rcc.o
+ .text.RCC_ITConfig
+                0x0000000000000000       0x7c obj/stm32f30x_rcc.o
+ .text.RCC_GetFlagStatus
+                0x0000000000000000       0xdc obj/stm32f30x_rcc.o
+ .text.RCC_ClearFlag
+                0x0000000000000000       0x20 obj/stm32f30x_rcc.o
+ .text.RCC_GetITStatus
+                0x0000000000000000       0x64 obj/stm32f30x_rcc.o
+ .text.RCC_ClearITPendingBit
+                0x0000000000000000       0x3c obj/stm32f30x_rcc.o
+ .debug_info    0x0000000000000000      0xc19 obj/stm32f30x_rcc.o
+ .debug_abbrev  0x0000000000000000      0x227 obj/stm32f30x_rcc.o
+ .debug_aranges
+                0x0000000000000000      0x158 obj/stm32f30x_rcc.o
+ .debug_ranges  0x0000000000000000      0x148 obj/stm32f30x_rcc.o
+ .debug_macro   0x0000000000000000      0x191 obj/stm32f30x_rcc.o
+ .debug_macro   0x0000000000000000      0xaa2 obj/stm32f30x_rcc.o
+ .debug_macro   0x0000000000000000       0x78 obj/stm32f30x_rcc.o
+ .debug_macro   0x0000000000000000       0x3b obj/stm32f30x_rcc.o
+ .debug_macro   0x0000000000000000       0x22 obj/stm32f30x_rcc.o
+ .debug_macro   0x0000000000000000       0x8e obj/stm32f30x_rcc.o
+ .debug_macro   0x0000000000000000       0x51 obj/stm32f30x_rcc.o
+ .debug_macro   0x0000000000000000       0xef obj/stm32f30x_rcc.o
+ .debug_macro   0x0000000000000000       0x6a obj/stm32f30x_rcc.o
+ .debug_macro   0x0000000000000000      0x1df obj/stm32f30x_rcc.o
+ .debug_macro   0x0000000000000000       0x2d obj/stm32f30x_rcc.o
+ .debug_macro   0x0000000000000000       0x26 obj/stm32f30x_rcc.o
+ .debug_macro   0x0000000000000000      0xd39 obj/stm32f30x_rcc.o
+ .debug_macro   0x0000000000000000     0xae16 obj/stm32f30x_rcc.o
+ .debug_macro   0x0000000000000000      0x1bd obj/stm32f30x_rcc.o
+ .debug_macro   0x0000000000000000      0x29a obj/stm32f30x_rcc.o
+ .debug_macro   0x0000000000000000      0x70b obj/stm32f30x_rcc.o
+ .debug_macro   0x0000000000000000      0x364 obj/stm32f30x_rcc.o
+ .debug_line    0x0000000000000000     0x120f obj/stm32f30x_rcc.o
+ .debug_str     0x0000000000000000    0x50670 obj/stm32f30x_rcc.o
+ .comment       0x0000000000000000       0x7a obj/stm32f30x_rcc.o
+ .debug_frame   0x0000000000000000      0x5a8 obj/stm32f30x_rcc.o
+ .ARM.attributes
+                0x0000000000000000       0x32 obj/stm32f30x_rcc.o
+ .group         0x0000000000000000        0xc obj/stm32f30x_i2c.o
+ .group         0x0000000000000000        0xc obj/stm32f30x_i2c.o
+ .group         0x0000000000000000        0xc obj/stm32f30x_i2c.o
+ .group         0x0000000000000000        0xc obj/stm32f30x_i2c.o
+ .group         0x0000000000000000        0xc obj/stm32f30x_i2c.o
+ .group         0x0000000000000000        0xc obj/stm32f30x_i2c.o
+ .group         0x0000000000000000        0xc obj/stm32f30x_i2c.o
+ .group         0x0000000000000000        0xc obj/stm32f30x_i2c.o
+ .group         0x0000000000000000        0xc obj/stm32f30x_i2c.o
+ .group         0x0000000000000000        0xc obj/stm32f30x_i2c.o
+ .group         0x0000000000000000        0xc obj/stm32f30x_i2c.o
+ .group         0x0000000000000000        0xc obj/stm32f30x_i2c.o
+ .group         0x0000000000000000        0xc obj/stm32f30x_i2c.o
+ .group         0x0000000000000000        0xc obj/stm32f30x_i2c.o
+ .group         0x0000000000000000        0xc obj/stm32f30x_i2c.o
+ .group         0x0000000000000000        0xc obj/stm32f30x_i2c.o
+ .group         0x0000000000000000        0xc obj/stm32f30x_i2c.o
+ .text          0x0000000000000000        0x0 obj/stm32f30x_i2c.o
+ .data          0x0000000000000000        0x0 obj/stm32f30x_i2c.o
+ .bss           0x0000000000000000        0x0 obj/stm32f30x_i2c.o
+ .rodata        0x0000000000000000       0x14 obj/stm32f30x_i2c.o
+ .text.I2C_DeInit
+                0x0000000000000000       0x68 obj/stm32f30x_i2c.o
+ .text.I2C_Init
+                0x0000000000000000      0x180 obj/stm32f30x_i2c.o
+ .text.I2C_StructInit
+                0x0000000000000000       0x40 obj/stm32f30x_i2c.o
+ .text.I2C_Cmd  0x0000000000000000       0x70 obj/stm32f30x_i2c.o
+ .text.I2C_SoftwareResetCmd
+                0x0000000000000000       0x54 obj/stm32f30x_i2c.o
+ .text.I2C_ITConfig
+                0x0000000000000000       0x90 obj/stm32f30x_i2c.o
+ .text.I2C_StretchClockCmd
+                0x0000000000000000       0x70 obj/stm32f30x_i2c.o
+ .text.I2C_StopModeCmd
+                0x0000000000000000       0x70 obj/stm32f30x_i2c.o
+ .text.I2C_DualAddressCmd
+                0x0000000000000000       0x70 obj/stm32f30x_i2c.o
+ .text.I2C_OwnAddress2Config
+                0x0000000000000000       0xbc obj/stm32f30x_i2c.o
+ .text.I2C_GeneralCallCmd
+                0x0000000000000000       0x70 obj/stm32f30x_i2c.o
+ .text.I2C_SlaveByteControlCmd
+                0x0000000000000000       0x70 obj/stm32f30x_i2c.o
+ .text.I2C_SlaveAddressConfig
+                0x0000000000000000       0x74 obj/stm32f30x_i2c.o
+ .text.I2C_10BitAddressingModeCmd
+                0x0000000000000000       0x70 obj/stm32f30x_i2c.o
+ .text.I2C_AutoEndCmd
+                0x0000000000000000       0x70 obj/stm32f30x_i2c.o
+ .text.I2C_ReloadCmd
+                0x0000000000000000       0x70 obj/stm32f30x_i2c.o
+ .text.I2C_NumberOfBytesConfig
+                0x0000000000000000       0x60 obj/stm32f30x_i2c.o
+ .text.I2C_MasterRequestConfig
+                0x0000000000000000       0x74 obj/stm32f30x_i2c.o
+ .text.I2C_GenerateSTART
+                0x0000000000000000       0x70 obj/stm32f30x_i2c.o
+ .text.I2C_GenerateSTOP
+                0x0000000000000000       0x70 obj/stm32f30x_i2c.o
+ .text.I2C_10BitAddressHeaderCmd
+                0x0000000000000000       0x70 obj/stm32f30x_i2c.o
+ .text.I2C_AcknowledgeConfig
+                0x0000000000000000       0x70 obj/stm32f30x_i2c.o
+ .text.I2C_GetAddressMatched
+                0x0000000000000000       0x44 obj/stm32f30x_i2c.o
+ .text.I2C_GetTransferDirection
+                0x0000000000000000       0x5c obj/stm32f30x_i2c.o
+ .text.I2C_TransferHandling
+                0x0000000000000000       0xd4 obj/stm32f30x_i2c.o
+ .text.I2C_SMBusAlertCmd
+                0x0000000000000000       0x70 obj/stm32f30x_i2c.o
+ .text.I2C_ClockTimeoutCmd
+                0x0000000000000000       0x70 obj/stm32f30x_i2c.o
+ .text.I2C_ExtendedClockTimeoutCmd
+                0x0000000000000000       0x70 obj/stm32f30x_i2c.o
+ .text.I2C_IdleClockTimeoutCmd
+                0x0000000000000000       0x70 obj/stm32f30x_i2c.o
+ .text.I2C_TimeoutAConfig
+                0x0000000000000000       0x74 obj/stm32f30x_i2c.o
+ .text.I2C_TimeoutBConfig
+                0x0000000000000000       0x7c obj/stm32f30x_i2c.o
+ .text.I2C_CalculatePEC
+                0x0000000000000000       0x70 obj/stm32f30x_i2c.o
+ .text.I2C_PECRequestCmd
+                0x0000000000000000       0x70 obj/stm32f30x_i2c.o
+ .text.I2C_GetPEC
+                0x0000000000000000       0x3c obj/stm32f30x_i2c.o
+ .text.I2C_ReadRegister
+                0x0000000000000000       0x9c obj/stm32f30x_i2c.o
+ .text.I2C_SendData
+                0x0000000000000000       0x40 obj/stm32f30x_i2c.o
+ .text.I2C_ReceiveData
+                0x0000000000000000       0x3c obj/stm32f30x_i2c.o
+ .text.I2C_DMACmd
+                0x0000000000000000       0x90 obj/stm32f30x_i2c.o
+ .text.I2C_GetFlagStatus
+                0x0000000000000000       0xd4 obj/stm32f30x_i2c.o
+ .text.I2C_ClearFlag
+                0x0000000000000000       0x5c obj/stm32f30x_i2c.o
+ .text.I2C_GetITStatus
+                0x0000000000000000      0x104 obj/stm32f30x_i2c.o
+ .text.I2C_ClearITPendingBit
+                0x0000000000000000       0x5c obj/stm32f30x_i2c.o
+ .debug_info    0x0000000000000000      0xca1 obj/stm32f30x_i2c.o
+ .debug_abbrev  0x0000000000000000      0x1d8 obj/stm32f30x_i2c.o
+ .debug_aranges
+                0x0000000000000000      0x168 obj/stm32f30x_i2c.o
+ .debug_ranges  0x0000000000000000      0x158 obj/stm32f30x_i2c.o
+ .debug_macro   0x0000000000000000      0x111 obj/stm32f30x_i2c.o
+ .debug_macro   0x0000000000000000      0xaa2 obj/stm32f30x_i2c.o
+ .debug_macro   0x0000000000000000       0x78 obj/stm32f30x_i2c.o
+ .debug_macro   0x0000000000000000       0x3b obj/stm32f30x_i2c.o
+ .debug_macro   0x0000000000000000       0x22 obj/stm32f30x_i2c.o
+ .debug_macro   0x0000000000000000       0x8e obj/stm32f30x_i2c.o
+ .debug_macro   0x0000000000000000       0x51 obj/stm32f30x_i2c.o
+ .debug_macro   0x0000000000000000       0xef obj/stm32f30x_i2c.o
+ .debug_macro   0x0000000000000000       0x6a obj/stm32f30x_i2c.o
+ .debug_macro   0x0000000000000000      0x1df obj/stm32f30x_i2c.o
+ .debug_macro   0x0000000000000000       0x2d obj/stm32f30x_i2c.o
+ .debug_macro   0x0000000000000000       0x26 obj/stm32f30x_i2c.o
+ .debug_macro   0x0000000000000000      0xd39 obj/stm32f30x_i2c.o
+ .debug_macro   0x0000000000000000     0xae16 obj/stm32f30x_i2c.o
+ .debug_macro   0x0000000000000000      0x1bd obj/stm32f30x_i2c.o
+ .debug_macro   0x0000000000000000      0x29a obj/stm32f30x_i2c.o
+ .debug_macro   0x0000000000000000      0x70b obj/stm32f30x_i2c.o
+ .debug_macro   0x0000000000000000      0x364 obj/stm32f30x_i2c.o
+ .debug_line    0x0000000000000000      0xf42 obj/stm32f30x_i2c.o
+ .debug_str     0x0000000000000000    0x5006f obj/stm32f30x_i2c.o
+ .comment       0x0000000000000000       0x7a obj/stm32f30x_i2c.o
+ .debug_frame   0x0000000000000000      0x5fc obj/stm32f30x_i2c.o
+ .ARM.attributes
+                0x0000000000000000       0x32 obj/stm32f30x_i2c.o
+ .group         0x0000000000000000        0xc obj/stm32f30x_gpio.o
+ .group         0x0000000000000000        0xc obj/stm32f30x_gpio.o
+ .group         0x0000000000000000        0xc obj/stm32f30x_gpio.o
+ .group         0x0000000000000000        0xc obj/stm32f30x_gpio.o
+ .group         0x0000000000000000        0xc obj/stm32f30x_gpio.o
+ .group         0x0000000000000000        0xc obj/stm32f30x_gpio.o
+ .group         0x0000000000000000        0xc obj/stm32f30x_gpio.o
+ .group         0x0000000000000000        0xc obj/stm32f30x_gpio.o
+ .group         0x0000000000000000        0xc obj/stm32f30x_gpio.o
+ .group         0x0000000000000000        0xc obj/stm32f30x_gpio.o
+ .group         0x0000000000000000        0xc obj/stm32f30x_gpio.o
+ .group         0x0000000000000000        0xc obj/stm32f30x_gpio.o
+ .group         0x0000000000000000        0xc obj/stm32f30x_gpio.o
+ .group         0x0000000000000000        0xc obj/stm32f30x_gpio.o
+ .group         0x0000000000000000        0xc obj/stm32f30x_gpio.o
+ .group         0x0000000000000000        0xc obj/stm32f30x_gpio.o
+ .group         0x0000000000000000        0xc obj/stm32f30x_gpio.o
+ .text          0x0000000000000000        0x0 obj/stm32f30x_gpio.o
+ .data          0x0000000000000000        0x0 obj/stm32f30x_gpio.o
+ .bss           0x0000000000000000        0x0 obj/stm32f30x_gpio.o
+ .rodata        0x0000000000000000       0x15 obj/stm32f30x_gpio.o
+ .text.GPIO_DeInit
+                0x0000000000000000      0x168 obj/stm32f30x_gpio.o
+ .text.GPIO_Init
+                0x0000000000000000      0x22c obj/stm32f30x_gpio.o
+ .text.GPIO_StructInit
+                0x0000000000000000       0x34 obj/stm32f30x_gpio.o
+ .text.GPIO_PinLockConfig
+                0x0000000000000000       0x98 obj/stm32f30x_gpio.o
+ .text.GPIO_ReadInputDataBit
+                0x0000000000000000      0x118 obj/stm32f30x_gpio.o
+ .text.GPIO_ReadInputData
+                0x0000000000000000       0x80 obj/stm32f30x_gpio.o
+ .text.GPIO_ReadOutputDataBit
+                0x0000000000000000      0x118 obj/stm32f30x_gpio.o
+ .text.GPIO_ReadOutputData
+                0x0000000000000000       0x80 obj/stm32f30x_gpio.o
+ .text.GPIO_SetBits
+                0x0000000000000000       0x94 obj/stm32f30x_gpio.o
+ .text.GPIO_ResetBits
+                0x0000000000000000       0x94 obj/stm32f30x_gpio.o
+ .text.GPIO_WriteBit
+                0x0000000000000000      0x128 obj/stm32f30x_gpio.o
+ .text.GPIO_Write
+                0x0000000000000000       0x84 obj/stm32f30x_gpio.o
+ .text.GPIO_PinAFConfig
+                0x0000000000000000      0x1cc obj/stm32f30x_gpio.o
+ .debug_info    0x0000000000000000      0x68c obj/stm32f30x_gpio.o
+ .debug_abbrev  0x0000000000000000      0x205 obj/stm32f30x_gpio.o
+ .debug_aranges
+                0x0000000000000000       0x80 obj/stm32f30x_gpio.o
+ .debug_ranges  0x0000000000000000       0x70 obj/stm32f30x_gpio.o
+ .debug_macro   0x0000000000000000       0xf3 obj/stm32f30x_gpio.o
+ .debug_macro   0x0000000000000000      0xaa2 obj/stm32f30x_gpio.o
+ .debug_macro   0x0000000000000000       0x78 obj/stm32f30x_gpio.o
+ .debug_macro   0x0000000000000000       0x3b obj/stm32f30x_gpio.o
+ .debug_macro   0x0000000000000000       0x22 obj/stm32f30x_gpio.o
+ .debug_macro   0x0000000000000000       0x8e obj/stm32f30x_gpio.o
+ .debug_macro   0x0000000000000000       0x51 obj/stm32f30x_gpio.o
+ .debug_macro   0x0000000000000000       0xef obj/stm32f30x_gpio.o
+ .debug_macro   0x0000000000000000       0x6a obj/stm32f30x_gpio.o
+ .debug_macro   0x0000000000000000      0x1df obj/stm32f30x_gpio.o
+ .debug_macro   0x0000000000000000       0x2d obj/stm32f30x_gpio.o
+ .debug_macro   0x0000000000000000       0x26 obj/stm32f30x_gpio.o
+ .debug_macro   0x0000000000000000      0xd39 obj/stm32f30x_gpio.o
+ .debug_macro   0x0000000000000000     0xae16 obj/stm32f30x_gpio.o
+ .debug_macro   0x0000000000000000      0x1bd obj/stm32f30x_gpio.o
+ .debug_macro   0x0000000000000000      0x29a obj/stm32f30x_gpio.o
+ .debug_macro   0x0000000000000000      0x70b obj/stm32f30x_gpio.o
+ .debug_macro   0x0000000000000000      0x364 obj/stm32f30x_gpio.o
+ .debug_line    0x0000000000000000      0xac9 obj/stm32f30x_gpio.o
+ .debug_str     0x0000000000000000    0x4fe0c obj/stm32f30x_gpio.o
+ .comment       0x0000000000000000       0x7a obj/stm32f30x_gpio.o
+ .debug_frame   0x0000000000000000      0x1ec obj/stm32f30x_gpio.o
+ .ARM.attributes
+                0x0000000000000000       0x32 obj/stm32f30x_gpio.o
+ .group         0x0000000000000000        0xc obj/system_stm32f30x.o
+ .group         0x0000000000000000        0xc obj/system_stm32f30x.o
+ .group         0x0000000000000000        0xc obj/system_stm32f30x.o
+ .group         0x0000000000000000        0xc obj/system_stm32f30x.o
+ .group         0x0000000000000000        0xc obj/system_stm32f30x.o
+ .group         0x0000000000000000        0xc obj/system_stm32f30x.o
+ .group         0x0000000000000000        0xc obj/system_stm32f30x.o
+ .group         0x0000000000000000        0xc obj/system_stm32f30x.o
+ .group         0x0000000000000000        0xc obj/system_stm32f30x.o
+ .group         0x0000000000000000        0xc obj/system_stm32f30x.o
+ .group         0x0000000000000000        0xc obj/system_stm32f30x.o
+ .group         0x0000000000000000        0xc obj/system_stm32f30x.o
+ .group         0x0000000000000000        0xc obj/system_stm32f30x.o
+ .text          0x0000000000000000        0x0 obj/system_stm32f30x.o
+ .data          0x0000000000000000        0x0 obj/system_stm32f30x.o
+ .bss           0x0000000000000000        0x0 obj/system_stm32f30x.o
+ .data.SystemCoreClock
+                0x0000000000000000        0x4 obj/system_stm32f30x.o
+ .data.AHBPrescTable
+                0x0000000000000000       0x10 obj/system_stm32f30x.o
+ .text.SystemCoreClockUpdate
+                0x0000000000000000       0xe4 obj/system_stm32f30x.o
+ .debug_macro   0x0000000000000000      0xaa2 obj/system_stm32f30x.o
+ .debug_macro   0x0000000000000000       0x78 obj/system_stm32f30x.o
+ .debug_macro   0x0000000000000000       0x3b obj/system_stm32f30x.o
+ .debug_macro   0x0000000000000000       0x22 obj/system_stm32f30x.o
+ .debug_macro   0x0000000000000000       0x8e obj/system_stm32f30x.o
+ .debug_macro   0x0000000000000000       0x51 obj/system_stm32f30x.o
+ .debug_macro   0x0000000000000000       0xef obj/system_stm32f30x.o
+ .debug_macro   0x0000000000000000       0x6a obj/system_stm32f30x.o
+ .debug_macro   0x0000000000000000      0x1df obj/system_stm32f30x.o
+ .debug_macro   0x0000000000000000       0x2d obj/system_stm32f30x.o
+ .debug_macro   0x0000000000000000       0x26 obj/system_stm32f30x.o
+ .debug_macro   0x0000000000000000      0xd39 obj/system_stm32f30x.o
+ .debug_macro   0x0000000000000000     0xae16 obj/system_stm32f30x.o
+ .text          0x0000000000000000       0x14 obj/startup_stm32f30x.o
+ .data          0x0000000000000000        0x0 obj/startup_stm32f30x.o
+ .bss           0x0000000000000000        0x0 obj/startup_stm32f30x.o
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+FLASH            0x0000000008000000 0x0000000000040000 xr
+RAM              0x0000000020000000 0x000000000000a000 xrw
+MEMORY_B1        0x0000000060000000 0x0000000000000000 xr
+CCMRAM           0x0000000010000000 0x0000000000002000 rw
+*default*        0x0000000000000000 0xffffffffffffffff
+
+Linker script and memory map
+
+LOAD obj/main.o
+LOAD obj/i2c.o
+LOAD obj/hal_i2c.o
+LOAD obj/itm.o
+LOAD obj/leds.o
+LOAD obj/delay.o
+LOAD obj/usart.o
+LOAD obj/stm32f30x_it.o
+LOAD obj/stm32f30x_rcc.o
+LOAD obj/stm32f30x_i2c.o
+LOAD obj/stm32f30x_gpio.o
+LOAD obj/system_stm32f30x.o
+LOAD obj/startup_stm32f30x.o
+                0x000000002000a000                _estack = 0x2000a000
+                0x0000000000000200                _Min_Heap_Size = 0x200
+                0x0000000000000400                _Min_Stack_Size = 0x400
+
+.isr_vector     0x0000000008000000      0x188
+                0x0000000008000000                . = ALIGN (0x4)
+ *(.isr_vector)
+ .isr_vector    0x0000000008000000      0x188 obj/startup_stm32f30x.o
+                0x0000000008000000                g_pfnVectors
+                0x0000000008000188                . = ALIGN (0x4)
+
+.text           0x0000000008000188      0x96c
+                0x0000000008000188                . = ALIGN (0x4)
+ *(.text)
+ *(.text*)
+ .text.ft_print_hexa
+                0x0000000008000188       0x7a obj/main.o
+                0x0000000008000188                ft_print_hexa
+ *fill*         0x0000000008000202        0x2 
+ .text.main     0x0000000008000204       0x68 obj/main.o
+                0x0000000008000204                main
+ .text.COMPASSACCELERO_IO_Init
+                0x000000000800026c       0x38 obj/hal_i2c.o
+                0x000000000800026c                COMPASSACCELERO_IO_Init
+ .text.I2Cx_Init
+                0x00000000080002a4       0x10 obj/hal_i2c.o
+                0x00000000080002a4                I2Cx_Init
+ .text.I2Cx_MspInit
+                0x00000000080002b4       0xbc obj/hal_i2c.o
+                0x00000000080002b4                I2Cx_MspInit
+ .text.HAL_I2C_Init
+                0x0000000008000370       0x70 obj/hal_i2c.o
+                0x0000000008000370                HAL_I2C_Init
+ .text.COMPASSACCELERO_READ_REGISTER
+                0x00000000080003e0      0x128 obj/hal_i2c.o
+                0x00000000080003e0                COMPASSACCELERO_READ_REGISTER
+ .text.COMPASSACCELERO_WRITE_REGISTER
+                0x0000000008000508      0x128 obj/hal_i2c.o
+                0x0000000008000508                COMPASSACCELERO_WRITE_REGISTER
+ .text.BSP_ACCELERO_Init
+                0x0000000008000630       0x6c obj/hal_i2c.o
+                0x0000000008000630                BSP_ACCELERO_Init
+ .text.BSP_ACCELERO_GetXYZ
+                0x000000000800069c       0x92 obj/hal_i2c.o
+                0x000000000800069c                BSP_ACCELERO_GetXYZ
+ .text.ITM_SendChar
+                0x000000000800072e       0x4c obj/itm.o
+ *fill*         0x000000000800077a        0x2 
+ .text.ITM_init
+                0x000000000800077c       0xa0 obj/itm.o
+                0x000000000800077c                ITM_init
+ .text._write   0x000000000800081c       0x3c obj/itm.o
+                0x000000000800081c                _write
+ .text.TIM6_enable
+                0x0000000008000858       0x34 obj/delay.o
+                0x0000000008000858                TIM6_enable
+ .text.delay    0x000000000800088c       0x48 obj/delay.o
+                0x000000000800088c                delay
+ .text.NMI_Handler
+                0x00000000080008d4        0xe obj/stm32f30x_it.o
+                0x00000000080008d4                NMI_Handler
+ .text.HardFault_Handler
+                0x00000000080008e2        0x6 obj/stm32f30x_it.o
+                0x00000000080008e2                HardFault_Handler
+ .text.MemManage_Handler
+                0x00000000080008e8        0x6 obj/stm32f30x_it.o
+                0x00000000080008e8                MemManage_Handler
+ .text.BusFault_Handler
+                0x00000000080008ee        0x6 obj/stm32f30x_it.o
+                0x00000000080008ee                BusFault_Handler
+ .text.UsageFault_Handler
+                0x00000000080008f4        0x6 obj/stm32f30x_it.o
+                0x00000000080008f4                UsageFault_Handler
+ .text.SVC_Handler
+                0x00000000080008fa        0xe obj/stm32f30x_it.o
+                0x00000000080008fa                SVC_Handler
+ .text.DebugMon_Handler
+                0x0000000008000908        0xe obj/stm32f30x_it.o
+                0x0000000008000908                DebugMon_Handler
+ .text.PendSV_Handler
+                0x0000000008000916        0xe obj/stm32f30x_it.o
+                0x0000000008000916                PendSV_Handler
+ .text.SysTick_Handler
+                0x0000000008000924        0xe obj/stm32f30x_it.o
+                0x0000000008000924                SysTick_Handler
+ *fill*         0x0000000008000932        0x2 
+ .text.SystemInit
+                0x0000000008000934       0x94 obj/system_stm32f30x.o
+                0x0000000008000934                SystemInit
+ .text.SetSysClock
+                0x00000000080009c8       0xe4 obj/system_stm32f30x.o
+ .text.Reset_Handler
+                0x0000000008000aac       0x44 obj/startup_stm32f30x.o
+                0x0000000008000aac                Reset_Handler
+ .text.Default_Handler
+                0x0000000008000af0        0x2 obj/startup_stm32f30x.o
+                0x0000000008000af0                TIM1_BRK_TIM15_IRQHandler
+                0x0000000008000af0                TIM8_TRG_COM_IRQHandler
+                0x0000000008000af0                TIM8_CC_IRQHandler
+                0x0000000008000af0                TIM1_CC_IRQHandler
+                0x0000000008000af0                USB_HP_IRQHandler
+                0x0000000008000af0                PVD_IRQHandler
+                0x0000000008000af0                EXTI3_IRQHandler
+                0x0000000008000af0                EXTI0_IRQHandler
+                0x0000000008000af0                I2C2_EV_IRQHandler
+                0x0000000008000af0                FPU_IRQHandler
+                0x0000000008000af0                EXTI2_TS_IRQHandler
+                0x0000000008000af0                TIM1_UP_TIM16_IRQHandler
+                0x0000000008000af0                ADC1_2_IRQHandler
+                0x0000000008000af0                SPI1_IRQHandler
+                0x0000000008000af0                TIM6_DAC_IRQHandler
+                0x0000000008000af0                TIM8_UP_IRQHandler
+                0x0000000008000af0                DMA2_Channel2_IRQHandler
+                0x0000000008000af0                DMA1_Channel4_IRQHandler
+                0x0000000008000af0                USART3_IRQHandler
+                0x0000000008000af0                DMA1_Channel7_IRQHandler
+                0x0000000008000af0                CAN1_RX1_IRQHandler
+                0x0000000008000af0                UART5_IRQHandler
+                0x0000000008000af0                ADC3_IRQHandler
+                0x0000000008000af0                TIM4_IRQHandler
+                0x0000000008000af0                DMA2_Channel1_IRQHandler
+                0x0000000008000af0                I2C1_EV_IRQHandler
+                0x0000000008000af0                DMA1_Channel6_IRQHandler
+                0x0000000008000af0                UART4_IRQHandler
+                0x0000000008000af0                DMA2_Channel4_IRQHandler
+                0x0000000008000af0                TIM3_IRQHandler
+                0x0000000008000af0                RCC_IRQHandler
+                0x0000000008000af0                DMA1_Channel1_IRQHandler
+                0x0000000008000af0                Default_Handler
+                0x0000000008000af0                USBWakeUp_RMP_IRQHandler
+                0x0000000008000af0                EXTI15_10_IRQHandler
+                0x0000000008000af0                TIM7_IRQHandler
+                0x0000000008000af0                EXTI9_5_IRQHandler
+                0x0000000008000af0                TAMPER_STAMP_IRQHandler
+                0x0000000008000af0                RTC_WKUP_IRQHandler
+                0x0000000008000af0                SPI2_IRQHandler
+                0x0000000008000af0                DMA2_Channel5_IRQHandler
+                0x0000000008000af0                DMA1_Channel5_IRQHandler
+                0x0000000008000af0                USB_LP_IRQHandler
+                0x0000000008000af0                EXTI4_IRQHandler
+                0x0000000008000af0                USB_LP_CAN1_RX0_IRQHandler
+                0x0000000008000af0                TIM1_TRG_COM_TIM17_IRQHandler
+                0x0000000008000af0                USB_HP_CAN1_TX_IRQHandler
+                0x0000000008000af0                DMA1_Channel3_IRQHandler
+                0x0000000008000af0                ADC4_IRQHandler
+                0x0000000008000af0                WWDG_IRQHandler
+                0x0000000008000af0                TIM2_IRQHandler
+                0x0000000008000af0                COMP7_IRQHandler
+                0x0000000008000af0                COMP1_2_3_IRQHandler
+                0x0000000008000af0                EXTI1_IRQHandler
+                0x0000000008000af0                USART2_IRQHandler
+                0x0000000008000af0                COMP4_5_6_IRQHandler
+                0x0000000008000af0                I2C2_ER_IRQHandler
+                0x0000000008000af0                DMA1_Channel2_IRQHandler
+                0x0000000008000af0                TIM8_BRK_IRQHandler
+                0x0000000008000af0                CAN1_SCE_IRQHandler
+                0x0000000008000af0                FLASH_IRQHandler
+                0x0000000008000af0                USART1_IRQHandler
+                0x0000000008000af0                SPI3_IRQHandler
+                0x0000000008000af0                I2C1_ER_IRQHandler
+                0x0000000008000af0                USBWakeUp_IRQHandler
+                0x0000000008000af0                DMA2_Channel3_IRQHandler
+                0x0000000008000af0                RTC_Alarm_IRQHandler
+ *(.glue_7)
+ .glue_7        0x0000000008000af2        0x0 linker stubs
+ *(.glue_7t)
+ .glue_7t       0x0000000008000af2        0x0 linker stubs
+ *(.eh_frame)
+ *(.init)
+ *(.fini)
+                0x0000000008000af4                . = ALIGN (0x4)
+ *fill*         0x0000000008000af2        0x2 
+                0x0000000008000af4                _etext = .
+
+.vfp11_veneer   0x0000000008000af4        0x0
+ .vfp11_veneer  0x0000000008000af4        0x0 linker stubs
+
+.v4_bx          0x0000000008000af4        0x0
+ .v4_bx         0x0000000008000af4        0x0 linker stubs
+
+.iplt           0x0000000008000af4        0x0
+ .iplt          0x0000000008000af4        0x0 obj/main.o
+
+.rodata         0x0000000008000af4       0x10
+                0x0000000008000af4                . = ALIGN (0x4)
+ *(.rodata)
+ .rodata        0x0000000008000af4        0xf obj/main.o
+ *(.rodata*)
+                0x0000000008000b04                . = ALIGN (0x4)
+ *fill*         0x0000000008000b03        0x1 
+
+.rel.dyn        0x0000000008000b04        0x0
+ .rel.iplt      0x0000000008000b04        0x0 obj/main.o
+
+.ARM.extab
+ *(.ARM.extab* .gnu.linkonce.armextab.*)
+
+.ARM            0x0000000008000b04        0x0
+                0x0000000008000b04                __exidx_start = .
+ *(.ARM.exidx*)
+                0x0000000008000b04                __exidx_end = .
+
+.preinit_array  0x0000000008000b04        0x0
+                [!provide]                        PROVIDE (__preinit_array_start = .)
+ *(.preinit_array*)
+                [!provide]                        PROVIDE (__preinit_array_end = .)
+
+.init_array     0x0000000008000b04        0x0
+                [!provide]                        PROVIDE (__init_array_start = .)
+ *(SORT_BY_NAME(.init_array.*))
+ *(.init_array*)
+                [!provide]                        PROVIDE (__init_array_end = .)
+
+.fini_array     0x0000000008000b04        0x0
+                [!provide]                        PROVIDE (__fini_array_start = .)
+ *(SORT_BY_NAME(.fini_array.*))
+ *(.fini_array*)
+                [!provide]                        PROVIDE (__fini_array_end = .)
+                0x0000000008000b04                _sidata = LOADADDR (.data)
+
+.data           0x0000000020000000        0x0 load address 0x0000000008000b04
+                0x0000000020000000                . = ALIGN (0x4)
+                0x0000000020000000                _sdata = .
+ *(.data)
+ *(.data*)
+                0x0000000020000000                . = ALIGN (0x4)
+                0x0000000020000000                _edata = .
+                0x0000000008000b04                _siccmram = LOADADDR (.ccmram)
+
+.igot.plt       0x0000000020000000        0x0 load address 0x0000000008000b04
+ .igot.plt      0x0000000020000000        0x0 obj/main.o
+
+.ccmram         0x0000000010000000        0x0 load address 0x0000000008000b04
+                0x0000000010000000                . = ALIGN (0x4)
+                0x0000000010000000                _sccmram = .
+ *(.ccmram)
+ *(.ccmram*)
+                0x0000000010000000                . = ALIGN (0x4)
+                0x0000000010000000                _eccmram = .
+                0x0000000010000000                . = ALIGN (0x4)
+
+.bss            0x0000000020000000        0x0
+                0x0000000020000000                _sbss = .
+                0x0000000020000000                __bss_start__ = _sbss
+ *(.bss)
+ *(.bss*)
+ *(COMMON)
+                0x0000000020000000                . = ALIGN (0x4)
+                0x0000000020000000                _ebss = .
+                0x0000000020000000                __bss_end__ = _ebss
+
+._user_heap_stack
+                0x0000000020000000      0x600
+                0x0000000020000000                . = ALIGN (0x4)
+                [!provide]                        PROVIDE (end = .)
+                [!provide]                        PROVIDE (_end = .)
+                0x0000000020000200                . = (. + _Min_Heap_Size)
+ *fill*         0x0000000020000000      0x200 
+                0x0000000020000600                . = (. + _Min_Stack_Size)
+ *fill*         0x0000000020000200      0x400 
+                0x0000000020000600                . = ALIGN (0x4)
+
+.memory_b1_text
+ *(.mb1text)
+ *(.mb1text*)
+ *(.mb1rodata)
+ *(.mb1rodata*)
+
+/DISCARD/
+
+.ARM.attributes
+                0x0000000000000000       0x30
+ *(.ARM.attributes)
+ .ARM.attributes
+                0x0000000000000000       0x32 obj/main.o
+ .ARM.attributes
+                0x0000000000000032       0x32 obj/hal_i2c.o
+ .ARM.attributes
+                0x0000000000000064       0x32 obj/itm.o
+ .ARM.attributes
+                0x0000000000000096       0x32 obj/delay.o
+ .ARM.attributes
+                0x00000000000000c8       0x32 obj/stm32f30x_it.o
+ .ARM.attributes
+                0x00000000000000fa       0x32 obj/system_stm32f30x.o
+ .ARM.attributes
+                0x000000000000012c       0x21 obj/startup_stm32f30x.o
+OUTPUT(blinking_leds-CM4 elf32-littlearm)
+
+.debug_info     0x0000000000000000     0x1811
+ .debug_info    0x0000000000000000      0x19e obj/main.o
+ .debug_info    0x000000000000019e      0x5ec obj/hal_i2c.o
+ .debug_info    0x000000000000078a      0x66f obj/itm.o
+ .debug_info    0x0000000000000df9      0x390 obj/delay.o
+ .debug_info    0x0000000000001189      0x160 obj/stm32f30x_it.o
+ .debug_info    0x00000000000012e9      0x506 obj/system_stm32f30x.o
+ .debug_info    0x00000000000017ef       0x22 obj/startup_stm32f30x.o
+
+.debug_abbrev   0x0000000000000000      0x799
+ .debug_abbrev  0x0000000000000000      0x116 obj/main.o
+ .debug_abbrev  0x0000000000000116      0x1b9 obj/hal_i2c.o
+ .debug_abbrev  0x00000000000002cf      0x1b9 obj/itm.o
+ .debug_abbrev  0x0000000000000488       0xf0 obj/delay.o
+ .debug_abbrev  0x0000000000000578       0x83 obj/stm32f30x_it.o
+ .debug_abbrev  0x00000000000005fb      0x18c obj/system_stm32f30x.o
+ .debug_abbrev  0x0000000000000787       0x12 obj/startup_stm32f30x.o
+
+.debug_aranges  0x0000000000000000      0x198
+ .debug_aranges
+                0x0000000000000000       0x30 obj/main.o
+ .debug_aranges
+                0x0000000000000030       0x58 obj/hal_i2c.o
+ .debug_aranges
+                0x0000000000000088       0x30 obj/itm.o
+ .debug_aranges
+                0x00000000000000b8       0x28 obj/delay.o
+ .debug_aranges
+                0x00000000000000e0       0x60 obj/stm32f30x_it.o
+ .debug_aranges
+                0x0000000000000140       0x30 obj/system_stm32f30x.o
+ .debug_aranges
+                0x0000000000000170       0x28 obj/startup_stm32f30x.o
+
+.debug_ranges   0x0000000000000000      0x130
+ .debug_ranges  0x0000000000000000       0x20 obj/main.o
+ .debug_ranges  0x0000000000000020       0x48 obj/hal_i2c.o
+ .debug_ranges  0x0000000000000068       0x20 obj/itm.o
+ .debug_ranges  0x0000000000000088       0x18 obj/delay.o
+ .debug_ranges  0x00000000000000a0       0x50 obj/stm32f30x_it.o
+ .debug_ranges  0x00000000000000f0       0x20 obj/system_stm32f30x.o
+ .debug_ranges  0x0000000000000110       0x20 obj/startup_stm32f30x.o
+
+.debug_macro    0x0000000000000000     0xe026
+ .debug_macro   0x0000000000000000       0xfb obj/main.o
+ .debug_macro   0x00000000000000fb      0xaa2 obj/main.o
+ .debug_macro   0x0000000000000b9d       0x78 obj/main.o
+ .debug_macro   0x0000000000000c15       0x3b obj/main.o
+ .debug_macro   0x0000000000000c50       0x22 obj/main.o
+ .debug_macro   0x0000000000000c72       0x8e obj/main.o
+ .debug_macro   0x0000000000000d00       0x51 obj/main.o
+ .debug_macro   0x0000000000000d51       0xef obj/main.o
+ .debug_macro   0x0000000000000e40       0x6a obj/main.o
+ .debug_macro   0x0000000000000eaa      0x1df obj/main.o
+ .debug_macro   0x0000000000001089       0x2d obj/main.o
+ .debug_macro   0x00000000000010b6       0x26 obj/main.o
+ .debug_macro   0x00000000000010dc      0xd39 obj/main.o
+ .debug_macro   0x0000000000001e15     0xae16 obj/main.o
+ .debug_macro   0x000000000000cc2b      0x1bd obj/main.o
+ .debug_macro   0x000000000000cde8      0x29a obj/main.o
+ .debug_macro   0x000000000000d082      0x70b obj/main.o
+ .debug_macro   0x000000000000d78d      0x364 obj/main.o
+ .debug_macro   0x000000000000daf1      0x1e9 obj/hal_i2c.o
+ .debug_macro   0x000000000000dcda       0xf3 obj/itm.o
+ .debug_macro   0x000000000000ddcd       0xf3 obj/delay.o
+ .debug_macro   0x000000000000dec0       0xb5 obj/stm32f30x_it.o
+ .debug_macro   0x000000000000df75       0xb1 obj/system_stm32f30x.o
+
+.debug_line     0x0000000000000000     0x1ca1
+ .debug_line    0x0000000000000000      0x46b obj/main.o
+ .debug_line    0x000000000000046b      0x69f obj/hal_i2c.o
+ .debug_line    0x0000000000000b0a      0x4aa obj/itm.o
+ .debug_line    0x0000000000000fb4      0x426 obj/delay.o
+ .debug_line    0x00000000000013da      0x3e3 obj/stm32f30x_it.o
+ .debug_line    0x00000000000017bd      0x471 obj/system_stm32f30x.o
+ .debug_line    0x0000000000001c2e       0x73 obj/startup_stm32f30x.o
+
+.debug_str      0x0000000000000000    0x50594
+ .debug_str     0x0000000000000000    0x4f9aa obj/main.o
+                                      0x4fb23 (size before relaxing)
+ .debug_str     0x000000000004f9aa      0x80f obj/hal_i2c.o
+                                      0x50344 (size before relaxing)
+ .debug_str     0x00000000000501b9      0x15c obj/itm.o
+                                      0x4fc7c (size before relaxing)
+ .debug_str     0x0000000000050315       0x99 obj/delay.o
+                                      0x4fbdc (size before relaxing)
+ .debug_str     0x00000000000503ae       0xa3 obj/stm32f30x_it.o
+                                      0x47590 (size before relaxing)
+ .debug_str     0x0000000000050451      0x11d obj/system_stm32f30x.o
+                                      0x47680 (size before relaxing)
+ .debug_str     0x000000000005056e       0x26 obj/startup_stm32f30x.o
+                                         0x4b (size before relaxing)
+
+.comment        0x0000000000000000       0x79
+ .comment       0x0000000000000000       0x79 obj/main.o
+                                         0x7a (size before relaxing)
+ .comment       0x0000000000000079       0x7a obj/hal_i2c.o
+ .comment       0x0000000000000079       0x7a obj/itm.o
+ .comment       0x0000000000000079       0x7a obj/delay.o
+ .comment       0x0000000000000079       0x7a obj/stm32f30x_it.o
+ .comment       0x0000000000000079       0x7a obj/system_stm32f30x.o
+
+.debug_frame    0x0000000000000000      0x3f4
+ .debug_frame   0x0000000000000000       0x70 obj/main.o
+ .debug_frame   0x0000000000000070      0x124 obj/hal_i2c.o
+ .debug_frame   0x0000000000000194       0x7c obj/itm.o
+ .debug_frame   0x0000000000000210       0x58 obj/delay.o
+ .debug_frame   0x0000000000000268      0x110 obj/stm32f30x_it.o
+ .debug_frame   0x0000000000000378       0x7c obj/system_stm32f30x.o
