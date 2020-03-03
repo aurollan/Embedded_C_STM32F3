@@ -1,5 +1,5 @@
 .DEFAULT_GOAL := all
-.PHONY: all clean fclean
+.PHONY: all clean fclean re
 
 ################################################################################
 #								PROJECT	CONFIG 								   #
@@ -66,13 +66,12 @@ F_FLAGS =  -mfloat-abi=softfp -mfpu=fpv4-sp-d16
 # Include path flags
 I_FLAGS = $(addprefix -I , $(DIR_INC))
 # DEFINE/Macro flags
-# DM_FLAGS =-D__STARTUP_CLEAR_BSS
 DM_FLAGS =  -DSTM32F303xC -DUSE_FULL_ASSERT
 # Optimization flags (add -0s for optimization flag)
 O_FLAGS = -ffunction-sections -fdata-sections
 # Warning flags
 W_FLAGS = -Werror -Wall -Wextra
-# Spec file flags (--specs=nano.specs --specs=rdimon.specs --specs=nosys.specs)
+# Library nano (--specs=nano.specs --specs=rdimon.specs --specs=nosys.specs)
 SP_FLAGS = --specs=nosys.specs
 
 C_FLAGS = $(A_FLAGS) $(D_FLAGS) $(F_FLAGS) $(I_FLAGS) \
@@ -89,6 +88,7 @@ CMF_FLAGS = -Map=$(NAME).map
 # linking script flags
 SC_FLAGS = -T ld_scripts/STM32F303VC_FLASH.ld
 
+# TODO: ADD SP_FLAG BECAUSE it's both cc and ld flags
 L_FLAGS = $(SC_FLAGS) $(LO_FLAGS) $(CMF_FLAGS)
 
 ################################################################################
