@@ -1,17 +1,18 @@
 /* ************************************************************************** */
 /*                                                          LE - /            */
 /*                                                              /             */
-/*   delay.c                                          .::    .:/ .      .::   */
+/*   main.c                                           .::    .:/ .      .::   */
 /*                                                 +:+:+   +:    +:  +:+:+    */
 /*   By: aurollan <aurollan@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
-/*   Created: 2020/02/04 17:46:06 by aurollan     #+#   ##    ##    #+#       */
-/*   Updated: 2020/02/04 17:47:59 by aurollan    ###    #+. /#+    ###.fr     */
+/*   Created: 2020/01/22 11:11:06 by aurollan     #+#   ##    ##    #+#       */
+/*   Updated: 2020/03/04 17:16:55 by aurollan    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
-#include "drone.h"
+#include "stm32f30x_it.h"
+#include "stm32f30x.h"
 
 void TIM6_enable(void)
 {
@@ -40,3 +41,32 @@ void delay(uint16_t ms)
 	/* Reset event */
 	TIM6->SR = 0;
 }
+
+int main(void)
+{
+	TIM6_enable();
+	return (0);
+}
+
+#ifdef  USE_FULL_ASSERT
+
+/**
+ * @brief  Reports the name of the source file and the source line number
+ *         where the assert_param error has occurred.
+ * @param  file: pointer to the source file name
+ * @param  line: assert_param error line source number
+ * @retval None
+ */
+void assert_failed(uint8_t* file, uint32_t line)
+{ 
+	(void)file;
+	(void)line;
+	/* User can add his own implementation to report the file name and line number,
+ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
+
+  /* Infinite loop */
+  while (1)
+  {
+  }
+}
+#endif

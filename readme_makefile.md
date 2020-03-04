@@ -1,4 +1,9 @@
 # MAKEFILE FLAGS
+Building an embedded executable require some file:
+- your sources files 
+- your header files
+- a linker script file (used during linking)
+- a startup_fonction file (not necessarily a file but usually)
 
 # PROJECT CONFIG
 STM32F3 use an ARM cortex M4.

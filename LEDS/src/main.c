@@ -6,53 +6,47 @@
 /*   By: aurollan <aurollan@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2020/01/22 11:11:06 by aurollan     #+#   ##    ##    #+#       */
-/*   Updated: 2020/02/26 17:53:44 by aurollan    ###    #+. /#+    ###.fr     */
+/*   Updated: 2020/03/04 17:11:45 by aurollan    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
 #include "stm32f30x_it.h"
 #include "stm32f30x.h"
-#include "stm32f30x_conf.h"
-#include "drone.h"
 
-void			ft_print_hexa(uint8_t data)
+/* Enable led-compass led */
+/* REFERENCE MANUAL P166 RCC register map */
+void GPIOE_enable(void)
 {
-	char	hex_char;
-
-	if (((data & 0b11110000) >> 4) > 9)
-		hex_char = ((data & 0b11110000) >> 4) + 55;
-	else
-		hex_char = ((data & 0b11110000) >> 4) + 48;
-	_write(0, &hex_char, 1);
-	if ((data & 0b1111) > 9)
-		hex_char = (data & 0b1111) + 55;
-	else
-		hex_char = (data & 0b1111) + 48;
-	_write(0, &hex_char, 1);
+	RCC->AHBENR |= RCC_AHBENR_GPIOEEN;
 }
 
+/* Initialize all led form led-compass */
+/* REFERENCE MANUAL P228 General-purpose I/Os (GPIO)*/
+void GPIOE_full_init(void)
+{
+  GPIOE->MODER = 0x55555555;      /*!< GPIO port mode register,                                   */
+  GPIOE->OTYPER = 0x0000;       /*!< GPIO port output type register,                            */
+  GPIOE->OSPEEDR = 0xFFFFFFFF;      /*!< GPIO port output speed register,                           */
+  GPIOE->PUPDR = 0x0000;        /*!< GPIO port pull-up/pull-down register,                      */
+}
 
+void	leds(void)
+{
+	GPIOE_enable();
+	GPIOE_full_init();
+	GPIOE->BSRR = (1 << 15);
+	GPIOE->BSRR = (1 << 14);
+	GPIOE->BSRR = (1 << 13);
+	GPIOE->BSRR = (1 << 12);
+	GPIOE->BSRR = (1 << 11);
+	GPIOE->BSRR = (1 << 10);
+	GPIOE->BSRR = (1 << 9);
+	GPIOE->BSRR = (1 << 8);
+}
 int main(void)
 {
-	uint8_t data[6] = {0};
-
-	ITM_init();
-	TIM6_enable();
-	BSP_ACCELERO_Init();
-	while (1)
-	{
-		BSP_ACCELERO_GetXYZ(&data[0]);
-		_write(0, "DATA\n", 5);
-		int a = 0;
-		while (a < 6)
-		{
-			ft_print_hexa(data[a]);	
-			a++;
-		}
-		_write(0, "\n----\n", 6);
-		delay(60000);
-	}
+	leds();
 	return (0);
 }
 

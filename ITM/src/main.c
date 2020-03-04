@@ -1,17 +1,18 @@
 /* ************************************************************************** */
 /*                                                          LE - /            */
 /*                                                              /             */
-/*   itm.c                                            .::    .:/ .      .::   */
+/*   main.c                                           .::    .:/ .      .::   */
 /*                                                 +:+:+   +:    +:  +:+:+    */
 /*   By: aurollan <aurollan@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
-/*   Created: 2020/02/04 17:44:11 by aurollan     #+#   ##    ##    #+#       */
-/*   Updated: 2020/02/04 17:48:35 by aurollan    ###    #+. /#+    ###.fr     */
+/*   Created: 2020/01/22 11:11:06 by aurollan     #+#   ##    ##    #+#       */
+/*   Updated: 2020/03/04 16:57:56 by aurollan    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
-#include "drone.h"
+#include "stm32f30x_it.h"
+#include "stm32f30x.h"
 
 void ITM_init(void)
 {
@@ -34,4 +35,11 @@ int _write(int32_t file, char* ptr, int32_t len)
 	for(i=0 ; i<len ; i++)
 		ITM_SendChar((*ptr++));
 	return i;
+}
+
+int main(void)
+{
+	ITM_init();
+	_write(0, "Hello Wolrd\n", 12);
+	return (0);
 }
