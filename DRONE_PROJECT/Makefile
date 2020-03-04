@@ -68,7 +68,7 @@ I_FLAGS = $(addprefix -I , $(DIR_INC))
 # DEFINE/Macro flags
 DM_FLAGS =  -DSTM32F303xC -DUSE_FULL_ASSERT
 # Optimization flags (add -0s for optimization flag)
-O_FLAGS = -ffunction-sections -fdata-sections
+O_FLAGS = 
 # Warning flags
 W_FLAGS = -Werror -Wall -Wextra
 # Library nano (--specs=nano.specs --specs=rdimon.specs --specs=nosys.specs)
@@ -82,7 +82,7 @@ C_FLAGS = $(A_FLAGS) $(D_FLAGS) $(F_FLAGS) $(I_FLAGS) \
 ################################################################################
 
 # Optimization flags
-LO_FLAGS = --gc-sections
+LO_FLAGS = 
 # Create map file
 CMF_FLAGS = -Map=$(NAME).map
 # linking script flags
