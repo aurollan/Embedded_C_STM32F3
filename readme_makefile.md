@@ -1,6 +1,6 @@
 # MAKEFILE FLAGS
 
-Building an embedded executable following files:
+Building an embedded executable require following files:
 - header files:
 	core_cm4.h
 	core_cmFunc.h
@@ -89,7 +89,7 @@ Maybe useless for us because we don't use extern code....
 https://gcc.gnu.org/onlinedocs/gcc/Debugging-Options.html
 
 ##### Why use debugging option ?
-We this flags set, debugging symbol will be added to executable.
+With this flags set, debugging symbol will be added to executable.
 We will use them for step by step debugging if we encounter bugs or unexpected behavior.
 
 ### -g or -g1/2/3
@@ -181,9 +181,10 @@ Optimize for size. -Os enables all -O2 optimizations except those that often inc
 It also enables -finline-functions, causes the compiler to tune for code size rather than execution speed, and performs further optimizations designed to reduce code size.
 
 ##### Why use optimization ?
-C is known partly because it runs fast. A lot of optimization rely on the 
-developper but the compiler does its jobs too while processing your code.
-Fast code is good, especially for underpowered microcontroller.
+C is known partly because it runs fast and it creates ligtthweight executables.
+A lot of optimization rely on the developper but the compiler does its jobs too 
+while processing your code. Fast and lightweight code is good,
+especially for microcontroller with limited power and memory.
 
 ## WARNING FLAGS
 https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html
@@ -207,6 +208,14 @@ https://www.st.com/content/ccc/resource/technical/document/user_manual/group1/cd
 If you need to use nano library change the "--specs="flag in the makefile to "--specs=nano.specs".
 
 # LINKER
+
+##### Why separate compiling steps and linking steps ?
+For learning purpose. Linker is often a program we don't use directly and
+having to use a linker script makes me understand its importance and also use 
+it directly.
+
+##### What is a gcc tool chain ?
+https://stackoverflow.com/questions/50307733/what-is-a-gcc-toolchain
 
 ## SCRIPTS
 https://gcc.gnu.org/onlinedocs/gcc/Link-Options.html
@@ -254,7 +263,7 @@ will produce the following output in the link map if the -M option is used:
 See Expressions for more information about expressions in linker scripts.
 
 
-## OPTIONS (IF YOU USE JUST GCC FOR THE WHOLE PROCESS)
+## OPTIONS (IF YOU ONLY GCC FOR THE COMPILATION PROCESS)
 ### -Wl,option
 ### -Wl,-Map=$(NAME).map
 ### -Wl,--gc-sections
@@ -270,5 +279,3 @@ des scatter files (*.sct ou *.ld) : pour faire son travail l’éditeur de lien 
 
 
 
-J'ai voulu m’intéresser plus particulièrement au dossier CMSIS parce qu'il a une particularité très intéressante.
-CMSIS pour ARM Cortex Microcontroller Software Interface Standard est une couche d'abstraction bas niveau, comprenez hardware, indépendante du constructeur pour les séries de micro contrôleur Cortex. Ce qui signifie, que quelque soit le constructeur de micro contrôleur Cortex M0, Cortex M3 ou Cortex M4 (ST, NXP, etc ...), la couche d'abstraction CMSIS sera, à un ou deux détails près, la même.

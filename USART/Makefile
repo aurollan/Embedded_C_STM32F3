@@ -72,7 +72,7 @@ LO_FLAGS = --gc-sections
 # Create map file
 CMF_FLAGS = -Map=$(NAME).map
 # linking script flags
-SC_FLAGS = -T ld_scripts/STM32F303VC_FLASH.ld
+SC_FLAGS = -T ld_scripts/STM32F303VC_FLASH_Std.ld
 
 # TODO: ADD SP_FLAG BECAUSE it's both cc and ld flags
 L_FLAGS = $(SC_FLAGS) $(LO_FLAGS) $(CMF_FLAGS)

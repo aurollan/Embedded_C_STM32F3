@@ -1,4 +1,4 @@
-# [WORK IN PROGRESS] Embedded C development  WITHOUT IDE but using Makefile and VIM (Or any Text editor you want)
+# [WORK IN PROGRESS] Embedded C development  WITHOUT IDE but using Makefile and VIM (Or any Text editor you want) and CMSIS Library (optionnal but reliable).
 This repository contains all the resources I used to learn how to develop on microcontrolleur.
 I explain all choices made to build my project.
 
@@ -27,18 +27,21 @@ Makefile and text editor (with of course an appropriate tool chain).
 Because i think it's better to understand what you do and i wanted to make my
 work useful for people like me :).
 
+## Why use CMSIS Library ?
+CMSIS for ARM Cortex Microcontroller Software Interface Standard is a Lower Layer Abstraction library (hardware). It's constructor independent for Micro controller using Cortex M series processor. 
+
 ## Is there everything I need to know on this page ?
 No. Just what i think is mandatory to know/understand for 
 embedded software development. No electronics skills are needed
-and i don't cover this part yet.
+and i don't cover this part (yet).
 
 ## How is your project build ?
-A readme explaining all choices made for each subject/file.
-I tell what I'm doing and why. Sometimes (or usually) a lot of other sources to
-read, to go further/deeply.
+A readme.md file explains all choices made for each subject/file.
+I tell what I'm doing and why. Sometimes (or usually) i add a lot of other 
+sources to read, to go further/deeply.
 
 ## Is there an order for reading ?
-No. Each little project is independent and can works alone.
+No. Each little project is independent and can work alone.
 You have to mix projects in order to see results.
 
 For example:
