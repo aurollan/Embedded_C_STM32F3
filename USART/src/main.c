@@ -6,7 +6,7 @@
 /*   By: aurollan <aurollan@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2020/01/22 11:11:06 by aurollan     #+#   ##    ##    #+#       */
-/*   Updated: 2020/03/04 17:19:28 by aurollan    ###    #+. /#+    ###.fr     */
+/*   Updated: 2020/03/05 10:53:16 by aurollan    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -94,6 +94,11 @@ void echo_back()
 
 int main(void)
 {
+	RCC_USART1_enable();
+	USART_enable();
+	GPIOA_config();
+	GPIOA_connect_PIN9_PIN10();
+	USART_output("USART IS WORKING");
 	echo_back();
 	return (0);
 }
