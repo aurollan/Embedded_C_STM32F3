@@ -1,25 +1,65 @@
-USER MANUAL:
-https://www.st.com/content/ccc/resource/technical/document/user_manual/8a/56/97/63/8d/56/41/73/DM00063382.pdf/files/DM00063382.pdf/jcr:content/translations/en.DM00063382.pdf
+# TOOL CHAIN
 
-DATA SHEET:
-https://www.st.com/resource/en/datasheet/stm32f303vc.pdf
+Working in embedded development require a specific tool chain:
 
-REFERENCE MANUAL:
-https://www.st.com/content/ccc/resource/technical/document/reference_manual/4a/19/6e/18/9d/92/43/32/DM00043574.pdf/files/DM00043574.pdf/jcr:content/translations/en.DM00043574.pdf
+- gcc-arm-embedded (Compiling)
+- openocd (loading and debugging)
+- minicom (USART )
+- itmdump
 
-ECOMPASS MODULE: 3D ACCELEROMETER AND 3D MAGNETOMETER:
-https://www.st.com/resource/en/datasheet/lsm303dlhc.pdf
+# gcc-arm-embedded
+
+Tool chain used to build our executable and debug.
+### arm-none-eabi-gcc
+- arm: target architecture
+- none: no vendor
+- No OS is specified (bare metal programming)
+- eabi: complies embedded-application binary interface
+- gcc: call the compiler in this case
+
+##### Why eabi is specified ?
+https://en.wikipedia.org/wiki/Application_binary_interface
+
+##### How is the command line build ?
+https://stackoverflow.com/questions/5961701/arm-gcc-toolchain-as-arm-elf-or-arm-none-eabi-what-is-the-difference
+
+https://community.arm.com/developer/tools-software/tools/f/arm-compilers-forum/44065/what-library-used-on-arm-gcc-none-eabi
 
 
-3-AXIS DIGITAL OUTPUT GYROSCOPE:
-https://www.st.com/content/ccc/resource/technical/document/application_note/2c/d9/a7/f8/43/48/48/64/DM00119036.pdf/files/DM00119036.pdf/jcr:content/translations/en.DM00119036.pdf
+#arm-none-eabi-gdb
+Simply the gdb ARM debugger. We use it to load executable on the device through
+openocd.
 
-#arm-none-neabi-gdb
-
+## Commands
 ### -q
        -quiet
        -q  "Quiet".  Do not print the introductory and copyright messages.
            These messages are also suppressed in batch mode.
 ### -x file.gdb
 		       -x file
-           Execute GDB commands from file file.
+           Execute GDB commands from file.
+##### Why use a file ?
+To avoid writing manually those commands each time we launch a session.
+
+##### Why use those command ?
+- target remote: 3333
+3333 is the ports used by openocd which is connected to our device.
+We debug and load executable using openocd bridge, so we have to connect to it.
+
+- load
+Command to load our executable in the device flash memory.
+
+- break main
+set a breakpoint at the main function
+
+###### Following command are used only for ITM configuration
+- monitor tpiu config internal itm.txt uart off 72000000
+	itm.txt: file where data will be written
+	720000000: devie clock run
+	TODO: Finish
+
+- monitor itm port 0
+Use port 0 as we use this one to send our data in our ITM configuration
+
+- continue
+Just start the program which should stop at main given our previous breakpoint.
