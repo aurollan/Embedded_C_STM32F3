@@ -6,7 +6,7 @@
 /*   By: aurollan <aurollan@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2020/01/22 11:11:06 by aurollan     #+#   ##    ##    #+#       */
-/*   Updated: 2020/03/04 17:11:45 by aurollan    ###    #+. /#+    ###.fr     */
+/*   Updated: 2020/03/06 16:07:13 by aurollan    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -14,27 +14,18 @@
 #include "stm32f30x_it.h"
 #include "stm32f30x.h"
 
-/* Enable led-compass led */
-/* REFERENCE MANUAL P166 RCC register map */
-void GPIOE_enable(void)
-{
-	RCC->AHBENR |= RCC_AHBENR_GPIOEEN;
-}
-
-/* Initialize all led form led-compass */
-/* REFERENCE MANUAL P228 General-purpose I/Os (GPIO)*/
-void GPIOE_full_init(void)
-{
-  GPIOE->MODER = 0x55555555;      /*!< GPIO port mode register,                                   */
-  GPIOE->OTYPER = 0x0000;       /*!< GPIO port output type register,                            */
-  GPIOE->OSPEEDR = 0xFFFFFFFF;      /*!< GPIO port output speed register,                           */
-  GPIOE->PUPDR = 0x0000;        /*!< GPIO port pull-up/pull-down register,                      */
-}
-
 void	leds(void)
 {
-	GPIOE_enable();
-	GPIOE_full_init();
+	/* Enable GPIOE */
+	RCC->AHBENR |= RCC_AHBENR_GPIOEEN;
+
+	/* Set all GPIOE to output mode */
+	GPIOE->MODER = 0x55555555;      /*!< GPIO port mode register, set all value to 01 (output mode) */
+
+	/* Light up all leds with ODR register */
+	GPIOE->ODR = (1 << 15) | (1 << 14) | (1 << 13) | (1 << 12) | (1 << 11) | (1 << 10) | (1 << 9) | (1 << 8);
+
+	/* Light up all leds with BSRR register */
 	GPIOE->BSRR = (1 << 15);
 	GPIOE->BSRR = (1 << 14);
 	GPIOE->BSRR = (1 << 13);
@@ -44,6 +35,7 @@ void	leds(void)
 	GPIOE->BSRR = (1 << 9);
 	GPIOE->BSRR = (1 << 8);
 }
+
 int main(void)
 {
 	leds();

@@ -92,3 +92,6 @@ https://sourceware.org/binutils/docs/ld/Input-Section-Keep.html#Input-Section-Ke
 
 Some redondant information, but more precise than me on some point:
 http://developers.stf12.net/cpp-demo/gcc-linker-script-and-stm32-a-tutorial
+
+Use CCM SRAM on STM32:
+https://www.st.com/content/ccc/resource/technical/document/application_note/bb/09/ca/83/14/e9/44/c5/DM00083249.pdf/files/DM00083249.pdf/jcr:content/translations/en.DM00083249.pdf

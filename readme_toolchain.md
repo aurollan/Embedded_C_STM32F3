@@ -63,3 +63,9 @@ Use port 0 as we use this one to send our data in our ITM configuration
 
 - continue
 Just start the program which should stop at main given our previous breakpoint.
+
+# openocd
+
+# minicom
+
+# itmdump
