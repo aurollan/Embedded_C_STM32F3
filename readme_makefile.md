@@ -40,6 +40,9 @@ We have to tell gcc information so it can use the right configuration.
 It's called cross-compilation.
 
 ### -mthumb
+Mixing ARM and THUMB InstructionSets
+In most low-end ARM microcontrollers the 16-bit THUMB instruction setoffers both better code density and actually better performance whenexecuted from ROM, even though the 16-bit THUMB instruction set is lesspowerful than the 32-bit ARM instruction set. This article shows how touse any combination of ARM and THUMB instruction sets for optimalperformance.
+
 -mthumb / -marm
 Select between generating code that executes in ARM and Thumb states. The default for most configurations is to generate code that executes in ARM state, but the default can be changed by configuring GCC with the --with-mode=state configure option.
 You can also override the ARM and Thumb mode for each function by using the target("thumb") and target("arm") function attributes (see ARM Function Attributes) or pragmas (see Function Specific Option Pragmas).
@@ -279,3 +282,6 @@ des scatter files (*.sct ou *.ld) : pour faire son travail l’éditeur de lien 
 
 
 
+ The .glue_7t and.glue_7 sections are synthesized by the compiler when you specify theARM-THUMB interworking option. The sections contain the “call veneers”between THUMB and ARM code and are accessed frequently by every callbetween ARM and THUMB. It's typically advantageous to place this smallamount of hot-spot code in RAM.
+
+ The .data section islocated in RAM, but is loaded to ROM and copied to RAM during startup.

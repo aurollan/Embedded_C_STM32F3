@@ -1,3 +1,28 @@
+#define GPIO_AF_4            ((uint8_t)0x04) /* I2C1, I2C2, TIM1, TIM8, TIM16, TIM17 */
+typedef enum
+{
+  GPIO_PuPd_NOPULL = 0x00,
+  GPIO_PuPd_UP     = 0x01,
+  GPIO_PuPd_DOWN   = 0x02
+}GPIOPuPd_TypeDef;
+typedef enum
+{ 
+  GPIO_Speed_Level_1  = 0x01, /*!< Fast Speed     */
+  GPIO_Speed_Level_2  = 0x02, /*!< Meduim Speed   */
+  GPIO_Speed_Level_3  = 0x03  /*!< High Speed     */
+}GPIOSpeed_TypeDef;
+typedef enum
+{ 
+  GPIO_OType_PP = 0x00,
+  GPIO_OType_OD = 0x01
+}GPIOOType_TypeDef;
+typedef enum
+{ 
+  GPIO_Mode_IN   = 0x00, /*!< GPIO Input Mode */
+  GPIO_Mode_OUT  = 0x01, /*!< GPIO Output Mode */
+  GPIO_Mode_AF   = 0x02, /*!< GPIO Alternate function Mode */
+  GPIO_Mode_AN   = 0x03  /*!< GPIO Analog In/Out Mode      */
+}GPIOMode_TypeDef;
 #define LSM303DLHC_OUT_X_L_A                 0x28  /* Output Register X acceleration */
 #define LSM303DLHC_OUT_X_H_A                 0x29  /* Output Register X acceleration */
 #define LSM303DLHC_OUT_Y_L_A                 0x2A  /* Output Register Y acceleration */
@@ -39,26 +64,27 @@
 #define LSM303DLHC_ACC_SENSITIVITY_4G     ((uint8_t)2)  /*!< accelerometer sensitivity with 4 g full scale [mg/LSB] */
 #define LSM303DLHC_ACC_SENSITIVITY_8G     ((uint8_t)4)  /*!< accelerometer sensitivity with 8 g full scale [mg/LSB] */
 #define LSM303DLHC_ACC_SENSITIVITY_16G    ((uint8_t)12) /*!< accelerometer sensitivity with 12 g full scale [mg/LSB] */
-#include "drone.h"
-void COMPASSACCELERO_IO_Init(void)
+
+#include "stm32f30x_it.h"
+#include "stm32f30x.h"
+
+void  I2C_Init()
 {
-	RCC->AHBENR |= RCC_AHBENR_GPIOEEN;
-  
-	/* Those pin are in input mode and speed_3  and NOPULL*/
-	GPIOE->OSPEEDR |= GPIO_SPEED_FREQ_HIGH << 5 * 2;      /*!< GPIO port output speed register to maximum speed */
-	GPIOE->OSPEEDR |= GPIO_SPEED_FREQ_HIGH << 4 * 2;      /*!< GPIO port output speed register to maximum speed */
-	I2Cx_Init();
+	I2C1->CR1 &= ~I2C_CR1_PE;
+
+	I2C1->TIMINGR = 0xC062121F & TIMING_CLEAR_MASK;
+	I2C1->OAR1 &= ~I2C_OAR1_OA1EN;
+	I2C1->OAR1 = (I2C_OAR1_OA1EN | ACCELERO_I2C_ADDRESS);
+	I2C1->CR2 |= (I2C_CR2_AUTOEND | I2C_CR2_NACK);
+	I2C1->OAR2 &= ~I2C_DUALADDRESS_ENABLE;
+	I2C1->OAR2 = (I2C_DUALADDRESS_DISABLE | 0x00 | (0x00 << 8));
+	I2C1->CR1 = (I2C_GENERALCALL_DISABLE | I2C_NOSTRETCH_DISABLE);
+	I2C1->CR1 |= I2C_CR1_PE;
 }
 
-void I2Cx_Init(void)
+void ENABLE_GPIOB_SCA_SCL(void)
 {
 	/* Init the I2C */
-	I2Cx_MspInit();
-	HAL_I2C_Init();
-}
-
-void I2Cx_MspInit()
-{
 	RCC->AHBENR |= RCC_AHBENR_GPIOBEN;
 	GPIOB->AFR[0] &= ~(0xF << ((6 % 8) * 4)); // le mask est sur 4 bits
 	GPIOB->AFR[0] &= ~(0xF << ((7 % 8) * 4)); // le mask est sur 4 bits
@@ -76,24 +102,11 @@ void I2Cx_MspInit()
 	GPIOB->PUPDR |= GPIO_PuPd_DOWN << 7 * 2;        /*!< GPIO port pull-up/pull-down register,                      */
 
 	RCC->APB1ENR |= RCC_APB1ENR_I2C1EN;            /*!< I2C clock enable */
-}
-
-void  HAL_I2C_Init()
-{
-	I2C1->CR1 &= ~I2C_CR1_PE;
-
-	I2C1->TIMINGR = 0xC062121F & TIMING_CLEAR_MASK;
-	I2C1->OAR1 &= ~I2C_OAR1_OA1EN;
-	I2C1->OAR1 = (I2C_OAR1_OA1EN | ACCELERO_I2C_ADDRESS);
-	I2C1->CR2 |= (I2C_CR2_AUTOEND | I2C_CR2_NACK);
-	I2C1->OAR2 &= ~I2C_DUALADDRESS_ENABLE;
-	I2C1->OAR2 = (I2C_DUALADDRESS_DISABLE | 0x00 | (0x00 << 8));
-	I2C1->CR1 = (I2C_GENERALCALL_DISABLE | I2C_NOSTRETCH_DISABLE);
-	I2C1->CR1 |= I2C_CR1_PE;
+	I2C_Init();
 }
 
 
-uint8_t  COMPASSACCELERO_READ_REGISTER(uint16_t DeviceAddr, uint16_t RegisterAddr)
+uint8_t  READ_REGISTER(uint16_t DeviceAddr, uint16_t RegisterAddr)
 {
 	// TODO: WARNING REGADDR OPTIMIZED OUT WITH OPTI FLAG SET IN GCC
 	uint32_t timeout = I2C_TIMEOUT;
@@ -154,7 +167,7 @@ uint8_t  COMPASSACCELERO_READ_REGISTER(uint16_t DeviceAddr, uint16_t RegisterAdd
 	return data;
 }
 
-void  COMPASSACCELERO_WRITE_REGISTER(uint16_t DeviceAddr, uint16_t RegisterAddr, uint8_t RegisterConfig)
+void  WRITE_REGISTER(uint16_t DeviceAddr, uint16_t RegisterAddr, uint8_t RegisterConfig)
 {
 	// TODO: WARNING REGADDR OPTIMIZED OUT WITH OPTI FLAG SET IN GCC
 	uint32_t timeout = I2C_TIMEOUT;
@@ -212,27 +225,8 @@ void  COMPASSACCELERO_WRITE_REGISTER(uint16_t DeviceAddr, uint16_t RegisterAddr,
 	I2C1->CR2 &= (uint32_t)~((uint32_t)(I2C_CR2_SADD | I2C_CR2_HEAD10R | I2C_CR2_NBYTES | I2C_CR2_RELOAD | I2C_CR2_RD_WRN));
 }
 
-uint8_t BSP_ACCELERO_Init(void)
-{  
-	uint8_t tmpreg;
-	uint16_t RegisterConfig = 0x0000;
 
-	RegisterConfig = 0x0847;
-	COMPASSACCELERO_IO_Init();
-	COMPASSACCELERO_WRITE_REGISTER(ACC_I2C_ADDRESS, LSM303DLHC_CTRL_REG1_A, RegisterConfig);
-
-	RegisterConfig = (uint8_t) (RegisterConfig << 8);
-	COMPASSACCELERO_WRITE_REGISTER(ACC_I2C_ADDRESS, LSM303DLHC_CTRL_REG4_A, RegisterConfig);
-
-	RegisterConfig = 0x90;
-	tmpreg = COMPASSACCELERO_READ_REGISTER(ACC_I2C_ADDRESS, LSM303DLHC_CTRL_REG2_A);
-	tmpreg &= 0x0C;
-	tmpreg |= RegisterConfig;
-	COMPASSACCELERO_WRITE_REGISTER(ACC_I2C_ADDRESS, LSM303DLHC_CTRL_REG2_A, tmpreg);
-	return(1);
-}
-
-void BSP_ACCELERO_GetXYZ(uint8_t *pDataXYZ)
+void LSM303DLHC_GetData(uint8_t *pDataXYZ)
 {
 
 	// const uint8_t MAGNETOMETER = 0x1E; // 0x1E
@@ -243,23 +237,23 @@ void BSP_ACCELERO_GetXYZ(uint8_t *pDataXYZ)
 	uint8_t sensitivity = LSM303DLHC_ACC_SENSITIVITY_2G;
 
 	/* Read the acceleration control register content */
-	ctrlx[0] = COMPASSACCELERO_READ_REGISTER(ACC_I2C_ADDRESS, LSM303DLHC_CTRL_REG4_A);
-	ctrlx[1] = COMPASSACCELERO_READ_REGISTER(ACC_I2C_ADDRESS, LSM303DLHC_CTRL_REG5_A);
+	ctrlx[0] = READ_REGISTER(ACC_I2C_ADDRESS, LSM303DLHC_CTRL_REG4_A);
+	ctrlx[1] = READ_REGISTER(ACC_I2C_ADDRESS, LSM303DLHC_CTRL_REG5_A);
 
 	/* Read output register X, Y & Z acceleration */
-	// buffer[0] = COMPASSACCELERO_READ_REGISTER(ACC_I2C_ADDRESS, OUT_X_L_A); 
-	// buffer[1] = COMPASSACCELERO_READ_REGISTER(ACC_I2C_ADDRESS, OUT_X_H_A);
-	// buffer[2] = COMPASSACCELERO_READ_REGISTER(ACC_I2C_ADDRESS, OUT_Y_L_A);
-	// buffer[3] = COMPASSACCELERO_READ_REGISTER(ACC_I2C_ADDRESS, OUT_Y_H_A);
-	// buffer[4] = COMPASSACCELERO_READ_REGISTER(ACC_I2C_ADDRESS, OUT_Z_L_A);
-	// buffer[5] = COMPASSACCELERO_READ_REGISTER(ACC_I2C_ADDRESS, OUT_Z_H_A);
+	// buffer[0] = READ_REGISTER(ACC_I2C_ADDRESS, OUT_X_L_A); 
+	// buffer[1] = READ_REGISTER(ACC_I2C_ADDRESS, OUT_X_H_A);
+	// buffer[2] = READ_REGISTER(ACC_I2C_ADDRESS, OUT_Y_L_A);
+	// buffer[3] = READ_REGISTER(ACC_I2C_ADDRESS, OUT_Y_H_A);
+	// buffer[4] = READ_REGISTER(ACC_I2C_ADDRESS, OUT_Z_L_A);
+	// buffer[5] = READ_REGISTER(ACC_I2C_ADDRESS, OUT_Z_H_A);
 
-	pDataXYZ[0] = COMPASSACCELERO_READ_REGISTER(ACC_I2C_ADDRESS, LSM303DLHC_OUT_X_L_A); 
-	pDataXYZ[1] = COMPASSACCELERO_READ_REGISTER(ACC_I2C_ADDRESS, LSM303DLHC_OUT_X_H_A);
-	pDataXYZ[2] = COMPASSACCELERO_READ_REGISTER(ACC_I2C_ADDRESS, LSM303DLHC_OUT_Y_L_A);
-	pDataXYZ[3] = COMPASSACCELERO_READ_REGISTER(ACC_I2C_ADDRESS, LSM303DLHC_OUT_Y_H_A);
-	pDataXYZ[4] = COMPASSACCELERO_READ_REGISTER(ACC_I2C_ADDRESS, LSM303DLHC_OUT_Z_L_A);
-	pDataXYZ[5] = COMPASSACCELERO_READ_REGISTER(ACC_I2C_ADDRESS, LSM303DLHC_OUT_Z_H_A);
+	pDataXYZ[0] = READ_REGISTER(ACC_I2C_ADDRESS, LSM303DLHC_OUT_X_L_A); 
+	pDataXYZ[1] = READ_REGISTER(ACC_I2C_ADDRESS, LSM303DLHC_OUT_X_H_A);
+	pDataXYZ[2] = READ_REGISTER(ACC_I2C_ADDRESS, LSM303DLHC_OUT_Y_L_A);
+	pDataXYZ[3] = READ_REGISTER(ACC_I2C_ADDRESS, LSM303DLHC_OUT_Y_H_A);
+	pDataXYZ[4] = READ_REGISTER(ACC_I2C_ADDRESS, LSM303DLHC_OUT_Z_L_A);
+	pDataXYZ[5] = READ_REGISTER(ACC_I2C_ADDRESS, LSM303DLHC_OUT_Z_H_A);
 	return ;
 	/* Check in the control register4 the data alignment*/
 	if(!(ctrlx[0] & LSM303DLHC_BLE_MSB)) 
@@ -300,4 +294,34 @@ void BSP_ACCELERO_GetXYZ(uint8_t *pDataXYZ)
 	{
 		pDataXYZ[i]=(pnRawData[i] * sensitivity);
 	}
+}
+
+void ENABLE_LSM303DLHC_INT(void)
+{
+	RCC->AHBENR |= RCC_AHBENR_GPIOEEN;
+  
+	/* Those pin are in input mode and speed_3  and NOPULL*/
+	GPIOE->OSPEEDR |= GPIO_SPEED_FREQ_HIGH << 5 * 2;      /*!< GPIO port output speed register to maximum speed */
+	GPIOE->OSPEEDR |= GPIO_SPEED_FREQ_HIGH << 4 * 2;      /*!< GPIO port output speed register to maximum speed */
+	ENABLE_GPIOB_SCA_SCL();
+}
+
+uint8_t LSM303DLHC_Init(void)
+{  
+	uint8_t tmpreg;
+	uint16_t RegisterConfig = 0x0000;
+
+	RegisterConfig = 0x0847;
+	ENABLE_LSM303DLHC_INT();
+	WRITE_REGISTER(ACC_I2C_ADDRESS, LSM303DLHC_CTRL_REG1_A, RegisterConfig);
+
+	RegisterConfig = (uint8_t) (RegisterConfig << 8);
+	WRITE_REGISTER(ACC_I2C_ADDRESS, LSM303DLHC_CTRL_REG4_A, RegisterConfig);
+
+	RegisterConfig = 0x90;
+	tmpreg = READ_REGISTER(ACC_I2C_ADDRESS, LSM303DLHC_CTRL_REG2_A);
+	tmpreg &= 0x0C;
+	tmpreg |= RegisterConfig;
+	WRITE_REGISTER(ACC_I2C_ADDRESS, LSM303DLHC_CTRL_REG2_A, tmpreg);
+	return(1);
 }
