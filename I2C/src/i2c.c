@@ -1,278 +1,280 @@
-/* ************************************************************************** */
-/*                                                          LE - /            */
-/*                                                              /             */
-/*   i2c.c                                            .::    .:/ .      .::   */
-/*                                                 +:+:+   +:    +:  +:+:+    */
-/*   By: aurollan <aurollan@student.le-101.fr>      +:+   +:    +:    +:+     */
-/*                                                 #+#   #+    #+    #+#      */
-/*   Created: 2020/02/04 17:52:07 by aurollan     #+#   ##    ##    #+#       */
-/*   Updated: 2020/02/26 17:53:23 by aurollan    ###    #+. /#+    ###.fr     */
-/*                                                         /                  */
-/*                                                        /                   */
-/* ************************************************************************** */
+#include "i2c.h"
+#include "stm32f30x.h"
+#include "stm32f30x_it.h"
 
-#include "drone.h"
-#define CR2_CLEAR_MASK          ((uint32_t)0x07FF7FFF)  /*<! I2C CR2 clear register Mask */
-#define TIMING_CLEAR_MASK       ((uint32_t)0xF0FFFFFF)  /*<! I2C TIMING clear register Mask */
-#define I2C_TIMEOUT         ((uint32_t)0x3FFFF) /*!< I2C Time out */
-
-
-void RCC_I2C_enable()
+void  I2C_Init()
 {
-	RCC->AHBENR |= RCC_AHBENR_GPIOBEN;
-	RCC->APB1ENR |= RCC_APB1ENR_I2C1EN;            /*!< I2C clock enable */
+	I2C1->CR1 &= ~I2C_CR1_PE;
+
+	I2C1->TIMINGR = 0xC062121F & TIMING_CLEAR_MASK;
+	// I2C1->TIMINGR = 0xE0000303 & TIMING_CLEAR_MASK;
+	I2C1->OAR1 &= ~I2C_OAR1_OA1EN;
+	I2C1->OAR1 = (I2C_OAR1_OA1EN | ACCELERO_I2C_ADDRESS);
+	I2C1->CR2 |= (I2C_CR2_AUTOEND | I2C_CR2_NACK);
+	I2C1->OAR2 &= ~I2C_DUALADDRESS_ENABLE;
+	I2C1->OAR2 = (I2C_DUALADDRESS_DISABLE | 0x00 | (0x00 << 8));
+	I2C1->CR1 = (I2C_GENERALCALL_DISABLE | I2C_NOSTRETCH_DISABLE);
+	I2C1->CR1 |= I2C_CR1_PE;
 }
 
-void GPIOB_connect_PIN6_PIN7()
+void ENABLE_GPIOB_SCA_SCL(void)
 {
-	/* Cleaning bits */
+	/* Init the I2C */
+	RCC->AHBENR |= RCC_AHBENR_GPIOBEN;
 	GPIOB->AFR[0] &= ~(0xF << ((6 % 8) * 4)); // le mask est sur 4 bits
 	GPIOB->AFR[0] &= ~(0xF << ((7 % 8) * 4)); // le mask est sur 4 bits
 	/* Setting bits */
 	GPIOB->AFR[0] |= (GPIO_AF_4 << (6 % 8) * 4);
 	GPIOB->AFR[0] |= (GPIO_AF_4 << (7 % 8) * 4);
-}
-
-/* Open drain connection ? */
-void GPIOB_config()
-{
 	GPIOB->MODER |= GPIO_Mode_AF << 6 * 2; // alternate function mode
 	GPIOB->MODER |= GPIO_Mode_AF << 7 * 2; // alternate function mode
-	GPIOB->OTYPER |= GPIO_OType_OD << 6;       /*!< GPIO port output type register in push pull mode  0x00 */
-	GPIOB->OTYPER |= GPIO_OType_OD << 7;       /*!< GPIO port output type register in push pull mode  0x00 */
+	GPIOB->OTYPER |= GPIO_OType_PP << 6;       /*!< GPIO port output type register in push pull mode  0x00 */
+	GPIOB->OTYPER |= GPIO_OType_PP << 7;       /*!< GPIO port output type register in push pull mode  0x00 */
 	GPIOB->OSPEEDR |= GPIO_Speed_Level_3 << 6 * 2;      /*!< GPIO port output speed register to maximum speed */
 	GPIOB->OSPEEDR |= GPIO_Speed_Level_3 << 7 * 2;      /*!< GPIO port output speed register to maximum speed */
 	// PUPD_UP ? A VERIFIER
-	GPIOB->PUPDR |= GPIO_PuPd_NOPULL << 6 * 2;        /*!< GPIO port pull-up/pull-down register,                      */
-	GPIOB->PUPDR |= GPIO_PuPd_NOPULL << 7 * 2;        /*!< GPIO port pull-up/pull-down register,                      */
-	// To test
-	// GPIOB->PUPDR |= GPIO_PuPd_DOWN << 6 * 2;        /*!< GPIO port pull-up/pull-down register,                      */
-	// GPIOB->PUPDR |= GPIO_PuPd_DOWN << 7 * 2;        /*!< GPIO port pull-up/pull-down register,                      */
-}
+	GPIOB->PUPDR |= GPIO_PuPd_DOWN << 6 * 2;        /*!< GPIO port pull-up/pull-down register,                      */
+	GPIOB->PUPDR |= GPIO_PuPd_DOWN << 7 * 2;        /*!< GPIO port pull-up/pull-down register,                      */
 
-void I2C_enable()
-{
-	RCC_I2C_enable();
-	GPIOB_connect_PIN6_PIN7();
-	GPIOB_config();
-
-	// I2C1SW enabled  why ?
-	RCC->CFGR3 |= RCC_I2C1CLK_SYSCLK;
-	/* Clearing to reset value setting PE to 0 ensure a software reset (need 3 apb clock cycle to be effective) */
-	I2C1->CR1 = 0x00000000;
-	/* Clearing to reset value */
-	I2C1->TIMINGR = 0x00000000;
-
-	I2C1->TIMINGR = 0xC062121F & TIMING_CLEAR_MASK; // find the right value
-    // I2C1->TIMINGR = 0xF0001317 | ((4 & 0x0F) << 20) | ((5 & 0x0F) << 16);
-	// I2C1->TIMINGR = 0xB0420F13 & TIMING_CLEAR_MASK; // for clock at 48 Mhz
-	// I2C1->TIMINGR = 0x00902025 & TIMING_CLEAR_MASK; // for clock at 72 Mhz ?
-
-	I2C1->CR1 |= I2C_CR1_PE; // ici pour la fonction init()
-	I2C1->OAR1 = 0x00000000;
-	I2C1->OAR2 = 0x00000000;
-	I2C1->OAR1 |= I2C_OAR1_OA1EN;
-	I2C1->CR2 = 0x00000000;
-	// hi2c->Instance->TIMINGR = hi2c->Init.Timing & TIMING_CLEAR_MASK;
-	// hi2c->Instance->OAR1 &= ~I2C_OAR1_OA1EN;
-	// hi2c->Instance->OAR1 = (I2C_OAR1_OA1EN | hi2c->Init.OwnAddress1);
-	// hi2c->Instance->CR2 |= (I2C_CR2_AUTOEND | I2C_CR2_NACK);
-	// hi2c->Instance->OAR2 &= ~I2C_DUALADDRESS_ENABLE;
-	// hi2c->Instance->OAR2 = (hi2c->Init.DualAddressMode | hi2c->Init.OwnAddress2 | (hi2c->Init.OwnAddress2Masks << 8));
-	// hi2c->Instance->CR1 = (hi2c->Init.GeneralCallMode | hi2c->Init.NoStretchMode);
+	RCC->APB1ENR |= RCC_APB1ENR_I2C1EN;            /*!< I2C clock enable */
+	I2C_Init();
 }
 
 
-int I2C_communicate(void)
+uint8_t  READ_REGISTER(uint16_t DeviceAddr, uint16_t RegisterAddr)
 {
+	// TODO: WARNING REGADDR OPTIMIZED OUT WITH OPTI FLAG SET IN GCC
 	uint32_t timeout = I2C_TIMEOUT;
-	const uint32_t magnetic_field_addr = 0b0011110;
-	const uint8_t OUT_X_H_M = 0x03;
-	//const linear_acceleration_addr = 0x28;
-	
-	// Wait if communication
+	uint8_t data;
+
 	while ((I2C1->ISR & I2C_ISR_BUSY) != 0)
 	{
-		if((timeout--) == 0) 
+		if((timeout--) == 0)
 		{
-			_write(0, "ERROR READBUSY\n", 15);
-			return 0;
+			_write(0, "ERROR ISRBUSY\n", 14);
+			return (0);
 		}
 	}
-	I2C1->CR2 |= (magnetic_field_addr << 1); // I2C_CR2_SADD [0;9]
-	I2C1->CR2 &= ~I2C_CR2_RD_WRN; // (write)I2C_CR2_RD_WRN [10]
-	I2C1->CR2 &= ~I2C_CR2_ADD10; // ensure disabled I2C_CR2_ADD10 [11]
-	I2C1->CR2 |= (1 << 16); // 1 byte send with addr I2C_CR2_NBYTES [16;23]
-	I2C1->CR2 |= I2C_CR2_START; // I2C_CR2_START [13]
 
-
+	I2C1->CR2 = (I2C1->CR2 & 0xF8000000U) | ((uint32_t)(((uint32_t)DeviceAddr & I2C_CR2_SADD) | (((uint32_t)1 << I2C_CR2_NBYTES_Pos) & I2C_CR2_NBYTES) | (uint32_t)I2C_SOFTEND_MODE | (uint32_t)I2C_GENERATE_START_WRITE));
 
 	timeout = I2C_TIMEOUT;
 	while ((I2C1->ISR & I2C_ISR_TXIS) == 0)
 	{
 		if((timeout--) == 0)
 		{
-			_write(0, "ERROR READTXIS\n", 15);
-			return 0;
+			_write(0, "ERROR ISRTXIS\n", 14);
+			return (0);
 		}
 	}
 
-	I2C1->TXDR = (uint8_t)OUT_X_H_M & I2C_TXDR_TXDATA;
+	I2C1->TXDR = ((uint8_t)((uint16_t)((RegisterAddr) & (uint16_t)(0x00FFU))));
 
 	timeout = I2C_TIMEOUT;
 	while ((I2C1->ISR & I2C_ISR_TC) == 0)
 	{
 		if((timeout--) == 0)
 		{
-			_write(0, "ERROR READ_TC\n", 14);
-			return 0;
+			_write(0, "ERROR ISRTC\n", 12);
+			return (0);
 		}
 	}
 
-	I2C1->CR2 &= ~I2C_CR2_ADD10; // ensure disabled I2C_CR2_ADD10 [11] (default 7bits)
-	I2C1->CR2 |= I2C_CR2_RD_WRN; // I2C_CR2_RD_WRN [10]
-	I2C1->CR2 &= ~(0xFF << 16); // I2C_CR2_NBYTES [16;23]
-	I2C1->CR2 |= 6 << 16; // I2C_CR2_NBYTES [16;23]
-	I2C1->CR2 |= I2C_CR2_AUTOEND; // I2C_CR2_STOP [14]
-	I2C1->CR2 |= I2C_CR2_START; // I2C_CR2_START [13]
+	I2C1->CR2 = (I2C1->CR2 & 0xF8000000U) | ((uint32_t)(((uint32_t)DeviceAddr & I2C_CR2_SADD) | (((uint32_t)1 << I2C_CR2_NBYTES_Pos) & I2C_CR2_NBYTES) | (uint32_t)I2C_AUTOEND_MODE | (uint32_t)I2C_GENERATE_START_READ));
 
-	volatile uint8_t a;
-	volatile uint8_t data[6];
-	volatile char		c;
-
-	a = 0;
-	_write(0, "DATA\n", 5);
-	_write(0, "0x", 2);
-	while (a < 6)
+	timeout = I2C_TIMEOUT;
+	while ((I2C1->ISR & I2C_ISR_RXNE) == 0)
 	{
-		while ((I2C1->ISR & I2C_ISR_RXNE) == 0) 
+		if((timeout--) == 0)
 		{
-			if((timeout--) == 0)
-			{
-				_write(0, "ERROR READRXNE\n", 15);
-				return 0;
-			}
+			_write(0, "ERROR ISRRXNE\n", 14);
+			return (0);
 		}
-		(void)data;
-		c = I2C1->RXDR;
-		ft_print_hexa((uint8_t)c);
-		_write(0, "\n", 1);
-		a++;
 	}
-	_write(0, "\n", 1);
-	return (1);
+	data = (uint8_t)I2C1->RXDR;
+
+	timeout = I2C_TIMEOUT;
+	while ((I2C1->ISR & I2C_ISR_STOPF) == 0)
+	{
+		if((timeout--) == 0)
+		{
+			_write(0, "ERROR ISRSTOPF\n", 15);
+			return (0);
+		}
+	}
+	I2C1->ICR &= (uint32_t)~((uint32_t)(1 << 5));
+	I2C1->CR2 &= (uint32_t)~((uint32_t)(I2C_CR2_SADD | I2C_CR2_HEAD10R | I2C_CR2_NBYTES | I2C_CR2_RELOAD | I2C_CR2_RD_WRN));
+	return data;
 }
 
-
-void i2c1_initp(void)
+void  WRITE_REGISTER(uint16_t DeviceAddr, uint16_t RegisterAddr, uint8_t RegisterConfig)
 {
-  GPIO_InitTypeDef GPIO_InitStructure;
-  I2C_InitTypeDef  I2C_InitStructure;
+	// TODO: WARNING REGADDR OPTIMIZED OUT WITH OPTI FLAG SET IN GCC
+	uint32_t timeout = I2C_TIMEOUT;
 
-  RCC_I2CCLKConfig(RCC_I2C1CLK_SYSCLK);
+	while ((I2C1->ISR & I2C_ISR_BUSY) != 0)
+	{
+		if((timeout--) == 0)
+		{
+			return ;
+		}
+	}
+	I2C1->CR2 = (I2C1->CR2 & 0xF8000000U) | ((uint32_t)(((uint32_t)DeviceAddr & I2C_CR2_SADD) | (((uint32_t)1 << I2C_CR2_NBYTES_Pos) & I2C_CR2_NBYTES) | (uint32_t)I2C_RELOAD_MODE | (uint32_t)I2C_GENERATE_START_WRITE));
 
-  RCC_APB1PeriphClockCmd(RCC_APB1Periph_I2C1, ENABLE);
-  RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOB, ENABLE);
+	timeout = I2C_TIMEOUT;
+	while ((I2C1->ISR & I2C_ISR_TXIS) == 0)
+	{
+		if((timeout--) == 0)
+		{
+			return ;
+		}
+	}
 
-  GPIO_PinAFConfig(GPIOB, GPIO_PinSource6, GPIO_AF_4);
-  GPIO_PinAFConfig(GPIOB, GPIO_PinSource7, GPIO_AF_4);
+	I2C1->TXDR = ((uint8_t)((uint16_t)((RegisterAddr) & (uint16_t)(0x00FFU))));
 
-  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
-  GPIO_InitStructure.GPIO_OType = GPIO_OType_OD;
-  GPIO_InitStructure.GPIO_PuPd  = GPIO_PuPd_NOPULL;
-  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+	timeout = I2C_TIMEOUT;
+	while ((I2C1->ISR & I2C_ISR_TCR) == 0)
+	{
+		if((timeout--) == 0)
+		{
+			return ;
+		}
+	}
 
-  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6;
-  GPIO_Init(GPIOB, &GPIO_InitStructure);
+	I2C1->CR2 = (I2C1->CR2 & 0xF8000000U) | ((uint32_t)(((uint32_t)DeviceAddr & I2C_CR2_SADD) | (((uint32_t)1 << I2C_CR2_NBYTES_Pos) & I2C_CR2_NBYTES) | (uint32_t)I2C_AUTOEND_MODE | (uint32_t)I2C_NO_STARTSTOP));
 
-  GPIO_InitStructure.GPIO_Pin =  GPIO_Pin_7;
-  GPIO_Init(GPIOB, &GPIO_InitStructure);
+	timeout = I2C_TIMEOUT;
+	while ((I2C1->ISR & I2C_ISR_TXIS) == 0)
+	{
+		if((timeout--) == 0)
+		{
+			return ;
+		}
+	}
+	I2C1->TXDR = RegisterConfig;
 
-  I2C_DeInit(I2C1);
-  I2C_InitStructure.I2C_Mode = I2C_Mode_I2C;
-  I2C_InitStructure.I2C_AnalogFilter = I2C_AnalogFilter_Enable;
-  I2C_InitStructure.I2C_DigitalFilter = 0x00;
-  I2C_InitStructure.I2C_Ack = I2C_Ack_Enable;
-  I2C_InitStructure.I2C_AcknowledgedAddress = I2C_AcknowledgedAddress_7bit;
-  I2C_InitStructure.I2C_Timing = 0x2000090E;
-  I2C_InitStructure.I2C_OwnAddress1 = 0x00;
-
-
-  I2C_Init(I2C1, &I2C_InitStructure);
-  I2C_Cmd(I2C1, ENABLE);
-
-  // init_register();
+	timeout = I2C_TIMEOUT;
+	while ((I2C1->ISR & I2C_ISR_STOPF) == 0)
+	{
+		if((timeout--) == 0)
+		{
+			return ;
+		}
+	}
+	I2C1->ICR &= (uint32_t)~((uint32_t)(1 << 5));
+	I2C1->CR2 &= (uint32_t)~((uint32_t)(I2C_CR2_SADD | I2C_CR2_HEAD10R | I2C_CR2_NBYTES | I2C_CR2_RELOAD | I2C_CR2_RD_WRN));
 }
 
-uint8_t i2c_set(uint8_t DeviceAddr, uint8_t RegAddr)
+
+void LSM303DLHCAcc_GetData(uint8_t *pDataXYZ)
 {
-	uint32_t timeout;
 
-	// Auto increment register when multiple read
-	// RegAddr |= 0b10000000;
-	timeout = I2C_TIMEOUT;
-	while(I2C_GetFlagStatus(I2C1, I2C_ISR_BUSY) != RESET)
+	// const uint8_t MAGNETOMETER = 0x1E; // 0x1E
+	int16_t pnRawData[3];
+	uint8_t ctrlx[2]={0,0};
+	int8_t buffer[6];
+	uint8_t i = 0;
+	uint8_t sensitivity = LSM303DLHC_ACC_SENSITIVITY_2G;
+
+	/* Read the acceleration control register content */
+	ctrlx[0] = READ_REGISTER(ACC_I2C_ADDRESS, LSM303DLHC_CTRL_REG4_A);
+	ctrlx[1] = READ_REGISTER(ACC_I2C_ADDRESS, LSM303DLHC_CTRL_REG5_A);
+
+	/* Read output register X, Y & Z acceleration */
+	// pDataXYZ[0] = READ_REGISTER(MAG_I2C_ADDRESS, LSM303DLHC_OUT_X_L_M);
+	// pDataXYZ[1] = READ_REGISTER(MAG_I2C_ADDRESS, LSM303DLHC_OUT_X_H_M);
+	// pDataXYZ[2] = READ_REGISTER(MAG_I2C_ADDRESS, LSM303DLHC_OUT_Y_L_M);
+	// pDataXYZ[3] = READ_REGISTER(MAG_I2C_ADDRESS, LSM303DLHC_OUT_Y_H_M);
+	// pDataXYZ[4] = READ_REGISTER(MAG_I2C_ADDRESS, LSM303DLHC_OUT_Z_L_M);
+	// pDataXYZ[5] = READ_REGISTER(MAG_I2C_ADDRESS, LSM303DLHC_OUT_Z_H_M);
+
+	pDataXYZ[0] = READ_REGISTER(ACC_I2C_ADDRESS, LSM303DLHC_OUT_X_L_A);
+	pDataXYZ[1] = READ_REGISTER(ACC_I2C_ADDRESS, LSM303DLHC_OUT_X_H_A);
+	pDataXYZ[2] = READ_REGISTER(ACC_I2C_ADDRESS, LSM303DLHC_OUT_Y_L_A);
+	pDataXYZ[3] = READ_REGISTER(ACC_I2C_ADDRESS, LSM303DLHC_OUT_Y_H_A);
+	pDataXYZ[4] = READ_REGISTER(ACC_I2C_ADDRESS, LSM303DLHC_OUT_Z_L_A);
+	pDataXYZ[5] = READ_REGISTER(ACC_I2C_ADDRESS, LSM303DLHC_OUT_Z_H_A);
+	return ;
+	/* Check in the control register4 the data alignment*/
+	if(!(ctrlx[0] & LSM303DLHC_BLE_MSB))
 	{
-		if((timeout--) == 0)
+		for(i=0; i<3; i++)
 		{
-			_write(0, "ERROR ISR BUSY\n", 15);
-			return 0;
+			pnRawData[i]=((int16_t)((uint16_t)buffer[2*i+1] << 8) + buffer[2*i]);
 		}
 	}
-	// TRY I2C_CR2_RELOAD instead of  I2C_SoftEnd_mode 
-	I2C_TransferHandling(I2C1, DeviceAddr, 1, I2C_SoftEnd_Mode, I2C_Generate_Start_Write);
-
-	timeout = I2C_TIMEOUT;
-	while(I2C_GetFlagStatus(I2C1, I2C_ISR_TXIS) == RESET)
+	else /* Big Endian Mode */
 	{
-		if((timeout--) == 0)
+		for(i=0; i<3; i++)
 		{
-			_write(0, "ERROR ISR TXIS\n", 15);
-			return 0;
+			pnRawData[i]=((int16_t)((uint16_t)buffer[2*i] << 8) + buffer[2*i+1]);
 		}
 	}
 
-	I2C_SendData(I2C1, RegAddr);
-
-	timeout = I2C_TIMEOUT;
-	while ((I2C1->ISR & I2C_ISR_TC) == 0)
+	/* Normal mode */
+	/* Switch the sensitivity value set in the CRTL4 */
+	switch(ctrlx[0] & LSM303DLHC_FULLSCALE_16G)
 	{
-		if((timeout--) == 0)
-		{
-			_write(0, "ERROR ISR TC\n", 13);
-			return 0;
-		}
+		case LSM303DLHC_FULLSCALE_2G:
+			sensitivity = LSM303DLHC_ACC_SENSITIVITY_2G;
+			break;
+		case LSM303DLHC_FULLSCALE_4G:
+			sensitivity = LSM303DLHC_ACC_SENSITIVITY_4G;
+			break;
+		case LSM303DLHC_FULLSCALE_8G:
+			sensitivity = LSM303DLHC_ACC_SENSITIVITY_8G;
+			break;
+		case LSM303DLHC_FULLSCALE_16G:
+			sensitivity = LSM303DLHC_ACC_SENSITIVITY_16G;
+			break;
 	}
-	return (1);
+
+	/* Obtain the mg value for the three axis */
+	for(i=0; i<3; i++)
+	{
+		pDataXYZ[i]=(pnRawData[i] * sensitivity);
+	}
 }
 
-uint8_t i2c_read(uint8_t DeviceAddr, uint8_t* data)
+void ENABLE_LSM303DLHC_INT(void)
 {
-	uint32_t timeout;
+	RCC->AHBENR |= RCC_AHBENR_GPIOEEN;
 
-	I2C_TransferHandling(I2C1, DeviceAddr, 1, I2C_AutoEnd_Mode, I2C_Generate_Start_Read);
-	// I2C_TransferHandling(I2C1, DeviceAddr, 1, I2C_AutoEnd_Mode, I2C_No_StartStop);
-	timeout = I2C_TIMEOUT;
-	while ((I2C1->ISR & I2C_ISR_RXNE) == 0) 
-	{
-		if((timeout--) == 0)
-		{
-			_write(0, "ERROR ISR RXNE\n", 15);
-			return 0;
-		}
-	}
-	*data = I2C_ReceiveData(I2C1);
-	I2C1->CR2 |= I2C_CR2_NACK;
-	while ((I2C1->CR2 & I2C_CR2_NACK) == 0) {};
-	I2C1->CR2 |= I2C_CR2_STOP;
-	while ((I2C1->CR2 & I2C_CR2_STOP) == 0) {};
-	return (1);
+	/* Those pin are in input mode and speed_3  and NOPULL*/
+	GPIOE->OSPEEDR |= GPIO_SPEED_FREQ_HIGH << 5 * 2;      /*!< GPIO port output speed register to maximum speed */
+	GPIOE->OSPEEDR |= GPIO_SPEED_FREQ_HIGH << 4 * 2;      /*!< GPIO port output speed register to maximum speed */
+	ENABLE_GPIOB_SCA_SCL();
 }
 
+uint8_t LSM303DLHCAcc_Init(void)
+{
+	uint8_t tmpreg;
+	uint16_t RegisterConfig = 0x0000;
+
+	// Xen/Yen/Zen
+	// 50hz
+	RegisterConfig = 0x0847;
+	ENABLE_LSM303DLHC_INT();
+	WRITE_REGISTER(ACC_I2C_ADDRESS, LSM303DLHC_CTRL_REG1_A, RegisterConfig);
+
+	// Continuous update
+	// data LSB at lower address
+	// +-2g
+	// hight resolution disbled
+	// 4-wire interface
+	RegisterConfig = (uint8_t) (RegisterConfig << 8); // same as = 0;
+	WRITE_REGISTER(ACC_I2C_ADDRESS, LSM303DLHC_CTRL_REG4_A, RegisterConfig);
 
 
-
-// void	init_register(void)
-// {
-// 
-// }
+	//  HPM1 enable
+	//  HPIS1 enable
+	RegisterConfig = 0x90;
+	tmpreg = READ_REGISTER(ACC_I2C_ADDRESS, LSM303DLHC_CTRL_REG2_A);
+	// Keeping only FDS and HPCLICK if enabled
+	tmpreg &= 0x0C;
+	// adding HPM1 and HPIS1
+	tmpreg |= RegisterConfig;
+	// writing it
+	WRITE_REGISTER(ACC_I2C_ADDRESS, LSM303DLHC_CTRL_REG2_A, tmpreg);
+	return(1);
+}

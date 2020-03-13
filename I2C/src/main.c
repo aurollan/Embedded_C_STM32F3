@@ -6,16 +6,16 @@
 /*   By: aurollan <aurollan@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2020/01/22 11:11:06 by aurollan     #+#   ##    ##    #+#       */
-/*   Updated: 2020/03/06 19:05:27 by aurollan    ###    #+. /#+    ###.fr     */
+/*   Updated: 2020/03/13 14:38:48 by aurollan    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
-#include "stm32f30x_it.h"
-#include "stm32f30x.h"
+#include "i2c.h"
 
-uint8_t LSM303DLHC_Init(void);
-void LSM303DLHC_GetData(uint8_t *pDataXYZ);
+uint8_t LSM303DLHCAcc_Init(void);
+void LSM303DLHCAcc_GetData(uint8_t *pDataXYZ);
+void LSM303DLHCMag_GetData(uint8_t *pDataXYZ);
 
 void TIM6_enable(void)
 {
@@ -46,11 +46,11 @@ void ITM_init(void)
 	ITM->TER |= (1UL << 0);
 }
 
-int _write(int32_t file, char* ptr, int32_t len)
+int _write(uint32_t file, char* ptr, int len)
 {
 	(void)file;
 	int i=0;
-	for(i=0 ; i<len ; i++)
+	for(i=0 ; i < len ; i++)
 		ITM_SendChar((*ptr++));
 	return i;
 }
@@ -77,10 +77,12 @@ int main(void)
 
 	ITM_init();
 	TIM6_enable();
-	LSM303DLHC_Init();
+	// LSM303DLHCAcc_Init();
+	LSM303DLHCMag_Init();
 	while (1)
 	{
-		LSM303DLHC_GetData(&data[0]);
+		// LSM303DLHCAcc_GetData(&data[0]);
+		LSM303DLHCMag_GetData(&data[0]);
 		_write(0, "DATA\n", 5);
 		int a = 0;
 		while (a < 6)
