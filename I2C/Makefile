@@ -14,7 +14,10 @@ NAME = I2C-$(CORE)
 # Compiler & Linker
 CC = arm-none-eabi-gcc
 LD = arm-none-eabi-ld
-DB = arm-none-eabi-gdb
+# Launch debug from Linux (Ubuntu/Debian)
+LDB = gdb-multiarch
+# Launch debug from MacOS
+MDB = arm-none-eabi-gdb
 
 # STM32 library path
 
@@ -108,8 +111,11 @@ $(DIR_OBJ)/%.o: $(DIR_ASM)/%.s
 	@echo "\033[0;32m [OK] \033[0m       \033[0;33m Compiling:\033[0m" $<
 	@echo "---------------------------------------------------------------------"
 
-launch:
-	@$(DB) -q $(NAME) -x openocd.gdb
+mlaunch:
+	@$(MDB) -q $(NAME) -x openocd.gdb
+
+llaunch:
+	@$(LDB) -q $(NAME) -x openocd.gdb
 
 clean: 
 	@rm -rf *.map
