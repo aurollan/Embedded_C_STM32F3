@@ -1,59 +1,78 @@
 # LD SCRIPT
-This is an obscure part of embedded development.
+This is an obscure part of embedded development and develoment in general.
 First of all it's not mandatory to know how to build a linker script
-but i think it is to understand it. I will go from general to detailed 
+but I think it is to understand it. I will go from general to detailed 
 information.
 
 ### ld ?
 ld is the name of the linker executable.
-After building object files, you have to link them together to create an 
-executable file. This where ld is called.
+After building object files from assembly, you have to link them together to
+create an executable file. This where ld is called.
 
 ## Where do your file come from ?
 Currently linker script in each project come from:
 
-Std_Library (deprecated but still easy to understand and
-work with) available in manufacturer website:
+Std_Library (deprecated but still easy to understand and work with) available
+in manufacturer website:
 https://www.st.com/en/embedded-software/stm32-standard-peripheral-libraries.html
 PATH: STM32F30x_DSP_StdPeriph_Lib_V1.2.3/Projects/STM32F30x_StdPeriph_Templates/TrueSTUDIO/STM32F303xC
 
-STM32Cube3D for F3:
+STM32Cube3D for F3 available in manufacturer website too:
 https://www.st.com/content/st_com/en/products/embedded-software/mcu-mpu-embedded-software/stm32-embedded-software/stm32cube-mcu-mpu-packages/stm32cubef3.html
 PATH: STM32Cube_FW_F3_V1.11.0/Projects/STM32F3-Discovery/Demonstrations/SW4STM32/STM32F3-Discovery_Demo
 
-I will build a simple script later. For know you can use them, don't worry you
-will have enough trouble with your code later ;).
+They both come from manufacturer website so we can rely on them.
+For know you can use them, don't worry you will have enough trouble with your
+code later ;).
+Maybe I will build a simple script later.
 
 ## This looks really complicated. Do I need to know this ?
-It's seems complicated and you don't have to understand it right know if you need/want to dive into code quickly.
-But i think it's important to understand at least some generality.
+It's seems complicated and you don't have to understand it right know if you
+need/want to dive into code quickly. But i think it's important to understand
+at least some generality because it highlight some of the most important
+idea/notion in software. This ld script is heavily commented so you can undestand
+what it does.
 
 ## What is important to understand (in my opininion) ?
-
 ### Entrypoint
 The first information is the entrypoint with a value in ().
 It simply tell the linker the first executable instruction of the output file.
 https://ftp.gnu.org/old-gnu/Manuals/ld-2.9.1/html_node/ld_24.html
+Here is where the program you will flash on your device later start.
 
 ##### Why Reset_Handler and not main ?
 Reset_Handler is the function called when reseting your device.
-This function will call your main after performing some code. Check readme_startup.md for more information.
+This function will call your main after performing some code.
+Check readme_startup.md file for more information.
 
 ### Memory
 As said in "STM32F303VC_FLASH_Std.ld" line 40 "Specify the memory areas".
 When you buy your device you always see some information like:
 `STM32F303VCT6 microcontroller featuring 256‑Kbyte Flash memory and 48‑Kbyte RAM`
 This is were this memory is available from ORIGIN to ORIGIN + LENGTH.
+To put it simply:
+- FLASH MEMORY: Dead memory that keep value even the device is not suplied with 
+power. Used to store all your code and value.
+- RAM: volatile memory that lost value when the device is not supplied with power.
+This is where your variable will be stored when your code will run.
+- MEMORY_B1: label for external RAM memory (Useless for us now).
+- CCMRAM: Core Coupled Memory is a RAM memory space where you can store your code
+to run it faster than in flash memory(Useless for us now).
+
+If you begin just remember FLAS and RAM, we will use only them.
+Detailed information about CCMRAM in "I want to go further section".
+
 
 ##### How do i know my device memory layout ?
-In the device reference manual:
+In the device reference manual (see Documentation repository):
 https://www.st.com/content/ccc/resource/technical/document/reference_manual/4a/19/6e/18/9d/92/43/32/DM00043574.pdf/files/DM00043574.pdf/jcr:content/translations/en.DM00043574.pdf
 
 For example we are looking for a memory map (layout) and we found it page 51.
-We just have to find SRAM and Main Flash memory.
+We just have to find SRAM and Main Flash memory. You should see that both
+adresses correspond to our linker file.
 
-### Data organization
-When building an executable the linker organize your code in section:
+### Executable organization
+An executable is organized as follow:
 .text:
 	Contains your code
 .rotdata:
@@ -63,8 +82,8 @@ When building an executable the linker organize your code in section:
 .bss:
 	Uinitialized global and static variable
 
-The linker script will tell linker how to organize each section this is why
-we find all this information in the script.
+The linker script will tell the linker executable how to organize each section
+this is why we find all this information in the script.
 
 Key for reading:
 - _s = start

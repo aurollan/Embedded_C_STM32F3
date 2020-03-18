@@ -185,8 +185,7 @@ SECTIONS
   /* Remove information from the standard libraries */
   /DISCARD/ :
   {
-	/* aurollan edit */
-	/* normalement il n'y a pas a commenter les lib dessous */
+	/* Co;;ented for now */
     /* libc.a ( * ) */
    	/* libm.a ( * ) */
     /* libgcc.a ( * ) */

@@ -1,6 +1,6 @@
 # MAKEFILE FLAGS
 
-Building an embedded executable require following files:
+Building an embedded executable require following files from CMSIS ARN library:
 - header files:
 	core_cm4.h
 	core_cmFunc.h
@@ -25,36 +25,52 @@ There is a readme file for each part.
 STM32F3 use an ARM cortex M4 (not M3 as the name suggest).
 
 /!\ Warning
-I use arm-gcc and arm-ld separately but using only GCC may avoid you some trouble
-if you are not comfortable with compilation process.
-If you need more information about the toolchain, please refer to readme_toolchain.md.
+I use arm-gcc and arm-ld separately but using only GCC may avoid you some
+trouble if you are not comfortable with compilation process.
+If you need more information about the toolchain, please refer to
+readme_toolchain.md.
 
 # GCC COMPILATION FLAGS
 
 ## ARM ARCH
 Link to find all option below:
 https://gcc.gnu.org/onlinedocs/gcc/ARM-Options.html
+
 ##### Why do i have to set all this options ?
-Because we will use arm-gcc to compile an executable for a specific target. 
-We have to tell gcc information so it can use the right configuration.
 It's called cross-compilation.
+Because we will use arm-gcc to compile an executable for a specific target. 
+We have to tell gcc information so it can made an appropriate executable.
 
 ### -mthumb
-Mixing ARM and THUMB InstructionSets
-In most low-end ARM microcontrollers the 16-bit THUMB instruction setoffers both better code density and actually better performance whenexecuted from ROM, even though the 16-bit THUMB instruction set is lesspowerful than the 32-bit ARM instruction set. This article shows how touse any combination of ARM and THUMB instruction sets for optimalperformance.
+Mixing ARM and THUMB Instruction Sets.
+In most low-end ARM microcontrollers the 16-bit THUMB instruction set offers
+both better code density and actually better performance when executed from
+ROM, even though the 16-bit THUMB instruction set is lesspowerful than the
+32-bit ARM instruction set. This article shows how touse any combination of ARM
+and THUMB instruction sets for optimalperformance.
 
 -mthumb / -marm
-Select between generating code that executes in ARM and Thumb states. The default for most configurations is to generate code that executes in ARM state, but the default can be changed by configuring GCC with the --with-mode=state configure option.
-You can also override the ARM and Thumb mode for each function by using the target("thumb") and target("arm") function attributes (see ARM Function Attributes) or pragmas (see Function Specific Option Pragmas).
+Select between generating code that executes in ARM and Thumb states. The
+default for most configurations is to generate code that executes in ARM state,
+but the default can be changed by configuring GCC with the --with-mode=state
+configure option.
+You can also override the ARM and Thumb mode for each function by using the
+target("thumb") and target("arm") function attributes (see ARM Function
+Attributes) or pragmas (see Function Specific Option Pragmas).
 
 ##### What is Thumb ?
-Thumb is simply 16-bits instruction sets used by your Micro_processor to execute your program.
+Thumb is simply 16-bits instruction sets used by your Micro_processor to
+execute your program.
 ##### Why do we use the thumb set instruction ?
 A good answer:
 https://www.embedded.com/introduction-to-arm-thumb/
 
 ### -mcpu=cortex-m
-This specifies the name of the target ARM processor. GCC uses this name to derive the name of the target ARM architecture (as if specified by -march) and the ARM processor type for which to tune for performance (as if specified by -mtune). Where this option is used in conjunction with -march or -mtune, those options take precedence over the appropriate part of this option.
+This specifies the name of the target ARM processor. GCC uses this name to
+derive the name of the target ARM architecture (as if specified by -march) and
+the ARM processor type for which to tune for performance (as if specified by
+-mtune). Where this option is used in conjunction with -march or -mtune, those
+options take precedence over the appropriate part of this option.
 
 ##### How do i know Cortex reference ?
 On every documentation concerning your microcontroller like:
@@ -62,7 +78,8 @@ https://www.st.com/content/ccc/resource/technical/document/user_manual/8a/56/97/
 
 
 ### -mlittle-endian
-Generate code for a processor running in little-endian mode. This is the default for all standard configurations.
+Generate code for a processor running in little-endian mode. This is the
+default for all standard configurations.
 
 ##### How do i know endianness ?
 On your reference manual.
@@ -81,7 +98,11 @@ https://www.quora.com/Is-ARM-big-endian-or-little-endian
 
 
 ### -mthumb-interwork
-Generate code that supports calling between the ARM and Thumb instruction sets. Without this option, on pre-v5 architectures, the two instruction sets cannot be reliably used inside one program. The default is -mno-thumb-interwork, since slightly larger code is generated when -mthumb-interwork is specified. In AAPCS configurations this option is meaningless.
+Generate code that supports calling between the ARM and Thumb instruction sets.
+Without this option, on pre-v5 architectures, the two instruction sets cannot
+be reliably used inside one program. The default is -mno-thumb-interwork, since
+slightly larger code is generated when -mthumb-interwork is specified. In AAPCS
+configurations this option is meaningless.
 
 ##### Why use mthumb-interwork ?
 From gcc 's github page:
@@ -93,15 +114,23 @@ https://gcc.gnu.org/onlinedocs/gcc/Debugging-Options.html
 
 ##### Why use debugging option ?
 With this flags set, debugging symbol will be added to executable.
-We will use them for step by step debugging if we encounter bugs or unexpected behavior.
+We will use them for step by step debugging if we encounter bugs or unexpected
+behavior.
 
 ### -g or -g1/2/3
 Debug option and level of debug symbol
-Produce debugging information in the operating system’s native format (stabs, COFF, XCOFF, or DWARF). GDB can work with this debugging information.
-On most systems that use stabs format, -g enables use of extra debugging information that only GDB can use; this extra information makes debugging work better in GDB but probably makes other debuggers crash or refuse to read the program. If you want to control for certain whether to generate the extra information, use -gstabs+, -gstabs, -gxcoff+, -gxcoff, or -gvms (see below).
+Produce debugging information in the operating system’s native format (stabs,
+COFF, XCOFF, or DWARF). GDB can work with this debugging information.
+On most systems that use stabs format, -g enables use of extra debugging
+information that only GDB can use; this extra information makes debugging work
+better in GDB but probably makes other debuggers crash or refuse to read the
+program. If you want to control for certain whether to generate the extra
+information, use -gstabs+, -gstabs, -gxcoff+, -gxcoff, or -gvms (see below).
 
 ### ggdb
-Produce debugging information for use by GDB. This means to use the most expressive format available (DWARF, stabs, or the native format if neither of those are supported), including GDB extensions if at all possible.
+Produce debugging information for use by GDB. This means to use the most
+expressive format available (DWARF, stabs, or the native format if neither of
+those are supported), including GDB extensions if at all possible.
 
 ## FLOATING POINT
 https://gcc.gnu.org/onlinedocs/gcc/ARM-Options.html
@@ -113,15 +142,24 @@ so we have to tell gcc how our microcontroller will handle this.
 Maybe useless for know because we don't do floating point operation yet.
 
 ### -mfloat-abi=name
-Specifies which floating-point ABI to use. Permissible values are: ‘soft’, ‘softfp’ and ‘hard’.
+Specifies which floating-point ABI to use. Permissible values are: ‘soft’,
+‘softfp’ and ‘hard’.
 
-Specifying ‘soft’ causes GCC to generate output containing library calls for floating-point operations. ‘softfp’ allows the generation of code using hardware floating-point instructions, but still uses the soft-float calling conventions. ‘hard’ allows generation of floating-point instructions and uses FPU-specific calling conventions.
+Specifying ‘soft’ causes GCC to generate output containing library calls for
+floating-point operations. ‘softfp’ allows the generation of code using
+hardware floating-point instructions, but still uses the soft-float calling
+conventions. ‘hard’ allows generation of floating-point instructions and uses
+FPU-specific calling conventions.
 
-The default depends on the specific target configuration. Note that the hard-float and soft-float ABIs are not link-compatible; you must compile your entire program with the same ABI, and link with a compatible set of libraries.
+The default depends on the specific target configuration. Note that the
+hard-float and soft-float ABIs are not link-compatible; you must compile your
+entire program with the same ABI, and link with a compatible set of libraries.
 
 ##### How do you know the mfloat-abi value is 'hard' ?
 'hard' or 'softfp' if you have an FPU, 'soft' if you don't.
-'hard' use FPU-specific calling convention so you need to know if your device has an FPU unit. You can find this information on the company website or in the device manual:
+'hard' use FPU-specific calling convention so you need to know if your device
+has an FPU unit. You can find this information on the company website or in the
+device manual:
 
 https://www.st.com/en/microcontrollers-microprocessors/stm32f3-series.html
 
@@ -129,13 +167,29 @@ https://www.st.com/content/ccc/resource/technical/document/reference_manual/4a/1
 
 
 ### -mfpu=name (-mfpu=fpv4-sp-d16)
-This specifies what floating-point hardware (or hardware emulation) is available on the target. Permissible names are: ‘auto’, ‘vfpv2’, ‘vfpv3’, ‘vfpv3-fp16’, ‘vfpv3-d16’, ‘vfpv3-d16-fp16’, ‘vfpv3xd’, ‘vfpv3xd-fp16’, ‘neon-vfpv3’, ‘neon-fp16’, ‘vfpv4’, ‘vfpv4-d16’, ‘fpv4-sp-d16’, ‘neon-vfpv4’, ‘fpv5-d16’, ‘fpv5-sp-d16’, ‘fp-armv8’, ‘neon-fp-armv8’ and ‘crypto-neon-fp-armv8’. Note that ‘neon’ is an alias for ‘neon-vfpv3’ and ‘vfp’ is an alias for ‘vfpv2’.
+This specifies what floating-point hardware (or hardware emulation) is
+available on the target. Permissible names are: ‘auto’, ‘vfpv2’, ‘vfpv3’,
+‘vfpv3-fp16’, ‘vfpv3-d16’, ‘vfpv3-d16-fp16’, ‘vfpv3xd’, ‘vfpv3xd-fp16’,
+‘neon-vfpv3’, ‘neon-fp16’, ‘vfpv4’, ‘vfpv4-d16’, ‘fpv4-sp-d16’, ‘neon-vfpv4’,
+‘fpv5-d16’, ‘fpv5-sp-d16’, ‘fp-armv8’, ‘neon-fp-armv8’ and
+‘crypto-neon-fp-armv8’. Note that ‘neon’ is an alias for ‘neon-vfpv3’ and ‘vfp’
+is an alias for ‘vfpv2’.
 
-The setting ‘auto’ is the default and is special. It causes the compiler to select the floating-point and Advanced SIMD instructions based on the settings of -mcpu and -march.
+The setting ‘auto’ is the default and is special. It causes the compiler to
+select the floating-point and Advanced SIMD instructions based on the settings
+of -mcpu and -march.
 
-If the selected floating-point hardware includes the NEON extension (e.g. -mfpu=neon), note that floating-point operations are not generated by GCC’s auto-vectorization pass unless -funsafe-math-optimizations is also specified. This is because NEON hardware does not fully implement the IEEE 754 standard for floating-point arithmetic (in particular denormal values are treated as zero), so the use of NEON instructions may lead to a loss of precision.
+If the selected floating-point hardware includes the NEON extension
+(e.g. -mfpu=neon), note that floating-point operations are not generated by
+GCC’s auto-vectorization pass unless -funsafe-math-optimizations is also
+specified. This is because NEON hardware does not fully implement the IEEE 754
+standard for floating-point arithmetic (in particular denormal values are
+treated as zero), so the use of NEON instructions may lead to a loss of
+precision.
 
-You can also set the fpu name at function level by using the target("fpu=") function attributes (see ARM Function Attributes) or pragmas (see Function Specific Option Pragmas).
+You can also set the fpu name at function level by using the target("fpu=")
+function attributes (see ARM Function Attributes) or pragmas (see Function
+Specific Option Pragmas).
 
 ##### How do you know the mfpu value is 'fpv4-sp-d16' ?
 Here is a post where it's well explained.
@@ -162,45 +216,58 @@ This define tells which one you use.
 Another way to do this is uncomment define in header file.
 
 ##### Why define -USE_FULL_ASSERT ?
-If you use STM32 library (Std or HAL), each function will check that passed argument are actual register that the function use.
+If you use STM32 library (Std or HAL), each function will check that passed
+argument are actual register that the function use.
 Since we use only CMSIS  library we don't need this yet.
 
 ### UNDEF PREPROCESSOR MACRO
 -U name
-Cancel any previous definition of name, either built in or provided with a -D option.
+Cancel any previous definition of name, either built in or provided with
+a -D option.
 Unused here.
 
 
 ## OPTIMIZATION
 https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html
-/!\ WARNING: enabling optimization can lead to unexpected behavior for beginner. /!\
+/!\ WARNING: enabling optimization can lead to unexpected behavior for
+beginner. /!\
 
 ### -Os
-Optimize for size. -Os enables all -O2 optimizations except those that often increase code size:
+Optimize for size. -Os enables all -O2 optimizations except those that often
+increase code size:
 
 -falign-functions  -falign-jumps
 -falign-labels  -falign-loops
 -fprefetch-loop-arrays  -freorder-blocks-algorithm=stc
-It also enables -finline-functions, causes the compiler to tune for code size rather than execution speed, and performs further optimizations designed to reduce code size.
+It also enables -finline-functions, causes the compiler to tune for code size
+rather than execution speed, and performs further optimizations designed to
+reduce code size.
 
 ##### Why use optimization ?
 C is known partly because it runs fast and it creates ligtthweight executables.
-A lot of optimization rely on the developper but the compiler does its jobs too 
+A lot of optimization rely on the developper but the compiler does its jobs too
 while processing your code. Fast and lightweight code is good,
 especially for microcontroller with limited power and memory.
 
 ## WARNING FLAGS
 https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html
 ##### Why use warning flags ?
-Writing code is error prone, fortunatly some of the error checking is done by compiler.
+Writing code is error prone, fortunatly some of the error checking is done by
+compiler.
 Enabling those strict flags help produce more secure code and take good habits.
 
 ### -Werror
 Make all warnings into errors.
 ### -Wall
-This enables all the warnings about constructions that some users consider questionable, and that are easy to avoid (or modify to prevent the warning), even in conjunction with macros. This also enables some language-specific warnings described in C++ Dialect Options and Objective-C and Objective-C++ Dialect Options.
+This enables all the warnings about constructions that some users consider
+questionable, and that are easy to avoid (or modify to prevent the warning),
+even in conjunction with macros. This also enables some language-specific
+warnings described in C++ Dialect Options and Objective-C and Objective-C++
+Dialect Options.
 ### -Wextra
-This enables some extra warning flags that are not enabled by -Wall. (This option used to be called -W. The older name is still supported, but the newer name is more descriptive.)
+This enables some extra warning flags that are not enabled by -Wall. (This
+option used to be called -W. The older name is still supported, but the newer
+name is more descriptive.)
 
 ## Nano-Library
 ##### Why use a nano library ?
@@ -208,7 +275,8 @@ Nano library offers function suited for embedded developement.
 
 https://www.st.com/content/ccc/resource/technical/document/user_manual/group1/cd/29/43/c5/36/c0/40/bb/Newlib_nano_readme/files/newlib-nano_readme.pdf/jcr:content/translations/en.newlib-nano_readme.pdf
 
-If you need to use nano library change the "--specs="flag in the makefile to "--specs=nano.specs".
+If you need to use nano library change the "--specs="flag in the makefile to
+"--specs=nano.specs".
 
 # LINKER
 
@@ -228,16 +296,33 @@ To tell the ld executable the memory layout of the micro controller.
 More on this on the appropriate readme.
 
 ### -T script
-Use script as the linker script. This option is supported by most systems using the GNU linker. On some targets, such as bare-board targets without an operating system, the -T option may be required when linking to avoid references to undefined symbols.
+Use script as the linker script. This option is supported by most systems using
+the GNU linker. On some targets, such as bare-board targets without an
+operating system, the -T option may be required when linking to avoid
+references to undefined symbols.
 
 ### -L library
 -llibrary
 -l library
-Search the library named library when linking. (The second alternative with the library as a separate argument is only for POSIX compliance and is not recommended.)
-The -l option is passed directly to the linker by GCC. Refer to your linker documentation for exact details. The general description below applies to the GNU linker.
-The linker searches a standard list of directories for the library. The directories searched include several standard system directories plus any that you specify with -L.
-Static libraries are archives of object files, and have file names like liblibrary.a. Some targets also support shared libraries, which typically have names like liblibrary.so. If both static and shared libraries are found, the linker gives preference to linking with the shared library unless the -static option is used.
-It makes a difference where in the command you write this option; the linker searches and processes libraries and object files in the order they are specified. Thus, ‘foo.o -lz bar.o’ searches library ‘z’ after file foo.o but before bar.o. If bar.o refers to functions in ‘z’, those functions may not be loaded.
+Search the library named library when linking. (The second alternative with the
+library as a separate argument is only for POSIX compliance and is not
+recommended.)
+The -l option is passed directly to the linker by GCC. Refer to your linker
+documentation for exact details. The general description below applies to the
+GNU linker.
+The linker searches a standard list of directories for the library. The
+directories searched include several standard system directories plus any that
+you specify with -L.
+Static libraries are archives of object files, and have file names like
+liblibrary.a. Some targets also support shared libraries, which typically have
+names like liblibrary.so. If both static and shared libraries are found, the
+linker gives preference to linking with the shared library unless the -static
+option is used.
+It makes a difference where in the command you write this option; the linker
+searches and processes libraries and object files in the order they are
+specified. Thus, ‘foo.o -lz bar.o’ searches library ‘z’ after file foo.o but
+before bar.o. If bar.o refers to functions in ‘z’, those functions may not be
+loaded.
 
 ## MAP FILE
 ##### Why do we need a map file ?
@@ -247,15 +332,22 @@ Human readable map of the executable use mostly for debug purposes.
 Print a link map to the file mapfile. See the description of the -M option, above
 -M
 ### --print-map
-Print a link map to the standard output. A link map provides information about the link, including the following:
+Print a link map to the standard output. A link map provides information about
+the link, including the following:
 - Where object files are mapped into memory.
 - How common symbols are allocated.
 
-- All archive members included in the link, with a mention of the symbol which caused the archive member to be brought in.
+- All archive members included in the link, with a mention of the symbol which
+caused the archive member to be brought in.
 
 - The values assigned to symbols.
 
-Note - symbols whose values are computed by an expression which involves a reference to a previous value of the same symbol may not have correct result displayed in the link map. This is because the linker discards intermediate results and only retains the final value of an expression. Under such circumstances the linker will display the final value enclosed by square brackets. Thus for example a linker script containing:
+Note - symbols whose values are computed by an expression which involves a
+reference to a previous value of the same symbol may not have correct result
+displayed in the link map. This is because the linker discards intermediate
+results and only retains the final value of an expression. Under such
+circumstances the linker will display the final value enclosed by square
+brackets. Thus for example a linker script containing:
 foo = 1
 foo = foo * 4
 foo = foo + 8
@@ -270,18 +362,36 @@ See Expressions for more information about expressions in linker scripts.
 ### -Wl,option
 ### -Wl,-Map=$(NAME).map
 ### -Wl,--gc-sections
-Pass option as an option to the linker. If option contains commas, it is split into multiple options at the commas. You can use this syntax to pass an argument to the option. For example, -Wl,-Map,output.map passes -Map output.map to the linker. When using the GNU linker, you can also get the same effect with -Wl,-Map=output.map.
+Pass option as an option to the linker. If option contains commas, it is split
+into multiple options at the commas. You can use this syntax to pass an
+argument to the option. For example, -Wl,-Map,output.map passes -Map output.map
+to the linker. When using the GNU linker, you can also get the same effect
+with -Wl,-Map=output.map.
 
-Les fichier listing (*.lst) :  contiennent des informations sur les erreurs de compilation et/ou d’assemblage.
+Les fichier listing (*.lst) :  contiennent des informations sur les erreurs de
+compilation et/ou d’assemblage.
 
-Le fichier mapping (*.map) : contient l’ensemble des informations relatives à l’organisation mémoire de l’application. On peut y trouver entre autres les adresses physiques où seront implémentées les variables, les procédures, les sections, etc.
+Le fichier mapping (*.map) : contient l’ensemble des informations relatives à
+l’organisation mémoire de l’application. On peut y trouver entre autres les
+adresses physiques où seront implémentées les variables, les procédures, les
+sections, etc.
 
-Le fichier exécutable ( *.axf ou *.elf ou *.hex) : contient l’image (en binaire ou en version éditable de l’application)
+Le fichier exécutable ( *.axf ou *.elf ou *.hex) : contient l’image (en binaire
+ou en version éditable de l’application)
 
-des scatter files (*.sct ou *.ld) : pour faire son travail l’éditeur de lien a besoin d’avoir des informations sur les quantités et les types de mémoire qui existent dans la cible. Une telle spécification est contenue dans les scatter files. À noter que lorsque l’on utilise une IDE, cette information peut aussi directement être éditée dans les options de la cible. Pour Keil par exemple on peut voir :
+des scatter files (*.sct ou *.ld) : pour faire son travail l’éditeur de lien a
+besoin d’avoir des informations sur les quantités et les types de mémoire qui
+existent dans la cible. Une telle spécification est contenue dans les scatter
+files. À noter que lorsque l’on utilise une IDE, cette information peut aussi
+directement être éditée dans les options de la cible. Pour Keil par exemple on
+peut voir :
 
 
+ The .glue_7t and.glue_7 sections are synthesized by the compiler when you
+ specify theARM-THUMB interworking option. The sections contain the
+ “call veneers”between THUMB and ARM code and are accessed frequently by every
+ callbetween ARM and THUMB. It's typically advantageous to place this
+ smallamount of hot-spot code in RAM.
 
- The .glue_7t and.glue_7 sections are synthesized by the compiler when you specify theARM-THUMB interworking option. The sections contain the “call veneers”between THUMB and ARM code and are accessed frequently by every callbetween ARM and THUMB. It's typically advantageous to place this smallamount of hot-spot code in RAM.
-
- The .data section islocated in RAM, but is loaded to ROM and copied to RAM during startup.
+ The .data section islocated in RAM, but is loaded to ROM and copied to RAM
+ during startup.
