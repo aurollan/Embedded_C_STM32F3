@@ -1,20 +1,20 @@
 # MAKEFILE FLAGS
 
-Building an embedded executable require following files from CMSIS ARN library:
+Building an embedded executable require following files from CMSIS ARM library:
 - header files:
-	core_cm4.h
-	core_cmFunc.h
-	core_cmInstr.h
-	core_cmSimd.h
-	stm32f30x.h
-	stm32f30x_it.h
-	system_stm32f30x.h
+	stm32f30x.h			=>	Contains all defined MACRO we will use
+	stm32f30x_it.h		=>	Contains interrupt funcion declaration needed by the interruption table
+	system_stm32f30x.h	=>	Contains the system init function declaration
+	core_cm4.h			=>	Used by stm32f30x.h
+	core_cmFunc.h		=>	Used by core_cm4.h
+	core_cmInstr.h		=>	Used by core_cm4.h
+	core_cmSimd.h		=>	Used by core_cm4.h
 	
 - sources files:
-	system_stm32f30x.c
+	system_stm32f30x.c	=>	Contains the syste; init function definition
 
 - a linker script file (used during linking phase with ld):
-	STM32F303VC_FLASH.ld	
+	STM32F303VC_FLASH.ld
 
 - a startup fonction file (not necessarily a file but usually)
 	startup_stm32f30x.s	
@@ -28,7 +28,7 @@ STM32F3 use an ARM cortex M4 (not M3 as the name suggest).
 I use arm-gcc and arm-ld separately but using only GCC may avoid you some
 trouble if you are not comfortable with compilation process.
 If you need more information about the toolchain, please refer to
-readme_toolchain.md.
+readme_toolchain.md. /!\
 
 # GCC COMPILATION FLAGS
 
@@ -38,16 +38,16 @@ https://gcc.gnu.org/onlinedocs/gcc/ARM-Options.html
 
 ##### Why do i have to set all this options ?
 It's called cross-compilation.
-Because we will use arm-gcc to compile an executable for a specific target. 
-We have to tell gcc information so it can made an appropriate executable.
+Because we will use arm-gcc toolchain to compile an executable for a specific target. 
+We have to tell arm-gcc information so it can made an appropriate executable.
 
 ### -mthumb
 Mixing ARM and THUMB Instruction Sets.
 In most low-end ARM microcontrollers the 16-bit THUMB instruction set offers
 both better code density and actually better performance when executed from
-ROM, even though the 16-bit THUMB instruction set is lesspowerful than the
-32-bit ARM instruction set. This article shows how touse any combination of ARM
-and THUMB instruction sets for optimalperformance.
+ROM, even though the 16-bit THUMB instruction set is less powerful than the
+32-bit ARM instruction set. This allows gcc to use any combination of ARM
+and THUMB instruction sets for optimal performance.
 
 -mthumb / -marm
 Select between generating code that executes in ARM and Thumb states. The
@@ -61,7 +61,7 @@ Attributes) or pragmas (see Function Specific Option Pragmas).
 ##### What is Thumb ?
 Thumb is simply 16-bits instruction sets used by your Micro_processor to
 execute your program.
-##### Why do we use the thumb set instruction ?
+##### Why do we use the thumb set instruction if there is an ARM ?
 A good answer:
 https://www.embedded.com/introduction-to-arm-thumb/
 
@@ -83,7 +83,7 @@ default for all standard configurations.
 
 ##### How do i know endianness ?
 On your reference manual.
-Page 51 - Memory organization
+Page 51 - Memory organization - Introduction
 https://www.st.com/content/ccc/resource/technical/document/reference_manual/4a/19/6e/18/9d/92/43/32/DM00043574.pdf/files/DM00043574.pdf/jcr:content/translations/en.DM00043574.pdf
 
 ##### What "little endian" mean ?
@@ -114,7 +114,7 @@ https://gcc.gnu.org/onlinedocs/gcc/Debugging-Options.html
 
 ##### Why use debugging option ?
 With this flags set, debugging symbol will be added to executable.
-We will use them for step by step debugging if we encounter bugs or unexpected
+We will use them for step by step debugging with GDB when we encounter bugs or unexpected
 behavior.
 
 ### -g or -g1/2/3
@@ -165,6 +165,7 @@ https://www.st.com/en/microcontrollers-microprocessors/stm32f3-series.html
 
 https://www.st.com/content/ccc/resource/technical/document/reference_manual/4a/19/6e/18/9d/92/43/32/DM00043574.pdf/files/DM00043574.pdf/jcr:content/translations/en.DM00043574.pdf
 
+Or simply in the device Datasheet (See Documentation).
 
 ### -mfpu=name (-mfpu=fpv4-sp-d16)
 This specifies what floating-point hardware (or hardware emulation) is
@@ -211,14 +212,14 @@ DEF: Custom macros (-DMACRO equals to #define MACRO)
 Predefine name as a macro, with definition 1.
 
 ##### Why define -STM32F303xC ?
-Header file use some definition according to your hardware.
+In nost library header file use macro definition according to your hardware.
 This define tells which one you use.
-Another way to do this is uncomment define in header file.
+Another way to do this is uncomment define in header files.
 
 ##### Why define -USE_FULL_ASSERT ?
 If you use STM32 library (Std or HAL), each function will check that passed
 argument are actual register that the function use.
-Since we use only CMSIS  library we don't need this yet.
+Since we use only CMSIS  library we don't need this yet. But still important to know because you will work with other libraries.
 
 ### UNDEF PREPROCESSOR MACRO
 -U name
@@ -243,11 +244,60 @@ It also enables -finline-functions, causes the compiler to tune for code size
 rather than execution speed, and performs further optimizations designed to
 reduce code size.
 
-##### Why use optimization ?
+##### Why use this optimization ?
 C is known partly because it runs fast and it creates ligtthweight executables.
 A lot of optimization rely on the developper but the compiler does its jobs too
 while processing your code. Fast and lightweight code is good,
 especially for microcontroller with limited power and memory.
+You chose what you want to optimize:
+- Os: Optimize speed without increasing Size
+- O 1/2/3: Optimize speed
+
+### -ffunction-sections -fdata-sections
+/!\
+WARNING: use this flag with this LD FLAG:
+- --gc-sections 
+/!\
+
+Place each function or data item into its own section in the output file if the
+target supports arbitrary sections. The name of the function or the name of the
+data item determines the section’s name in the output file.
+
+Use these options on systems where the linker can perform optimizations to
+improve locality of reference in the instruction space. Most systems using the
+ELF object format have linkers with such optimizations. On AIX, the linker
+rearranges sections (CSECTs) based on the call graph. The performance impact 
+varies.
+
+Together with a linker garbage collection (linker --gc-sections option) these
+options may lead to smaller statically-linked executables (after stripping).
+
+On ELF/DWARF systems these options do not degenerate the quality of the debug
+information. There could be issues with other object files/debug info formats.
+
+Only use these options when there are significant benefits from doing so. When
+you specify these options, the assembler and linker create larger object and
+executable files and are also slower. These options affect code generation.
+They prevent optimizations by the compiler and assembler using relative
+locations inside a translation unit since the locations are unknown until link
+time. An example of such an optimization is relaxing calls to short call
+instructions.
+
+##### Why use this optimization ?
+To reduce executable size if possible.
+Most of the time you will use .c files given in libraries. Those file contains
+a lot of function and we use only a few of them. In this case we can save space
+with those flags to cut those functions from our executable.
+These optimization are usually used for embedded development. But in our case
+we will build our own function and use all of them so those optimization will
+probably increase our executable size. But still you will see it everywhere so it's important to know.
+
+You can see which functions are deleted by adding this flag to ld:
+ -print-gc-sections
+
+Here is a source with a great explenation:
+https://lwn.net/Articles/741494/
+
 
 ## WARNING FLAGS
 https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html
@@ -289,11 +339,52 @@ it directly.
 https://stackoverflow.com/questions/50307733/what-is-a-gcc-toolchain
 
 ## SCRIPTS
+
 https://gcc.gnu.org/onlinedocs/gcc/Link-Options.html
+https://linux.die.net/man/1/ld
+
+### --gc-sections | --no-gc-sections
+Enable garbage collection of unused input sections. It is ignored on targets
+that do not support this option. The default behaviour (of not performing this
+garbage collection) can be restored by specifying --no-gc-sections on the
+command line.
+
+--gc-sections decides which input sections are used by examining symbols and
+relocations. The section containing the entry symbol and all sections
+containing symbols undefined on the command-line will be kept, as will sections
+containing symbols referenced by dynamic objects. Note that when building shared
+libraries, the linker must assume that any visible symbol is referenced. Once
+this initial set of sections has been determined, the linker recursively marks
+as used any section referenced by their relocations. See --entry and --undefined.
+
+This option can be set when doing a partial link (enabled with option -r). In
+this case the root of symbols kept must be explicitely specified either by an
+--entry or --undefined option or by a "ENTRY" command in the linker script. 
+
+
+##### Why use this optimization ?
+/!\
+WARNING: use this flag zith at least one of them:
+-ffunction-sections
+-fdata-sections
+/!\
+To reduce executable size if possible.
+Most of the time you will use .c files given in libraries. Those file contains
+a lot of function and we use only a few of them. In this case we can save space
+with those flags to cut those functions from our executable.
+These optimization are usually used for embedded development. But in our case
+we will build our own function and use all of them so those optimization will
+probably increase our executable size. But still you will see it everywhere so it's important to know.
+
+You can see which functions are deleted by adding this flag to ld:
+ -print-gc-sections
+
+Here is a source with a great explenation:
+https://lwn.net/Articles/741494/
 
 ##### Why use a linker script ?
 To tell the ld executable the memory layout of the micro controller.
-More on this on the appropriate readme.
+More on this on the readme_ld_script.md.
 
 ### -T script
 Use script as the linker script. This option is supported by most systems using
@@ -327,6 +418,7 @@ loaded.
 ## MAP FILE
 ##### Why do we need a map file ?
 Human readable map of the executable use mostly for debug purposes.
+It contains all information about memory mapping. We can find sectionsm variable...
 
 ### -Map=mapfile
 Print a link map to the file mapfile. See the description of the -M option, above
@@ -352,7 +444,7 @@ foo = 1
 foo = foo * 4
 foo = foo + 8
 will produce the following output in the link map if the -M option is used:
-0x00000001                foo = 0x1
+ 0x00000001                 foo = 0x1
 [0x0000000c]                foo = (foo * 0x4)
 [0x0000000c]                foo = (foo + 0x8)
 See Expressions for more information about expressions in linker scripts.
@@ -368,30 +460,3 @@ argument to the option. For example, -Wl,-Map,output.map passes -Map output.map
 to the linker. When using the GNU linker, you can also get the same effect
 with -Wl,-Map=output.map.
 
-Les fichier listing (*.lst) :  contiennent des informations sur les erreurs de
-compilation et/ou d’assemblage.
-
-Le fichier mapping (*.map) : contient l’ensemble des informations relatives à
-l’organisation mémoire de l’application. On peut y trouver entre autres les
-adresses physiques où seront implémentées les variables, les procédures, les
-sections, etc.
-
-Le fichier exécutable ( *.axf ou *.elf ou *.hex) : contient l’image (en binaire
-ou en version éditable de l’application)
-
-des scatter files (*.sct ou *.ld) : pour faire son travail l’éditeur de lien a
-besoin d’avoir des informations sur les quantités et les types de mémoire qui
-existent dans la cible. Une telle spécification est contenue dans les scatter
-files. À noter que lorsque l’on utilise une IDE, cette information peut aussi
-directement être éditée dans les options de la cible. Pour Keil par exemple on
-peut voir :
-
-
- The .glue_7t and.glue_7 sections are synthesized by the compiler when you
- specify theARM-THUMB interworking option. The sections contain the
- “call veneers”between THUMB and ARM code and are accessed frequently by every
- callbetween ARM and THUMB. It's typically advantageous to place this
- smallamount of hot-spot code in RAM.
-
- The .data section islocated in RAM, but is loaded to ROM and copied to RAM
- during startup.

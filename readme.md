@@ -1,6 +1,6 @@
-# [WORK IN PROGRESS] Embedded C development  WITHOUT IDE but using Makefile and VIM (Or any Text editor you want) and CMSIS Library (optionnal but reliable).
+# [WORK IN PROGRESS] Embedded C development WITHOUT IDE but using Makefile and VIM (Or any Text editor you want) and CMSIS Library (optionnal but reliable).
 This repository contains all the resources that I used to learn how to develop on micro controller.
-I explain all choices made to build my project (Why and How?).
+I explain all choices made to build my project (Why and How).
 
 ## Equipment:
 
@@ -14,32 +14,33 @@ can't afford one.
 - 2x Mini USB cable:
 https://www.amazon.fr/gp/product/B00P0GI68M?ref=ppx_pt2_dt_b_prod_image
 ### Why ?
-Because you need one to connect your computer to your microcontroler.
-And another one if you plan to use FTDI for UART (RS232) communication
+Because you need one to connect your computer to your microcontroler (USB or ST link).
+And another one if you plan to use FTDI component for UART (RS232) communication
 betweeen your computer and your device.
 
 - Bluetooth 2.0:
 https://www.amazon.fr/gp/product/B074GMQ6G3?ref=ppx_pt2_dt_b_prod_image
 ### Why ?
-If you plan to co;;unicate throught bluetooth between your computer and your
+If you plan to communicate throught bluetooth between your computer and your
 device.
 
 - FTDI:
 https://www.amazon.fr/gp/product/B06ZZ65R3H/ref=ppx_od_dt_b_asin_title_s00?ie=UTF8&psc=1
 ### Why ?
-If you plan to use FTDI for UART (RS232) communication
+If you plan to use UART communication (RS232) 
 between your computer and your device. Don't forget to buy
-a Mini USB cable for this.
+a Mini USB cable for this as mentioned earlier.
 
 - Male/Male, Male/Female, Female/Female wiring:
 https://www.amazon.fr/dp/B00OR3LWLM/ref=pe_3044141_189395771_TE_3p_dp_1
 ### Why ?
-We need this to connect FTDI (UART), Bluetooth (UART), ITM peripheral (ITM).
+We need this to connect FTDI (UART), Bluetooth (UART), ITM peripheral (ITM)
+and everything you could need later.
 
 ## Documentation
 We will rely on this documentation to develop our software.
-It covers your device in detailm we will need it if we face problems.
-See Documentation repository :).
+It covers your device in detail. 
+See Documentation repository or link in the "ressources" part.
 
 ## Why make another embedded development resource ?
 Because a lot of resources use an IDE/Library which hide the complexity and
@@ -58,7 +59,7 @@ Because CMSIS for ARM Cortex Microcontroller Software Interface Standard is a Lo
 Layer Abstraction library (hardware). It's constructor independent for Micro
 controller using Cortex M series processor. 
 https://developer.arm.com/tools-and-software/embedded/cmsis
-Because we will build our own library :).
+Because we will build our own library with it.
 
 ## Is there everything I need to know for embedded development on this "tutorial" ?
 No.
@@ -73,9 +74,9 @@ because there are a lot of good resources on the internet to learn a particular
 notion.
 
 ## Is there an order for reading ?
-No. Each little project is independent and can work alone.
-You can mix projects if you want to.
-But if it's your only learning resources (and I hope it's not) i encourage you to
+No. Each little project is independent and can work alone. You can cherry pick
+or mix project if you want to.
+But if it's your only learning material (and I hope it's not) i encourage you to
 follow the suggested order.
 
 ## Something else ?

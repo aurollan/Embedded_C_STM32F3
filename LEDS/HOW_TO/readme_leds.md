@@ -1,11 +1,12 @@
 # LEDS
 
 Usually the first thing we learn in embedded development is blinking a led.
-Here we are going to light one or more leds.
-If you need to make it blink you need to understand how to use timer.
+Here we are going to light up one or more leds.
+If you need to make it blink you need to understand how to use timer and create
+a delay function.
 
 ## Where do i start ?
-Read the user manual, then the reference manual.
+Read the user manual, then the reference manual. Let's start.
 
 ### User manual
 https://www.st.com/content/ccc/resource/technical/document/user_manual/8a/56/97/63/8d/56/41/73/DM00063382.pdf/files/DM00063382.pdf/jcr:content/translations/en.DM00063382.pdf
@@ -28,7 +29,7 @@ That seems pretty relevant.
 
 We see that they are used for Input/Output operation: that's what we are looking for.
 
-They have an "x" at the end of their name and we are looking for IO PE8...15.
+They have an "x" at the end of their name and we are looking for IO PE8 to PE15.
 
 Let's drop the number and look for IOPE.
 

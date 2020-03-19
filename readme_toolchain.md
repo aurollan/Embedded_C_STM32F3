@@ -1,16 +1,15 @@
 # TOOL CHAIN
 
-Working in embedded development require a specific tool chain:
+Working in embedded development require a specific tool chain. There is a lot of tools we can use and we zill work with the following:
 
-- gcc-arm-embedded (Compiling)
+- gcc-arm (Compiler for ARM arch)
 - openocd (loading and debugging)
-- minicom (USART )
-- itmdump
+- minicom (UART)
+- itmdump (ITM)
 
 # gcc-arm-embedded
-
-Tool chain used to build our executable and debug.
-### arm-none-eabi-gcc
+ The toolchain used to build our executable and debug.
+### Why arm-none-eabi-gcc ?
 - arm: target architecture
 - none: no vendor
 - No OS is specified (bare metal programming)
@@ -25,25 +24,27 @@ https://stackoverflow.com/questions/5961701/arm-gcc-toolchain-as-arm-elf-or-arm-
 
 https://community.arm.com/developer/tools-software/tools/f/arm-compilers-forum/44065/what-library-used-on-arm-gcc-none-eabi
 
-
 #arm-none-eabi-gdb
 Simply the gdb ARM debugger. We use it to load executable on the device through
 openocd.
 
 ## Commands
+
 ### -q
-       -quiet
-       -q  "Quiet".  Do not print the introductory and copyright messages.
-           These messages are also suppressed in batch mode.
+-quiet
+-q  "Quiet".  Do not print the introductory and copyright messages.
+These messages are also suppressed in batch mode.
+
 ### -x file.gdb
-		       -x file
-           Execute GDB commands from file.
+-x file
+Execute GDB commands from file.
+
 ##### Why use a file ?
 To avoid writing manually those commands each time we launch a session.
 
 ##### Why use those command ?
 - target remote: 3333
-3333 is the ports used by openocd which is connected to our device.
+3333 is the ports we use to communicate with openocd when it is connected to our device.
 We debug and load executable using openocd bridge, so we have to connect to it.
 
 - load

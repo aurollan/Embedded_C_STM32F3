@@ -17,7 +17,7 @@ When you load your program, it is stored in FLASH memory (memory that keep value
 when device shutdown).
 When your device is plugged, first called function is Reset_handler.
 This is the function in the startup file.
-When shutting down, all data stored in RAM is lost.
+When shutting down, all data stored in RAM is lost but our startup function is read from FLASH and at start it will be called.
 
 ## Where do your file come from ?
 Currently startup file in each project come from:
@@ -36,14 +36,12 @@ will have enough trouble with your code later ;).
 
 ## This looks really complicated. Do I need to know this ?
 Assembly language is not mandatory to work on most Micro controller.
-A startup is easy to do in C.
+A startup function is easy to do in C when you understand what you have to do.
 
 ## What is important to understand (in my opininion) ?
 You need to understand how we start a device:
 - Entry function is Reset_Handler()
 - First, this function load data/bss section to RAM (those with >RAM in linker script)
 - Then this function call systeminit() function for clock system initialization
-- Call static constructor (Why?)
 - Finally it call the main function
 
-TODO: FINISH
