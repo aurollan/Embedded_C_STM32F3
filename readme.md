@@ -4,38 +4,38 @@ I explain all choices made to build my project (Why and How).
 
 ## Equipment:
 
-- STM32F303VC Discovery
-https://fr.farnell.com/stmicroelectronics/stm32f3discovery/evaluation-f3-cortex-m4-discovery/dp/2215108
-### Why ?
+### Why buy a STM32F3 device?
 Because it's funnier to actually use an embedded device to program.
 But you still can use a processor emulator like QEMU (not covered here) if you
 can't afford one.
+- STM32F303VC Discovery
+https://fr.farnell.com/stmicroelectronics/stm32f3discovery/evaluation-f3-cortex-m4-discovery/dp/2215108
 
-- 2x Mini USB cable:
-https://www.amazon.fr/gp/product/B00P0GI68M?ref=ppx_pt2_dt_b_prod_image
-### Why ?
+### Why buy Mini USB cable ?
 Because you need one to connect your computer to your microcontroler (USB or ST link).
 And another one if you plan to use FTDI component for UART (RS232) communication
 betweeen your computer and your device.
+- 2x Mini USB cable:
+https://www.amazon.fr/gp/product/B00P0GI68M?ref=ppx_pt2_dt_b_prod_image
 
-- Bluetooth 2.0:
-https://www.amazon.fr/gp/product/B074GMQ6G3?ref=ppx_pt2_dt_b_prod_image
-### Why ?
+### Why buy a bluetooth peripheral ?
 If you plan to communicate throught bluetooth between your computer and your
 device.
+- Bluetooth 2.0:
+https://www.amazon.fr/gp/product/B074GMQ6G3?ref=ppx_pt2_dt_b_prod_image
 
-- FTDI:
-https://www.amazon.fr/gp/product/B06ZZ65R3H/ref=ppx_od_dt_b_asin_title_s00?ie=UTF8&psc=1
-### Why ?
+### Why buy a FTDI peripheral ?
 If you plan to use UART communication (RS232) 
 between your computer and your device. Don't forget to buy
 a Mini USB cable for this as mentioned earlier.
+- FTDI:
+https://www.amazon.fr/gp/product/B06ZZ65R3H/ref=ppx_od_dt_b_asin_title_s00?ie=UTF8&psc=1
 
-- Male/Male, Male/Female, Female/Female wiring:
-https://www.amazon.fr/dp/B00OR3LWLM/ref=pe_3044141_189395771_TE_3p_dp_1
-### Why ?
+### Why buy wiring ?
 We need this to connect FTDI (UART), Bluetooth (UART), ITM peripheral (ITM)
 and everything you could need later.
+- Male/Male, Male/Female, Female/Female wiring:
+https://www.amazon.fr/dp/B00OR3LWLM/ref=pe_3044141_189395771_TE_3p_dp_1
 
 ## Documentation
 We will rely on this documentation to develop our software.
@@ -76,8 +76,13 @@ notion.
 ## Is there an order for reading ?
 No. Each little project is independent and can work alone. You can cherry pick
 or mix project if you want to.
-But if it's your only learning material (and I hope it's not) i encourage you to
+But if it's your only learning material (and I hope it's not) I encourage you to
 follow the suggested order.
+
+## Why there is no picture from documentation in your readme files ?
+Because an essential skill you need in software development is knowing how to 
+RTFM (Read The F__king Manual). You HAVE to kno how to find information in your
+device documentation and how to use it.
 
 ## Something else ?
 If you need more information about a part of this resources, just ask me.
