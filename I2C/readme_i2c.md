@@ -110,3 +110,9 @@ After the START condition (ST) a slave address is sent, once a
 slave acknowledge (SAK) has been returned, an 8-bit sub-address (SUB) is transmitted; the
 7 LSBs represent the actual register address while the MSB enables address autoincrement. If the MSB of the SUB field is ‘1’, the SUB (register address) is automatically
 increased to allow multiple data Read/Write.
+
+It is also necessary to connect the power supply through a pull-up resistor. When the bus is idle, both lines on high power level.
+https://www.seeedstudio.com/blog/2019/09/25/uart-vs-i2c-vs-spi-communication-protocols-and-uses/
+
+A really good source:
+https://aticleworld.com/i2c-bus-protocol-and-interface/

@@ -9,7 +9,7 @@
 CORTEX_M = 4
 CORE = CM$(CORTEX_M)
 # Project name
-NAME = USART-$(CORE)
+NAME = UART-$(CORE)
 
 # Compiler & Linker
 CC = arm-none-eabi-gcc
@@ -30,6 +30,7 @@ DIR_OBJ = obj
 FILE_ASM = startup_stm32f30x.s
 
 FILE_SRC = main.c \
+		   uart.c \
 		   system_stm32f30x.c \
 
 FILE_OBJ = $(FILE_SRC:.c=.o)

@@ -33,8 +33,10 @@ DIR_OBJ = obj
 FILE_ASM = startup_stm32f30x.s
 
 FILE_SRC = main.c \
-		   i2c.c \
+		   i2c_acc.c \
 		   i2c_mag.c \
+		   itm.c \
+		   timer.c \
 		   system_stm32f30x.c \
 
 FILE_OBJ = $(FILE_SRC:.c=.o)

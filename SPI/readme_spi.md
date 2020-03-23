@@ -1,112 +1,82 @@
-# Understanding I2C
-# Ressource needed
-https://www.st.com/content/ccc/resource/technical/document/reference_manual/4a/19/6e/18/9d/92/43/32/DM00043574.pdf/files/DM00043574.pdf/jcr:content/translations/en.DM00043574.pdf
+# Understand SPI
+
+Reference Manual page 962 6 30.5.7 Configuration of SPI
+
+In any master receive only mode (RXONLY=1 or BIDIMODE=1 & BIDIOE=0), master starts
+to communicate and the clock starts running immediately after SPI is enabled.
+
+master slave : master manage communication
+
+Full duplex bus: receive and emit at the same time
+Semi duplux bus: emit or receive only
+
+/* User Manual page 22/23
+/* 
+ * Enable GPIOA
+ *
+ * PA5 = SCL/SPC		=> clock
+ * PA6 = SAO/SDO		=> MOSI
+ * PA7 = SDA/SDI/SDO	=> MISO
+ */
+
+/* 
+ * Enable GPIOE
+ *
+ * PE0 = INT1
+ * PE1 = DRDY/INT2
+ * PE3 = CS_I2C/SPI
+ */
+
+- MISO: Master In / Slave Out data. In the general case, this pin is used to transmit data
+in slave mode and receive data in master mode.
+• MOSI: Master Out / Slave In data. In the general case, this pin is used to transmit data
+in master mode and receive data in slave mode.
+• SCK: Serial Clock output pin for SPI masters and input pin for SPI slaves.
+• NSS: Slave select pin. Depending on the SPI and NSS settings, this pin can be used to
+either:
+– select an individual slave device for communication
+– synchronize the data frame or
+– detect a conflict between multiple masters
 
 
-## I2C Initialization flowchart (RTFM 825/1141 Figure 295)
-=> Clear PE bit in I2C_CR1
-=> Configure ANOFF and DNF (Analog noise filter and Digital Noise Filter)
-=> Configure PRESC/SDADEL/SCLDEL/SCLH/SCLL in I2C_TIMIGR
-=> Configure NOSTRETCH in I2C_CR1
-=> Sel PE bit in I2C_CR1
-=> end
+The SPI can communicate in half-duplex mode by setting the BIDIMODE bit in the
+SPIx_CR1 register.
+The SPI can communicate in simplex mode by setting the SPI in transmit-only or in receive-
+only using the RXONLY bit in the SPIx_CR2 register.
+Receive-only mode (RXONLY=1):The
+clock signal is generated continuously as long as the SPI is enabled. The only way to
+stop the clock is to clear the RXONLY bit or the SPE bit and wait until the incoming
+pattern from the MISO pin is finished and fills the data buffer structure, depending on its
+configuration.
+
+Prior to changing the CPOL/CPHA bits the SPI must be disabled by resetting the SPE bit.
+The idle state of SCK must correspond to the polarity selected in the SPIx_CR1 register (by
+pulling up SCK if CPOL=1 or pulling down SCK if CPOL=0).
+
+The SPI shift register can be set up to shift out MSB-first or LSB-first, depending on the
+value of the LSBFIRST bit. The data frame size is chosen by using the DS bits. It can be set
+from 4-bit up to 16-bit length and the setting applies for both transmission and reception.
+Whatever the selected data frame size, read access to the FIFO must be aligned with the
+FRXTH level. When the SPIx_DR register is accessed, data frames are always right-aligned
+into either a byte (if the data fits into a byte) or a half-word (see Figure 356). During
+communication, only bits within the data frame are clocked and transferred.
+
+When the master is in any receive only mode, the only way to stop the continuous clock is to
+disable the peripheral by SPE=0.
+o prevent
+having unread data, ensure that RXFIFO is empty when disabling the SPI,
+2. Wait until BSY=0 (the last data frame is processed).
+3. Read data until FRLVL[1:0] = 00 (read all the received data).
 
 
-## I2C Data transfert (RTFM 826/1141)
-### Reception
-if RXNE == 0
-	=> Data are copied to I2C_RXDR 
-else
-	=> Previous received data has not yet been read
-
-### Transmission
-if TXE == 0
-	=> data are copied to shift register
-else
-	=> no data is written yet to I2C_TXDR
+If packing mode is used and an odd number of data frames with a format less than or equal
+to 8 bits (fitting into one byte) has to be received, FRXTH must be set when FRLVL[1:0] =
+01, in order to generate the RXNE event to read the last odd data frame and to keep good
+FIFO pointer alignment.
 
 
-### I2C Hardware transfert management
-Way to close communication:
-=> NACK, STOP, ReSTART in master mode
-=> ACK control in slave receiver mode
-=> PEC generation/checking when SMBus feature is supported
-
-Number of bytes to be transfered: I2C_CR2 NBYTES[7:0] bit field
-How to end after n bytes are transfered:
-=> AUTOEND == 1 bit field in I2C_CR2 
-	automatically send STOP when NBYTES are transfered
-=> NO AUTOEND == 0 bit field in I2C_CR2
-	I2C_ISR_TCR is set when Transfert Complete R? TCR is cleared by software when NBYTES is written to a non-zero value
-
-## I2C master mode
-=> The master clock must be configured by setting SCLH and SCLL in I2C_TIMINGR register
-NEED CALCUL FOR CLOCK
-
-### Master communication initialization
-MUST program I2C_CR2 before start:
-=> adressing mode (7bits or 10 bits)
-=> Slave adress to be send: SADD[9:0]
-=> Transfert direction: read == 1, write == 0
-=> Number of bytes to be transfered: NBYTES[7:0]
-
-=> set START bit in I2C_CR2 all above can't be changed after this
-
-=> Wait bus is free BUSY == 0 
-
-=> start bit is reset after address has been send
-
-### Master transmitter
-the TXIS flag is set after each byte transmission
-TXIS generate an event if TXIE is set in I2C_CR1.
-TXIS is cleared when I2C_TXDR register is written
-
-the number of event TXIS correspond to NBYTES value
-
-The TXIS flag is not set when a NACK is received.
-• When RELOAD=0 and NBYTES data have been transferred:
-	– In automatic end mode (AUTOEND=1), a STOP is automatically sent.
-	– In software end mode (AUTOEND=0), the TC flag is set and the SCL line is
-	stretched low in order to perform software actions:
-
-	A RESTART condition can be requested by setting the START bit in the I2C_CR2
-	register with the proper slave address configuration, and number of bytes to be
-	transferred. Setting the START bit clears the TC flag and the START condition is
-	sent on the bus.
-
-	A STOP condition can be requested by setting the STOP bit in the I2C_CR2
-	register. Setting the STOP bit clears the TC flag and the STOP condition is sent on
-	the bus
-
-If a NACK is received: the TXIS flag is not set, and a STOP condition is automatically
-sent after the NACK reception. the NACKF flag is set in the I2C_ISR register, and an
-interrupt is generated if the NACKIE bit is set.
-
-
-### Master receiver
-In the case of a read transfer, the RXNE flag is set after each byte reception, after the 8th
-SCL pulse. An RXNE event generates an interrupt if the RXIE bit is set in the I2C_CR1
-register. The flag is cleared when I2C_RXDR is read.
-If the total number of data bytes to be received is greater than 255, reload mode must be
-selected by setting the RELOAD bit in the I2C_CR2 register. In this case, when
-NBYTES[7:0] data have been transferred, the TCR flag is set and the SCL line is stretched
-low until NBYTES[7:0] is written to a non-zero value.
-• When RELOAD=0 and NBYTES[7:0] data have been transferred:
-– In automatic end mode (AUTOEND=1), a NACK and a STOP are automatically
-sent after the last received byte.
-– In software end mode (AUTOEND=0), a NACK is automatically sent after the last
-received byte, the TC flag is set and the SCL line is stretched low in order to allow
-software actions:
-A RESTART condition can be requested by setting the START bit in the I2C_CR2
-register with the proper slave address configuration, and number of bytes to be
-transferred. Setting the START bit clears the TC flag and the START condition,
-followed by slave address, are sent on the bus.
-A STOP condition can be requested by setting the STOP bit in the I2C_CR2
-register. Setting the STOP bit clears the TC flag and the STOP condition is sent on
-the bus.
-
-
-After the START condition (ST) a slave address is sent, once a
-slave acknowledge (SAK) has been returned, an 8-bit sub-address (SUB) is transmitted; the
-7 LSBs represent the actual register address while the MSB enables address autoincrement. If the MSB of the SUB field is ‘1’, the SUB (register address) is automatically
-increased to allow multiple data Read/Write.
+A specific problem appears if an odd number of such “fit into one byte” data frames must be
+handled. On the transmitter side, writing the last data frame of any odd sequence with an 8-
+bit access to SPIx_DR is enough. The receiver has to change the Rx_FIFO threshold level
+for the last data frame received in the odd sequence of frames in order to generate the
+RXNE event.

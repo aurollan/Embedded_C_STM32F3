@@ -1,6 +1,4 @@
 #include "i2c.h"
-#include "stm32f30x.h"
-#include "stm32f30x_it.h"
 
 void  I2C_Init()
 {

@@ -1,16 +1,5 @@
-#include "stm32f30x_it.h"
-#include "stm32f30x.h"
 #include "i2c.h"
 
-#define LSM303DLHC_CRA_REG_M	0x00
-#define LSM303DLHC_CRB_REG_M	0x01
-#define LSM303DLHC_MR_REG_M		0x02
-
-
-uint8_t  READ_REGISTER(uint16_t DeviceAddr, uint16_t RegisterAddr);
-void  WRITE_REGISTER(uint16_t DeviceAddr, uint16_t RegisterAddr, uint8_t RegisterConfig);
-void ENABLE_GPIOB_SCA_SCL(void);
-void ENABLE_LSM303DLHC_INT(void);
 
 void  I2C_Init_Mag()
 {
