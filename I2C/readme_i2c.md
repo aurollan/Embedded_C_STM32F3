@@ -15,7 +15,7 @@ https://www.st.com/content/ccc/resource/technical/document/reference_manual/4a/1
 ## I2C Data transfert (RTFM 826/1141)
 ### Reception
 if RXNE == 0
-	=> Data are copied to I2C_RXDR 
+	=> Data are copied to I2C_RXDR
 else
 	=> Previous received data has not yet been read
 
@@ -34,7 +34,7 @@ Way to close communication:
 
 Number of bytes to be transfered: I2C_CR2 NBYTES[7:0] bit field
 How to end after n bytes are transfered:
-=> AUTOEND == 1 bit field in I2C_CR2 
+=> AUTOEND == 1 bit field in I2C_CR2
 	automatically send STOP when NBYTES are transfered
 => NO AUTOEND == 0 bit field in I2C_CR2
 	I2C_ISR_TCR is set when Transfert Complete R? TCR is cleared by software when NBYTES is written to a non-zero value
@@ -52,7 +52,7 @@ MUST program I2C_CR2 before start:
 
 => set START bit in I2C_CR2 all above can't be changed after this
 
-=> Wait bus is free BUSY == 0 
+=> Wait bus is free BUSY == 0
 
 => start bit is reset after address has been send
 
@@ -116,3 +116,7 @@ https://www.seeedstudio.com/blog/2019/09/25/uart-vs-i2c-vs-spi-communication-pro
 
 A really good source:
 https://aticleworld.com/i2c-bus-protocol-and-interface/
+
+
+https://makbit.com/web/firmware/tutorial-getting-started-with-stm32f3-discovery-board/
+I2C 	AF, 50MHz 	Open Drain 	NoPull 	Open Drain mode, pull-up resistors are always required
