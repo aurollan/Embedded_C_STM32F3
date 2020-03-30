@@ -109,7 +109,7 @@ https://www.st.com/content/ccc/resource/technical/document/application_note/2c/d
 
 ## One particularly good resources i started with
 https://docs.rust-embedded.org/discovery/index.html
-It's in Rust because i wanted to learn Embedded and Rust at the same time (bad idea).
+It's in Rust because i wanted to learn Embedded developement and Rust at the same time (bad idea).
 It's a well written tutorial you can refer too even if it's not in C.
 But there is just one thing missing:
 "I've taken care of initializing everything" => This is the part covered here.

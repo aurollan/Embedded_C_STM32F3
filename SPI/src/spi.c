@@ -139,51 +139,61 @@ void	L3GD20Gyro_Init(void)
 
 void	L3GD20Gyro_write_register(uint8_t register_address, uint8_t config)
 {
-	uint16_t data;
+	uint16_t package;
+
+	package = 0x0000;
+	package |= 0x00 | (register_address << 2); 
 
 	// 30.5.9 Data transmission and reception procedures
 
+	GPIOE->BSRR |= 1 << 19;
 	/* waiting transmitter buffer is empty */
 	while (!(SPI1->SR & (uint16_t)(1 << 1))) {};
-	SPI1->DR = register_address;
+	SPI1->DR = package;
 	/* Sending config value to get the data */
 	while (!(SPI1->SR & (uint16_t)(1 << 0))) {};
 	/* Reading value from Data Register */
-	data = SPI1->DR;
+	package = SPI1->DR;
 	while (!(SPI1->SR & (uint16_t)(1 << 1))) {};
 	SPI1->DR = config;
 	/* waiting Received buffer is empty */
 	while (!(SPI1->SR & (uint16_t)(1 << 0))) {};
 	/* Reading value from Data Register */
-	data = SPI1->DR;
+	package = SPI1->DR;
 	(void)data;
+	GPIOE->BSRR |= (1 << 3); //stop communication
 }
 
 uint8_t	L3GD20Gyro_read_register(uint8_t register_address)
 {
-	uint16_t data;
-	uint8_t datasend;
+	uint16_t package;
+	uint8_t received_data;
 
 	// 30.5.9 Data transmission and reception procedures
-	register_address |= 0x80; 
+	// bit 0: READ bit. The value is 1.
+	// bit 1: MS bit. When 0 do not increment address; when 1 increment address in multiple reading.
+	// bit 2-7: address AD(5:0). This is the address field of the indexed register.
+	// bit 8-15: received data
+	package = 0x0000;
+	package |= 0x01 | (register_address << 2); 
 
 	GPIOE->BSRR |= 1 << 19;
 	/* waiting transmitter buffer is empty */
 	while (!(SPI1->SR & (uint16_t)(1 << 1))) {};
-	SPI1->DR = register_address;
+	SPI1->DR = package;
 	/* Sending dummy value to get the data */
 	while (!(SPI1->SR & (uint16_t)(1 << 0))) {};
 	/* Reading value from Data Register */
-	data = SPI1->DR;
+	package = SPI1->DR;
 	while (!(SPI1->SR & (uint16_t)(1 << 1))) {};
 	SPI1->DR = 0x00;
 	/* waiting Received buffer is empty */
 	while (!(SPI1->SR & (uint16_t)(1 << 0))) {};
 	/* Reading value from Data Register */
-	data = SPI1->DR;
-	datasend = (uint8_t)data;
+	package = SPI1->DR;
+	received_data = (uint8_t)package;
 	GPIOE->BSRR |= (1 << 3); //stop communication
-	return (datasend);
+	return (received_data);
 }
 
 void	setup_gyro()

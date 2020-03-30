@@ -2,6 +2,7 @@
 # Ressource needed
 https://www.st.com/content/ccc/resource/technical/document/reference_manual/4a/19/6e/18/9d/92/43/32/DM00043574.pdf/files/DM00043574.pdf/jcr:content/translations/en.DM00043574.pdf
 
+https://learn.sparkfun.com/tutorials/i2c?_ga=2.195885420.157008010.1585558187-952891226.1585558187
 
 ## I2C Initialization flowchart (RTFM 825/1141 Figure 295)
 => Clear PE bit in I2C_CR1
