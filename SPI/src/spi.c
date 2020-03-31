@@ -12,8 +12,7 @@
 /* ************************************************************************** */
 
 #include "spi.h"
-
-
+ 
 /* 1. Write proper GPIO register */
 void	enable_GPIOE_int(void)
 {
@@ -134,77 +133,81 @@ void	L3GD20Gyro_Init(void)
 	// SPI is enabled and TXFIFO is not empty, or with the next write to TXFIFO.
 	/* Enable SPI AFTER configuration */
 	SPI1->CR1 |= (uint16_t)(1 << 6);
-	GPIOE->BSRR |= 1 << 19;
 }
 
 void	L3GD20Gyro_write_register(uint8_t register_address, uint8_t config)
 {
+	// 30.5.9 Data transmission and reception procedures
+	// bit 0: WRITE bit. The value is 0.
+	// bit 1: MS bit. When 0, do not increment address; when 1, increment address in multiple writing
+	// bit 2 -7: address AD(5:0). This is the address field of the indexed register.
+	// bit 8-15: data DI(7:0) (write mode). This is the data that will be written to the device (MSb first).
 	uint16_t package;
 
 	package = 0x0000;
-	package |= 0x00 | (register_address << 2); 
+	package |= register_address | (config << 8);
 
-	// 30.5.9 Data transmission and reception procedures
 
-	GPIOE->BSRR |= 1 << 19;
+	GPIOE->BSRR |= 1 << 19; // start communication
 	/* waiting transmitter buffer is empty */
 	while (!(SPI1->SR & (uint16_t)(1 << 1))) {};
+	/* Sending package value to get the data */
 	SPI1->DR = package;
-	/* Sending config value to get the data */
-	while (!(SPI1->SR & (uint16_t)(1 << 0))) {};
-	/* Reading value from Data Register */
-	package = SPI1->DR;
 	while (!(SPI1->SR & (uint16_t)(1 << 1))) {};
-	SPI1->DR = config;
-	/* waiting Received buffer is empty */
-	while (!(SPI1->SR & (uint16_t)(1 << 0))) {};
-	/* Reading value from Data Register */
-	package = SPI1->DR;
-	(void)data;
-	GPIOE->BSRR |= (1 << 3); //stop communication
+	/* Sending dummy value to get the data */
+	SPI1->DR = package;
+	GPIOE->BSRR |= (1 << 3); // stop communication
 }
+
 
 uint8_t	L3GD20Gyro_read_register(uint8_t register_address)
 {
-	uint16_t package;
-	uint8_t received_data;
+	uint16_t received_data;
 
 	// 30.5.9 Data transmission and reception procedures
 	// bit 0: READ bit. The value is 1.
 	// bit 1: MS bit. When 0 do not increment address; when 1 increment address in multiple reading.
 	// bit 2-7: address AD(5:0). This is the address field of the indexed register.
 	// bit 8-15: received data
-	package = 0x0000;
-	package |= 0x01 | (register_address << 2); 
+	received_data = 0x0000;
+	received_data |= 0x80 | (register_address); 
 
-	GPIOE->BSRR |= 1 << 19;
+	GPIOE->BSRR |= 1 << 19; // start communication
 	/* waiting transmitter buffer is empty */
 	while (!(SPI1->SR & (uint16_t)(1 << 1))) {};
-	SPI1->DR = package;
-	/* Sending dummy value to get the data */
+	/* Sending package value to get the data */
+	SPI1->DR = received_data;
+	/* waiting receiver buffer is full */
 	while (!(SPI1->SR & (uint16_t)(1 << 0))) {};
 	/* Reading value from Data Register */
-	package = SPI1->DR;
-	while (!(SPI1->SR & (uint16_t)(1 << 1))) {};
-	SPI1->DR = 0x00;
-	/* waiting Received buffer is empty */
-	while (!(SPI1->SR & (uint16_t)(1 << 0))) {};
-	/* Reading value from Data Register */
-	package = SPI1->DR;
-	received_data = (uint8_t)package;
-	GPIOE->BSRR |= (1 << 3); //stop communication
-	return (received_data);
+	received_data = SPI1->DR;
+	GPIOE->BSRR |= (1 << 3); // stop communication
+	return ((uint8_t)((received_data & 0xFF00) >> 8));
 }
 
 void	setup_gyro()
 {
 	uint8_t data[6];
 
+
 	data[0] = L3GD20Gyro_read_register(0x0F);
+	delay(1000);
 	data[1] = L3GD20Gyro_read_register(0x20);
-	L3GD20Gyro_write_register(0x20, 0x0F);
 	delay(1000);
 	data[2] = L3GD20Gyro_read_register(0x0F);
+	delay(1000);
+	data[3] = L3GD20Gyro_read_register(0x20);
+	delay(1000);
+	data[4] = L3GD20Gyro_read_register(0x0F);
+	delay(1000);
+	data[5] = L3GD20Gyro_read_register(0x20);
+	delay(1000);
+	L3GD20Gyro_write_register(0x20, 0x0F);
+	delay(1000);
+	data[6] = L3GD20Gyro_read_register(0x20);
+	delay(1000);
+	print_data(&data[0], 6);
+	while (1) {};
 
 	// 1.Write CTRL_REG2
 	data[3] = L3GD20Gyro_read_register(0x21);
@@ -222,6 +225,7 @@ void	setup_gyro()
 	// data[5] = L3GD20Gyro_read_register(0x24);
 	// 10.Write   CTRL_REG1
 	print_data(&data[0], 6);
+	while (1) {};
 }
 
 void	L3GD20Gyro_GetData(uint8_t *data)
