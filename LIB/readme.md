@@ -1,16 +1,15 @@
-# Understand User Push-button
+        "ld": ["-Wl,--gc-sections", "-Wl,--wrap,main", "-Wl,--wrap,_malloc_r",
+               "-Wl,--wrap,_free_r", "-Wl,--wrap,_realloc_r", "-Wl,--wrap,_memalign_r",
+               "-Wl,--wrap,_calloc_r", "-Wl,--wrap,exit", "-Wl,--wrap,atexit",
+               "-Wl,-n", "--specs=nano.specs"]
 
-## Extension connectors
-According to USer MAnual page 22
-PA0 is used for USER-BUTTON
 
-So we have to enable GPIOA
+			   thumbv7em-none-eabihf, for the Cortex-M4F and Cortex-M7F processors
 
-No other information from User_Manual or Reference_Manual or even in STM32F3 
-discovery Datasheet.
+https://docs.rust-embedded.org/discovery/05-led-roulette/build-it.html
 
-### Idea N1
-User button off = input data register PA0 == 0
-User button on = input data register PA0 == 1
+https://sourceware.org/binutils/docs/ld/Options.html
+https://manpages.debian.org/testing/binutils-arm-none-eabi/arm-none-eabi-ld.1.en.html
 
-Set up GPIOA0 to input and check GPIOA->IDR 0
+
+https://sourceware.org/newlib/libc.html#Syscalls

@@ -9,7 +9,7 @@
 CORTEX_M = 4
 CORE = CM$(CORTEX_M)
 # Project name
-NAME = BUTTON-$(CORE)
+NAME = LIB-$(CORE)
 
 # Compiler & Linker
 CC = arm-none-eabi-gcc
@@ -33,8 +33,7 @@ DIR_OBJ = obj
 FILE_ASM = startup_stm32f30x.s
 
 FILE_SRC = main.c \
-		   user_button.c \
-		   leds.c \
+		   itm.c \
 		   system_stm32f30x.c
 
 FILE_OBJ = $(FILE_SRC:.c=.o)
@@ -53,7 +52,7 @@ A_FLAGS =-mthumb -mcpu=cortex-m$(CORTEX_M) -mlittle-endian -mthumb-interwork
 # Debug flags
 D_FLAGS = -g3
 # Floating point flags (ARM)
-F_FLAGS =  -mfloat-abi=softfp -mfpu=fpv4-sp-d16
+F_FLAGS =  -mfloat-abi=hard -mfpu=fpv4-sp-d16
 # Include path flags
 I_FLAGS = $(addprefix -I , $(DIR_INC))
 # DEFINE/Macro flags
@@ -63,7 +62,7 @@ O_FLAGS = -ffunction-sections -fdata-sections
 # Warning flags
 W_FLAGS = -Werror -Wall -Wextra
 # Library nano (--specs=nano.specs --specs=rdimon.specs --specs=nosys.specs)
-SP_FLAGS = --specs=nosys.specs
+SP_FLAGS = --specs=nano.specs
 
 C_FLAGS = $(A_FLAGS) $(D_FLAGS) $(F_FLAGS) $(I_FLAGS) \
 		  $(DM_FLAGS) $(O_FLAGS) $(W_FLAGS) $(SP_FLAGS)
@@ -79,8 +78,7 @@ CMF_FLAGS = -Map=$(NAME).map
 # linking script flags
 SC_FLAGS = -T ld_scripts/STM32F303VC_FLASH_Std.ld
 
-# TODO: ADD SP_FLAG BECAUSE it's both cc and ld flags
-L_FLAGS = $(SC_FLAGS) $(LO_FLAGS) $(CMF_FLAGS)
+L_FLAGS = $(SC_FLAGS) $(LO_FLAGS) $(CMF_FLAGS) --library-path=/usr/lib/arm-none-eabi/newlib/thumb/v7e-m/  --library=c_nano --verbose
 
 ################################################################################
 #								MAKE RULES									   #

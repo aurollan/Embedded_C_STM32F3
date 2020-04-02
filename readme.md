@@ -82,7 +82,9 @@ follow the suggested order.
 ## Why there is no picture from documentation in your readme files ?
 Because an essential skill you need in software development is knowing how to 
 RTFM (Read The F__king Manual). You HAVE to kno how to find information in your
-device documentation and how to use it.
+device documentation and how to use it. It's important to get conmfortable with
+the official documentation. At the begining it's annoying but then you will find
+ what you need easily.
 
 ## Something else ?
 If you need more information about a part of this resources, just ask me.

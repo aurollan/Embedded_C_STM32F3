@@ -185,7 +185,7 @@ SECTIONS
   /* Remove information from the standard libraries */
   /DISCARD/ :
   {
-	/* Co;;ented for now */
+	/* Commented for now */
     /* libc.a ( * ) */
    	/* libm.a ( * ) */
     /* libgcc.a ( * ) */

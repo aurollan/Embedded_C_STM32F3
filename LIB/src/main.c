@@ -11,22 +11,27 @@
 /*                                                        /                   */
 /* ************************************************************************** */
 
-#include "user_button.h"
+#include "itm.h"
+#include "stdio.h"
+#include "newlib.h"
+
+int puts(const char *s)
+{
+	while (*s)
+	{
+		ITM_SendChar(*s);
+		s++;
+	}
+	return (1);
+}
+
 
 int main(void)
 {
-	setup_user_button();
-	init_leds();
-
-	ligth_up_leds();
+	ITM_init();
+	printf("Hello World number %d\n", 0x56);
 	while(1)
 	{
-		while ((GPIOA->IDR & ((uint32_t)0x01)) == 0) {};
-		while ((GPIOA->IDR & ((uint32_t)0x01)) == 1) {};
-		ligth_up_leds();
-		while ((GPIOA->IDR & ((uint32_t)0x01)) == 0) {};
-		while ((GPIOA->IDR & ((uint32_t)0x01)) == 1) {};
-		ligth_down_leds();
 	}
 	return 1;
 }
