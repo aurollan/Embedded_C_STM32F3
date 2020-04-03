@@ -33,6 +33,8 @@ PATH: STM32Cube_FW_F3_V1.11.0/Drivers/CMSIS/Device/ST/STM32F3xx/Source/Templates
 
 I will build a simple Reset_handler function in C. For know you can use them, don't worry you
 will have enough trouble with your code later ;).
+Here is a good source to do it by yourself:
+https://jacobmossberg.se/posts/2018/08/11/run-c-program-bare-metal-on-arm-cortex-m3.html
 
 ## This looks really complicated. Do I need to know this ?
 Assembly language is not mandatory to work on most Micro controller.

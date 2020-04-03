@@ -5,6 +5,7 @@
 
 
 			   thumbv7em-none-eabihf, for the Cortex-M4F and Cortex-M7F processors
+			   https://en.wikipedia.org/wiki/ARM_Cortex-M#Cortex-M4
 
 https://docs.rust-embedded.org/discovery/05-led-roulette/build-it.html
 

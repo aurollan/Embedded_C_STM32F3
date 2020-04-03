@@ -78,7 +78,7 @@ CMF_FLAGS = -Map=$(NAME).map
 # linking script flags
 SC_FLAGS = -T ld_scripts/STM32F303VC_FLASH_Std.ld
 
-L_FLAGS = $(SC_FLAGS) $(LO_FLAGS) $(CMF_FLAGS) --library-path=/usr/lib/arm-none-eabi/newlib/thumb/v7e-m/  --library=c_nano --verbose
+L_FLAGS = $(SC_FLAGS) $(LO_FLAGS) $(CMF_FLAGS) --library-path=/usr/lib/arm-none-eabi/newlib/thumb/v7e-m/fpv4-sp/hard/  --library=c_nano --verbose
 
 ################################################################################
 #								MAKE RULES									   #

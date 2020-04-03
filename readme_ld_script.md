@@ -121,6 +121,9 @@ https://hwengineer.github.io/linker/
 A well explained tutorial:
 https://embedds.com/programming-stm32-discovery-using-gnu-tools-linker-script/
 
+The DIY way:
+https://jacobmossberg.se/posts/2018/08/11/run-c-program-bare-metal-on-arm-cortex-m3.html
+
 More information on ALIGN():
 https://stackoverflow.com/questions/9827157/what-does-keep-mean-in-a-linker-script
 
