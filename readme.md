@@ -2,6 +2,11 @@
 This repository contains all the resources that I used to learn how to develop on micro controller.
 I explain all choices made to build my project (Why and How).
 
+"I hear and I forget,
+ I see and I remember,
+ I do and I understand."
+ Confucius
+
 ## Equipment:
 
 ### Why buy a STM32F3 device?

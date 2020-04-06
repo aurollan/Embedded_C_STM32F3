@@ -1,32 +1,60 @@
-/* Newlib sbrk */
-void * _sbrk (int  incr)
+#include "lib.h"
+
+caddr_t _sbrk(int incr)
 {
-	extern char __heap_start;//set by linker
-	extern char __heap_end;//set by linker
+  extern char _end;		/* Defined by the linker */
+  static char *heap_end;
+  char *prev_heap_end;
+  uint32_t stack_ptr;
 
-	static char *heap_end;		/* Previous end of heap or 0 if none */
-	char        *prev_heap_end;
+  if (heap_end == 0) {
+    heap_end = &_end;
+  }
+  prev_heap_end = heap_end;
+  
+  stack_ptr = __get_MSP();
 
-	if (0 == heap_end) {
-		heap_end = &__heap_start;			/* Initialize first time round */
-	}
-
-	prev_heap_end  = heap_end;
-	heap_end      += incr;
-	//check
-	if( heap_end < (&__heap_end)) {
-
-	} else {
-		errno = ENOMEM;
-		return (char*)-1;
-	}
-	return (void *) prev_heap_end;
-
+  if (((uint32_t)(heap_end + incr)) > stack_ptr)
+  {
+    _write(1, "Heap and stack collision\n", 25);
+    /* abort (); */
+	while (1) {};
+  }
+  heap_end += incr;
+  return ((caddr_t) prev_heap_end);
 }
 
-_close();
-_read();
-_write();
-_lseek();
-_fstat();
-_isatty();
+int _close(int fd)
+{
+	(void)fd;
+	return (-1);
+}
+
+int _read(int file, char *ptr, int len)
+{
+	(void)file;
+	(void)ptr;
+	(void)len;
+	return (0);
+}
+
+int _lseek(int file, int ptr, int dir)
+{
+	(void)file;
+	(void)ptr;
+	(void)dir;
+	return (0);
+}
+
+int _fstat(int file, struct stat *st)
+{
+	(void)file;
+	st->st_mode = S_IFCHR;
+	return (0);
+}
+
+int _isatty(int file)
+{
+	(void)file;
+	return (1);
+}

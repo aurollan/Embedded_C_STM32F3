@@ -14,6 +14,7 @@ NAME = LIB-$(CORE)
 # Compiler & Linker
 CC = arm-none-eabi-gcc
 LD = arm-none-eabi-ld
+SZ = arm-none-eabi-size
 # Launch debug from Linux (Ubuntu/Debian)
 LDB = gdb-multiarch
 # Launch debug from MacOS
@@ -34,6 +35,7 @@ FILE_ASM = startup_stm32f30x.s
 
 FILE_SRC = main.c \
 		   itm.c \
+		   syscall.c \
 		   system_stm32f30x.c
 
 FILE_OBJ = $(FILE_SRC:.c=.o)
@@ -58,21 +60,20 @@ I_FLAGS = $(addprefix -I , $(DIR_INC))
 # DEFINE/Macro flags
 DM_FLAGS =  -DSTM32F303xC -DUSE_FULL_ASSERT
 # Optimization flags (add -0s for optimization flag)
-O_FLAGS = -ffunction-sections -fdata-sections
+O_FLAGS = 
 # Warning flags
 W_FLAGS = -Werror -Wall -Wextra
 # Library nano (--specs=nano.specs --specs=rdimon.specs --specs=nosys.specs)
-SP_FLAGS = --specs=nano.specs
 
 C_FLAGS = $(A_FLAGS) $(D_FLAGS) $(F_FLAGS) $(I_FLAGS) \
-		  $(DM_FLAGS) $(O_FLAGS) $(W_FLAGS) $(SP_FLAGS)
+		  $(DM_FLAGS) $(O_FLAGS) $(W_FLAGS)
 
 ################################################################################
 #								LINKING										   #
 ################################################################################
 
 # Optimization flags
-LO_FLAGS = --gc-sections
+LO_FLAGS =
 # Create map file
 CMF_FLAGS = -Map=$(NAME).map
 # linking script flags
@@ -105,7 +106,7 @@ $(DIR_OBJ)/%.o: $(DIR_SRC)/%.c
 
 $(DIR_OBJ)/%.o: $(DIR_ASM)/%.s
 	@mkdir -p obj
-	$(CC) $(C_FLAGS) -o $@ -c $<
+	@$(CC) $(C_FLAGS) -o $@ -c $<
 	@echo "\033[0;32m [OK] \033[0m       \033[0;33m Compiling:\033[0m" $<
 	@echo "---------------------------------------------------------------------"
 
@@ -114,6 +115,10 @@ mlaunch:
 
 llaunch:
 	@$(LDB) -q $(NAME) -x openocd.gdb
+
+size:
+	@$(SZ) $(NAME)
+	
 
 clean: 
 	@rm -rf *.map

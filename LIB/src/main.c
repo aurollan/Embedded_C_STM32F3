@@ -12,8 +12,6 @@
 /* ************************************************************************** */
 
 #include "itm.h"
-#include "stdio.h"
-#include "newlib.h"
 
 int puts(const char *s)
 {
@@ -29,7 +27,6 @@ int puts(const char *s)
 int main(void)
 {
 	ITM_init();
-	printf("Hello World number %d\n", 0x56);
 	while(1)
 	{
 	}
