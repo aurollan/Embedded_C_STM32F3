@@ -1,5 +1,6 @@
 # [WORK IN PROGRESS] Embedded C development WITHOUT IDE but using Makefile and VIM (Or any Text editor you want) and CMSIS Library (optionnal but reliable).
-This repository contains all the resources that I used to learn how to develop on micro controller.
+This repository contains all the resources that I used to learn how to develop
+ on micro controller.
 I explain all choices made to build my project (Why and How).
 
 "I hear and I forget,
@@ -60,11 +61,14 @@ NEED anything else.
 Because I wanted to make my work useful for people like me :).
 
 ## Why use CMSIS Library ?
-Because CMSIS for ARM Cortex Microcontroller Software Interface Standard is a Lower
-Layer Abstraction library (hardware). It's constructor independent for Micro
-controller using Cortex M series processor. 
-https://developer.arm.com/tools-and-software/embedded/cmsis
-Because we will build our own library with it.
+CMSIS stands for ARM Cortex Microcontroller Software Interface Standard.
+More specifically we use the CMSIS library provided in the STM32 CubeMX 
+package.
+https://www.st.com/en/embedded-software/stm32cubef3.html
+In this package we have all the CMSIS library plus an additionnal header file 
+from stm32 suited for our devices. This header file is useful because we want 
+to avoid any mistake from bad bit manipulation.
+We need those files to build our own library.
 
 ## Is there everything I need to know for embedded development on this "tutorial" ?
 No.
@@ -73,23 +77,23 @@ No electronics skills are needed and i don't cover this part (yet).
 
 ## How is your project build ?
 A readme.md file explains all choices made for each subject/file.
-I tell what I'm doing and why. Sometimes (or usually) i add a lot of other 
-sources to read, to go further/deeply. I won't write everything on this tutorial
-because there are a lot of good resources on the internet to learn a particular
-notion.
+I tell what I'm doing and why. Sometimes (or usually) I add a lot of other 
+sources to read, to go further/deeply. I won't write everything on this 
+tutorial because there are a lot of good resources on the internet to learn a 
+particular notion.
 
 ## Is there an order for reading ?
 No. Each little project is independent and can work alone. You can cherry pick
 or mix project if you want to.
-But if it's your only learning material (and I hope it's not) I encourage you to
-follow the suggested order.
+But if it's your only learning material (and I hope it's not) I encourage you
+ to follow the suggested order.
 
 ## Why there is no picture from documentation in your readme files ?
 Because an essential skill you need in software development is knowing how to 
 RTFM (Read The F__king Manual). You HAVE to kno how to find information in your
 device documentation and how to use it. It's important to get conmfortable with
-the official documentation. At the begining it's annoying but then you will find
- what you need easily.
+the official documentation. At the begining it's annoying but then you will 
+find what you need easily.
 
 ## Something else ?
 If you need more information about a part of this resources, just ask me.
@@ -116,7 +120,8 @@ https://www.st.com/content/ccc/resource/technical/document/application_note/2c/d
 
 ## One particularly good resources i started with
 https://docs.rust-embedded.org/discovery/index.html
-It's in Rust because i wanted to learn Embedded developement and Rust at the same time (bad idea).
+It's in Rust because i wanted to learn Embedded developement and Rust at the 
+same time (bad idea).
 It's a well written tutorial you can refer too even if it's not in C.
 But there is just one thing missing:
 "I've taken care of initializing everything" => This is the part covered here.
