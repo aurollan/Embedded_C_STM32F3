@@ -1,5 +1,8 @@
+# make is alias for make all
 .DEFAULT_GOAL := all
-.PHONY: all clean fclean re
+
+# Name of recipes
+.PHONY: all llaunch mlaunch clean fclean re
 
 ################################################################################
 #								PROJECT	CONFIG 								   #
@@ -8,20 +11,21 @@
 # Selecting Core (STM32F303VC DISCOVERY IS ARM M4)
 CORTEX_M = 4
 CORE = CM$(CORTEX_M)
-# Project name
-NAME = LIB-$(CORE)
 
-# Compiler & Linker
+# Project name
+NAME = LEDS-$(CORE)
+
+# Compiler, Linker & Debugger
 CC = arm-none-eabi-gcc
 LD = arm-none-eabi-ld
-SZ = arm-none-eabi-size
+DB = arm-none-eabi-gdb
+
 # Launch debug from Linux (Ubuntu/Debian)
 LDB = gdb-multiarch
 # Launch debug from MacOS
 MDB = arm-none-eabi-gdb
 
 # STM32 library path
-
 DIR_INC = inc
 DIR_ASM = asm
 DIR_SRC = src
@@ -31,12 +35,11 @@ DIR_OBJ = obj
 #							PROJECT FILES									   #
 ################################################################################
 
-FILE_ASM = startup_stm32f30x.s
+FILE_ASM = startup_stm32f303xc.s
 
 FILE_SRC = main.c \
-		   itm.c \
-		   syscall.c \
-		   system_stm32f30x.c
+		   leds.c \
+		   system_stm32f3xx.c \
 
 FILE_OBJ = $(FILE_SRC:.c=.o)
 FILE_OBJ += $(FILE_ASM:.s=.o)
@@ -50,36 +53,45 @@ SRC = $(addprefix $(DIR_SRC)/, $(FILE_SRC))
 ################################################################################
 
 # Architecture flags (ARM)
-A_FLAGS =-mthumb -mcpu=cortex-m$(CORTEX_M) -mlittle-endian -mthumb-interwork
+ARCH_FLAGS =-mthumb -mcpu=cortex-m$(CORTEX_M) -mlittle-endian -mthumb-interwork
+
 # Debug flags
-D_FLAGS = -g3
+DBG_FLAGS = -g3
+
 # Floating point flags (ARM)
-F_FLAGS =  -mfloat-abi=hard -mfpu=fpv4-sp-d16
+FP_FLAGS =  -mfloat-abi=hard -mfpu=fpv4-sp-d16
+
 # Include path flags
-I_FLAGS = $(addprefix -I , $(DIR_INC))
+INC_FLAGS = $(addprefix -I , $(DIR_INC))
+
 # DEFINE/Macro flags
 DM_FLAGS =  -DSTM32F303xC -DUSE_FULL_ASSERT
-# Optimization flags (add -0s for optimization flag)
-O_FLAGS = 
-# Warning flags
-W_FLAGS = -Werror -Wall -Wextra
-# Library nano (--specs=nano.specs --specs=rdimon.specs --specs=nosys.specs)
 
-C_FLAGS = $(A_FLAGS) $(D_FLAGS) $(F_FLAGS) $(I_FLAGS) \
-		  $(DM_FLAGS) $(O_FLAGS) $(W_FLAGS)
+# Compiling Optimization flags (add -0s for best optimization flag)
+CO_FLAGS = -ffunction-sections -fdata-sections
+
+# Warning flags
+WRN_FLAGS = -Werror -Wall -Wextra
+
+# All flags for GCC compiling step
+GCC_FLAGS = $(ARCH_FLAGS) $(DBG_FLAGS) $(FP_FLAGS) $(INC_FLAGS) \
+		  $(DM_FLAGS) $(CO_FLAGS) $(WRN_FLAGS)
 
 ################################################################################
 #								LINKING										   #
 ################################################################################
 
-# Optimization flags
-LO_FLAGS =
-# Create map file
-CMF_FLAGS = -Map=$(NAME).map
-# linking script flags
-SC_FLAGS = -T ld_scripts/STM32F303VC_FLASH_Std.ld
+# Linking Optimization flags
+LO_FLAGS = --gc-sections
 
-L_FLAGS = $(SC_FLAGS) $(LO_FLAGS) $(CMF_FLAGS) --library-path=/usr/lib/arm-none-eabi/newlib/thumb/v7e-m/fpv4-sp/hard/  --library=c_nano --verbose
+# Map File flags
+MAP_FLAGS = -Map=$(NAME).map
+
+# Linking Script flags
+LS_FLAGS = -T ld_scripts/STM32F303VCTx_FLASH.ld
+
+# All flags for LD linking step
+LD_FLAGS = $(LS_FLAGS) $(LO_FLAGS) $(MAP_FLAGS)
 
 ################################################################################
 #								MAKE RULES									   #
@@ -87,46 +99,43 @@ L_FLAGS = $(SC_FLAGS) $(LO_FLAGS) $(CMF_FLAGS) --library-path=/usr/lib/arm-none-
 
 all: $(NAME)
 
-debug:
-	@echo $(L_FLAGS)
-	@echo $(INCLUDE)
-	@echo $(C_FLAGS)
-	@echo $(ASM)
-
 $(NAME): $(OBJ)
-	$(LD) $^ $(L_FLAGS) -o $@
+	$(LD) $^ $(LD_FLAGS) -o $@
 	@echo "\033[33;32m=== Compilation $(NAME)...\t\t\tDONE\033[0m"
 	@echo "---------------------------------------------------------------------"
 
+# Build *.c file
 $(DIR_OBJ)/%.o: $(DIR_SRC)/%.c
 	@mkdir -p obj
-	$(CC) $(C_FLAGS) -o $@ -c $<
+	$(CC) $(GCC_FLAGS) -o $@ -c $<
 	@echo "\033[0;32m [OK] \033[0m       \033[0;33m Compiling:\033[0m" $<
 	@echo "---------------------------------------------------------------------"
 
+# Build *.s file
 $(DIR_OBJ)/%.o: $(DIR_ASM)/%.s
 	@mkdir -p obj
-	@$(CC) $(C_FLAGS) -o $@ -c $<
+	$(CC) $(GCC_FLAGS) -o $@ -c $<
 	@echo "\033[0;32m [OK] \033[0m       \033[0;33m Compiling:\033[0m" $<
 	@echo "---------------------------------------------------------------------"
 
+# MacOsX flash and launch debug session
 mlaunch:
 	@$(MDB) -q $(NAME) -x openocd.gdb
 
+# Linux (Debian) flash and launch debug session
 llaunch:
 	@$(LDB) -q $(NAME) -x openocd.gdb
 
-size:
-	@$(SZ) $(NAME)
-	
-
+# Delete all intermediate files
 clean: 
 	@rm -rf *.map
 	@rm -rf obj
 	@echo "\033[33;32m=== Cleaning project $(DIR_OBJ) directory and $(NAME).map...\t\tDONE\033[0m"
 
+# Delete all intermediate files and executable file
 fclean: clean
 	@rm -rf $(NAME)	
 	@echo "\033[33;32m=== Cleaning executable $(NAME)...\t\t\tDONE\033[0m"
 
+# Clean and rebuild project
 re: fclean all
