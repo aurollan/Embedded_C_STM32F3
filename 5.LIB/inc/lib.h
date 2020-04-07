@@ -2,8 +2,7 @@
 #define __LIB_H__
 
 #include "itm.h"
-#include <stm32f30x.h>
-#include <stm32f30x_it.h>
+#include "stm32f303xc.h"
 #include <sys/stat.h>
 
 int		_isatty(int file);

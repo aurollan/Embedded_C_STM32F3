@@ -42,7 +42,7 @@ FILE_SRC = main.c \
 		   i2c_mag.c \
 		   itm.c \
 		   timer.c \
-		   system_stm32f3xx.c \
+		   system_stm32f30x.c \
 
 FILE_OBJ = $(FILE_SRC:.c=.o)
 FILE_OBJ += $(FILE_ASM:.s=.o)

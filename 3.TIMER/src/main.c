@@ -15,7 +15,16 @@
 
 int main(void)
 {
+	init_leds();
 	TIM6_enable();
+	delay(6000);
+	while (1)
+	{
+		ligth_up_leds();
+		delay(6000);
+		ligth_down_leds();
+		delay(6000);
+	}
 	return (0);
 }
 

@@ -3,8 +3,7 @@
 
 #include "itm.h"
 #include "timer.h"
-#include "stm32f30x.h"
-#include "stm32f30x_it.h"
+#include "stm32f303xc.h"
 
 
 typedef enum

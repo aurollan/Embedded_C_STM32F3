@@ -13,7 +13,7 @@ CORTEX_M = 4
 CORE = CM$(CORTEX_M)
 
 # Project name
-NAME = LEDS-$(CORE)
+NAME = LIB-$(CORE)
 
 # Compiler, Linker & Debugger
 CC = arm-none-eabi-gcc
@@ -38,7 +38,8 @@ DIR_OBJ = obj
 FILE_ASM = startup_stm32f303xc.s
 
 FILE_SRC = main.c \
-		   leds.c \
+		   syscall.c \
+		   itm.c \
 		   system_stm32f3xx.c \
 
 FILE_OBJ = $(FILE_SRC:.c=.o)
@@ -90,8 +91,11 @@ MAP_FLAGS = -Map=$(NAME).map
 # Linking Script flags
 LS_FLAGS = -T ld_scripts/STM32F303VCTx_FLASH.ld
 
+# Nano Library
+NL_FLAGS = --library-path=/usr/lib/arm-none-eabi/newlib/thumb/v7e-m/fpv4-sp/hard/  --library=c_nano
+
 # All flags for LD linking step
-LD_FLAGS = $(LS_FLAGS) $(LO_FLAGS) $(MAP_FLAGS)
+LD_FLAGS = $(LS_FLAGS) $(LO_FLAGS) $(MAP_FLAGS) $(NL_FLAGS) --verbose
 
 ################################################################################
 #								MAKE RULES									   #

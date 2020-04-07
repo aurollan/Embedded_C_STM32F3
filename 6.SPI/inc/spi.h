@@ -3,8 +3,7 @@
 
 #include "itm.h"
 #include "timer.h"
-#include "stm32f30x.h"
-#include "stm32f30x_it.h"
+#include "stm32f303xc.h"
 
 
 void	L3GD20Gyro_Init(void);
@@ -15,6 +14,6 @@ void	enable_GPIOE_int(void);
 void	enable_GPIOA_af(void);
 void	enable_SPI1(void);
 void	print_data(uint8_t *data, uint8_t len);
-void			ft_print_hexa(uint8_t data);
+void	ft_print_hexa(uint8_t data);
 void	setup_gyro();
 #endif

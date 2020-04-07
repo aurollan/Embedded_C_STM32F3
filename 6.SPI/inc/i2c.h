@@ -1,5 +1,7 @@
-#include "stm32f30x_it.h"
-#include "stm32f30x.h"
+#ifndef __I2C__H__
+#define __I2C__H__
+#include "stm32f303xc.h"
+
 #define LSM303DLHC_OUT_X_H_M                 0x03  /* Output Register X magnetic field */
 #define LSM303DLHC_OUT_X_L_M                 0x04  /* Output Register X magnetic field */
 #define LSM303DLHC_OUT_Z_H_M                 0x05  /* Output Register Z magnetic field */
@@ -77,3 +79,4 @@ typedef enum
 int _write(uint32_t file, char* ptr, int len);
 void LSM303DLHCMag_GetData(uint8_t *pDataXYZ);
 uint8_t LSM303DLHCMag_Init(void);
+#endif
