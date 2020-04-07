@@ -198,9 +198,10 @@ SECTIONS
   /* Remove information from the standard libraries */
   /DISCARD/ :
   {
-    libc.a ( * )
-    libm.a ( * )
-    libgcc.a ( * )
+	/* Unused library and generate Warning */
+    /* libc.a ( * ) */
+    /* libm.a ( * ) */
+    /* libgcc.a ( * ) */
   }
 
   .ARM.attributes 0 : { *(.ARM.attributes) }

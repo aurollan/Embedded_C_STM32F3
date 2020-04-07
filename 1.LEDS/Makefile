@@ -20,6 +20,11 @@ CC = arm-none-eabi-gcc
 LD = arm-none-eabi-ld
 DB = arm-none-eabi-gdb
 
+# Launch debug from Linux (Ubuntu/Debian)
+LDB = gdb-multiarch
+# Launch debug from MacOS
+MDB = arm-none-eabi-gdb
+
 # STM32 library path
 DIR_INC = inc
 DIR_ASM = asm
@@ -30,11 +35,11 @@ DIR_OBJ = obj
 #							PROJECT FILES									   #
 ################################################################################
 
-FILE_ASM = startup_stm32f30x.s
+FILE_ASM = startup_stm32f303xc.s
 
 FILE_SRC = main.c \
 		   leds.c \
-		   system_stm32f30x.c \
+		   system_stm32f3xx.c \
 
 FILE_OBJ = $(FILE_SRC:.c=.o)
 FILE_OBJ += $(FILE_ASM:.s=.o)
@@ -83,10 +88,10 @@ LO_FLAGS = --gc-sections
 MAP_FLAGS = -Map=$(NAME).map
 
 # Linking Script flags
-LS_FLAGS = -T ld_scripts/STM32F303VC_FLASH_Std.ld
+LS_FLAGS = -T ld_scripts/STM32F303VCTx_FLASH_STMCUBE.ld
 
 # All flags for LD linking step
-LD_FLAGS = $(SC_FLAGS) $(LO_FLAGS) $(MF_FLAGS)
+LD_FLAGS = $(LS_FLAGS) $(LO_FLAGS) $(MAP_FLAGS)
 
 ################################################################################
 #								MAKE RULES									   #
