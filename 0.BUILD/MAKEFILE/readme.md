@@ -98,6 +98,7 @@ https://www.quora.com/Is-ARM-big-endian-or-little-endian
 
 
 ### -mthumb-interwork
+https://github.com/gcc-mirror/gcc/blob/master/gcc/config/arm/README-interworking
 Generate code that supports calling between the ARM and Thumb instruction sets.
 Without this option, on pre-v5 architectures, the two instruction sets cannot
 be reliably used inside one program. The default is -mno-thumb-interwork, since
@@ -460,3 +461,5 @@ argument to the option. For example, -Wl,-Map,output.map passes -Map output.map
 to the linker. When using the GNU linker, you can also get the same effect
 with -Wl,-Map=output.map.
 
+# Library nano (--specs=nano.specs --specs=rdimon.specs --specs=nosys.specs)
+SP_FLAGS = --specs=nosys.specs

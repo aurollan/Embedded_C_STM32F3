@@ -1,12 +1,12 @@
 # LEDS
-
 Usually the first thing we learn in embedded development is blinking a led.
 Here we are going to light up one or more leds.
 If you need to make it blink you need to understand how to use timer and create
 a delay function. Check the TIMER project.
 
 ##### Important note
-You need to read readme_understand_memory_map.md to code anything working.
+You need to read "0.TOOLS/readme_understand_memory_map.md" to code anything 
+working.
 
 ## Where do i start ?
 Read the user manual, then the reference manual. They are the most accurate and
