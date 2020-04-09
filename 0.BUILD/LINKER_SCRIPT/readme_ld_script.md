@@ -147,3 +147,7 @@ https://www.st.com/content/ccc/resource/technical/document/application_note/bb/0
 
 Use lnker script symbol:
 https://sourceware.org/binutils/docs/ld/Source-Code-Reference.html
+
+RFRM page 64 - 4.2.1 Flash memory organization
+The Flash memory is organized as 64-bit wide memory cells that can be used for storing
+both code and data constants.
