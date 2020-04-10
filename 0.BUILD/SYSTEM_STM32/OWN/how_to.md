@@ -28,8 +28,11 @@ But only 2 are connected to SYSCLK and preipheral buses:
 	- E => External
 
 ## Peripheral max speed
-APB2 => 48 Mhz
-APB1 => 72 Mhz
+Page 125 of the Reference Manual
+The maximum frequency of the AHB and
+APB2 domains is 72 MHz. The maximum allowed frequency of the APB1 domain is 36 MHz.
+APB2 => 72 Mhz
+APB1 => 36 Mhz
 
 
 
