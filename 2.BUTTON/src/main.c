@@ -15,18 +15,21 @@
 
 int main(void)
 {
-	setup_user_button();
 	init_leds();
+	setup_user_button();
 
-	ligth_up_leds();
 	while(1)
 	{
+		/* Wait User button to be pushed */
 		while ((GPIOA->IDR & ((uint32_t)0x01)) == 0) {};
+		/* Wait User button to be released */
 		while ((GPIOA->IDR & ((uint32_t)0x01)) == 1) {};
-		ligth_up_leds();
+		switch_on_leds();
+		/* Wait User button to be pushed */
 		while ((GPIOA->IDR & ((uint32_t)0x01)) == 0) {};
+		/* Wait User button to be released */
 		while ((GPIOA->IDR & ((uint32_t)0x01)) == 1) {};
-		ligth_down_leds();
+		switch_off_leds();
 	}
 	return 1;
 }
