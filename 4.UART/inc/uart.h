@@ -7,5 +7,11 @@
 #define CR1_CLEAR_MASK            ((uint32_t)(USART_CR1_M | USART_CR1_PCE | \
                                               USART_CR1_PS | USART_CR1_TE | \
                                               USART_CR1_RE))
+void RCC_USART1_enable();
+void GPIOA_connect_PIN9_PIN10();
+void GPIOA_config();
+void USART_enable();
+void USART_output(char *s);
+void echo_back();
 
 #endif

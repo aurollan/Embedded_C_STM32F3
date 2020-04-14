@@ -1,4 +1,4 @@
-#include "uart.c"
+#include "uart.h"
 
 void RCC_USART1_enable()
 {
@@ -22,8 +22,8 @@ void GPIOA_config()
 	GPIOA->MODER |= GPIO_Mode_AF << 10 * 2; // alternate function mode
 	GPIOA->OTYPER |= GPIO_OType_PP << 9;       /*!< GPIO port output type register in push pull mode  0x00 */
 	GPIOA->OTYPER |= GPIO_OType_PP << 10;       /*!< GPIO port output type register in push pull mode  0x00 */
-	GPIOA->OSPEEDR |= GPIO_Speed_Level_3 << 9 * 2;      /*!< GPIO port output speed register to maximum speed */
-	GPIOA->OSPEEDR |= GPIO_Speed_Level_3 << 10 * 2;      /*!< GPIO port output speed register to maximum speed */
+	GPIOA->OSPEEDR |= GPIO_OSPEEDER_OSPEEDR3 << 9 * 2;      /*!< GPIO port output speed register to maximum speed */
+	GPIOA->OSPEEDR |= GPIO_OSPEEDER_OSPEEDR3 << 10 * 2;      /*!< GPIO port output speed register to maximum speed */
 	// PUPD_UP ? A VERIFIER
 	GPIOA->PUPDR |= GPIO_PuPd_NOPULL << 9 * 2;        /*!< GPIO port pull-up/pull-down register,                      */
 	GPIOA->PUPDR |= GPIO_PuPd_NOPULL << 10 * 2;        /*!< GPIO port pull-up/pull-down register,                      */
@@ -45,7 +45,7 @@ void USART_enable()
 	/* rx enabled */
 	USART1->CR1 |= USART_CR1_RE;
 	//default settings give you no hardware flow control, 8 data bits, no parity and one stop bit
-	USART1->BRR = 72000000/9600;
+	USART1->BRR = 8000000/9600;
 	/* USART enable  */
 	USART1->CR1 |= USART_CR1_UE; // 0x1
 	// USART1->CR2 &= ~(USART_CR2_STOP_1 | USART_CR2_STOP_0);
