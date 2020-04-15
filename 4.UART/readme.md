@@ -203,7 +203,7 @@ simpler projects like blinking leds. But if it's not please refer to
 For our project we just need PA9 and PA10 because we are setting up an 
 asynchronous communication without RS232 or RS485 standart.
 
-
+### Setting up peripherals
 #### Setup GPIOA pins
 According to the Datasheet
 
@@ -249,6 +249,7 @@ It's easy to find but if you can't just check
 You should find the appropriate register to modify, if you can't, please refer 
 to the code in the "src" repository.
 
+### Coding communication function
 #### Build transmit function
 Transmitting data using UART is simple.
 We focus on a single byte communication for now.
@@ -298,3 +299,9 @@ register.
 
 If you get stuck read again carefully, or check the code in the "src" 
 repository.
+
+## Communication woth your computer
+download minicom.
+using the FTDI connector
+wiring your micricontroller
+enjoy
