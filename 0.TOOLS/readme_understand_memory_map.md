@@ -5,11 +5,17 @@ or simply enable a peripheral clock.
 
 # How do we work with register ?
 Register are simply adresses.
-And we manipulate data pointed by register.
+And we manipulate data pointed by those adresses.
 
 # Where is memory mapping ?
 Just search for memory map in the Reference Manual.
-You should end up page 2 redirecting you to page 51.
+You should end up 
+	page 2
+
+redirecting you to 
+
+	page 51.
+
 All the memory mapping is here.
 
 # GPIOE example

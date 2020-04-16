@@ -1,4 +1,4 @@
-# TIMER
+# Understand TIMERs
 
 ## Why use timers ?
 There is a lot of reason to use timer but we will focus on a simple jobs for 
@@ -28,6 +28,17 @@ Cons:
 
 Obviously the best option is to use timer if we can.
 
+# How TIMER works ?
+article or video
+# How to program it ?
+We need to find information on the device documentation.
+
+## Exploring device documentation
+### Datasheet
+### User manual
+### Reference manual
+#### Finding detailled information
+#### Finding the right configuration
 ## How to use them ?
 We use one of the basic timer (TIM6). Like every peripheral we have to 
 enable its clock.
