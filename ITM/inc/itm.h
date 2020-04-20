@@ -1,8 +1,7 @@
 #ifndef __ITM_H__
 #define __ITM_H__
 
-#include "stm32f30x.h"
-#include "stm32f30x_it.h"
+#include "stm32f3xx.h"
 
 int _write(int32_t file, char* ptr, int32_t len);
 void ITM_init(void);

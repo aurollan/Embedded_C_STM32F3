@@ -3,7 +3,7 @@
 void ITM_init(void)
 {
 	CoreDebug->DEMCR |= CoreDebug_DEMCR_TRCENA_Msk;
-	TPI->ACPR = 72000000 / 2000000 - 1;
+	TPI->ACPR = 8000000 / 2000000 - 1;
 	TPI->FFCR |= 0x100; // default value bti 8 always at 1 and bit 2 activate formatter
 	TPI->SPPR = 2; // other asynchronous value : NRZ
 	DBGMCU->CR |= DBGMCU_CR_TRACE_IOEN;

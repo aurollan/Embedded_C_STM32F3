@@ -79,7 +79,8 @@ void	L3GD20Gyro_Init(void)
 	/* 2. Write to the SPI_CR1 register */
 	// a) Configure the serial clock baud rate using the BR[2:0] bits (Note: 4).
 	//SPI1->CR1 |= ((uint16_t)(0x0 << 3));
-	SPI1->CR1 |= ((uint16_t)(0x2 << 3));
+	// SPI1->CR1 |= ((uint16_t)(0x2 << 3));
+	SPI1->CR1 |= ((uint16_t)(0x0 << 3));
  //  SPI1->CR1 |= SPI_CR1_BR_1; //Bode rate equal to 72MHz / 8 . We do this because the gyroscope can't go faster than 10MHz.
 	// b) Configure the CPOL and CPHA bits combination to define one of the four
 	// relationships between the data transfer and the serial clock

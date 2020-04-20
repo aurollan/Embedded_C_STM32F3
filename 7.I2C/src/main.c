@@ -51,7 +51,7 @@ int main(void)
 			a++;
 		}
 		_write(0, "\n----\n", 6);
-		delay(60000);
+		delay(10000);
 	}
 	return (0);
 }

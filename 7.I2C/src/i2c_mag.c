@@ -6,7 +6,16 @@ void  I2C_Init_Mag()
 	I2C1->CR1 &= ~I2C_CR1_PE;
 
 	// I2C1->TIMINGR = 0xC062121F & TIMING_CLEAR_MASK;
-	I2C1->TIMINGR = 0xE0000303 & TIMING_CLEAR_MASK;
+	// For 72 Mhz I2C clock
+	// I2C1->TIMINGR = 0xE0000303 & TIMING_CLEAR_MASK;
+	// For 8 Mhz I2C clock
+	// Standart mode 100 Khz and 8Mhz I2C clock
+	// PRESC = (1 << 28)
+	// SCLDEL =  (0x4 << 20) 
+	// SDADEL = (0x2 << 16)
+	// SCLH = (0xF << 8)
+	// SCLL = (0x13 << 0)
+	I2C1->TIMINGR = (1 << 28) | (0x4 << 20) | (0x2 << 16) | (0xF << 8) | (0x13 << 0);
 	I2C1->OAR1 &= ~I2C_OAR1_OA1EN;
 	I2C1->OAR1 = (I2C_OAR1_OA1EN | ACCELERO_I2C_ADDRESS);
 	I2C1->CR2 |= (I2C_CR2_AUTOEND | I2C_CR2_NACK);

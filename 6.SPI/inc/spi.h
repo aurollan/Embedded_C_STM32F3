@@ -3,7 +3,7 @@
 
 #include "itm.h"
 #include "timer.h"
-#include "stm32f303xc.h"
+#include "stm32f3xx.h"
 
 
 void	L3GD20Gyro_Init(void);

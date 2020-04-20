@@ -16,6 +16,6 @@
 int main(void)
 {
 	ITM_init();
-	_write(0, "Hello Wolrd\n", 12);
+	_write(0, "Hello World\n", 12);
 	return (0);
 }

@@ -33,7 +33,7 @@ int main(void)
 		data[4] = L3GD20Gyro_read_register(0x2c); //2000 DPS
 		data[5] = L3GD20Gyro_read_register(0x2d); //2000 DPS
 		print_data(&data[0], 6);
-		delay(60000);
+		delay(10000);
 	}
 	return 1;
 }
