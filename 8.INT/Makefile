@@ -41,6 +41,7 @@ FILE_SRC = main.c \
 		   int.c \
 		   leds.c \
 		   timer.c \
+		   itm.c \
 		   user_button.c \
 		   system_stm32f3xx.c \
 

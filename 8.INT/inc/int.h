@@ -4,6 +4,7 @@
 #include "stm32f3xx.h"
 #include "leds.h"
 #include "timer.h"
+#include "itm.h"
 #include "user_button.h"
 
 void setup_user_button_interrupt();

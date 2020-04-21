@@ -16,13 +16,17 @@
 int main(void)
 {
 	init_leds();
+	ITM_init();
 	TIM6_enable();
 	setup_user_button();
 	setup_user_button_interrupt();
 	while(1)
 	{
 		switch_on_leds();
+		delay(6000);
+		switch_off_leds();
+		delay(6000);
 	}
-	return 1;
+	return 0;
 }
 

@@ -13,13 +13,15 @@ void setup_user_button_interrupt()
  //  IP[240];  /*  (R/W)  Interrupt Priority Register (8Bit wide) */
  //  STIR;     /*  ( /W)  Software Trigger Interrupt Register     */
  //
-	SYSCFG->EXTICR[0] &= ~((uint32_t)0xF);
+	SYSCFG->EXTICR[0] &= ~((uint32_t)0x7);
 	EXTI->IMR |= 1;
+	//EXTI->FTSR |= 1;
 	EXTI->RTSR |= 1;
+ 	NVIC_EnableIRQ(EXTI0_IRQn);
 }
 
 void EXTI0_IRQHandler()
 {
-	switch_off_leds();
-	delay(1000);
+	_write(0, "Hello World\n", 12);
+	EXTI->PR = ((uint32_t)(0x1));
 }
