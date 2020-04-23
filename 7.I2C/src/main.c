@@ -37,12 +37,12 @@ int main(void)
 
 	ITM_init();
 	TIM6_enable();
-	// LSM303DLHCAcc_Init();
 	LSM303DLHCMag_Init();
+	LSM303DLHCAcc_Init();
 	while (1)
 	{
-		// LSM303DLHCAcc_GetData(&data[0]);
-		LSM303DLHCMag_GetData(&data[0]);
+		LSM303DLHC_GetData_Acc(&data[0]);
+		//LSM303DLHC_GetData_Mag(&data[0]);
 		_write(0, "DATA\n", 5);
 		int a = 0;
 		while (a < 6)

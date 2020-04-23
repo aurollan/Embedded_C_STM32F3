@@ -34,6 +34,7 @@ typedef enum
   GPIO_Mode_AN   = 0x03  /*!< GPIO Analog In/Out Mode      */
 }GPIOMode_TypeDef;
 
+#define ACC_I2C_ADDRESS                      0x32
 #define LSM303DLHC_CTRL_REG1_A               0x20  /* Control register 1 acceleration */
 #define LSM303DLHC_CTRL_REG2_A               0x21  /* Control register 2 acceleration */
 #define LSM303DLHC_CTRL_REG3_A               0x22  /* Control register 3 acceleration */
@@ -47,6 +48,7 @@ typedef enum
 #define LSM303DLHC_OUT_Z_L_A                 0x2C  /* Output Register Z acceleration */
 #define LSM303DLHC_OUT_Z_H_A                 0x2D  /* Output Register Z acceleration */
 
+#define MAG_I2C_ADDRESS                      0x3C
 #define LSM303DLHC_CRA_REG_M	0x00
 #define LSM303DLHC_CRB_REG_M	0x01
 #define LSM303DLHC_MR_REG_M		0x02
@@ -77,8 +79,6 @@ typedef enum
 #define I2C_CR2_NBYTES_Pos           (16U)
 #define LSM303DLHC_BLE_LSB                 ((uint8_t)0x00) /*!< Little Endian: data LSB @ lower address */
 #define LSM303DLHC_BLE_MSB                 ((uint8_t)0x40) /*!< Big Endian: data MSB @ lower address */
-#define ACC_I2C_ADDRESS                      0x32
-#define MAG_I2C_ADDRESS                      0x3C
 #define LSM303DLHC_FULLSCALE_2G            ((uint8_t)0x00)  /*!< ±2 g */
 #define LSM303DLHC_FULLSCALE_4G            ((uint8_t)0x10)  /*!< ±4 g */
 #define LSM303DLHC_FULLSCALE_8G            ((uint8_t)0x20)  /*!< ±8 g */
@@ -88,19 +88,19 @@ typedef enum
 #define LSM303DLHC_ACC_SENSITIVITY_8G     ((uint8_t)4)  /*!< accelerometer sensitivity with 8 g full scale [mg/LSB] */
 #define LSM303DLHC_ACC_SENSITIVITY_16G    ((uint8_t)12) /*!< accelerometer sensitivity with 12 g full scale [mg/LSB] */
 
-void LSM303DLHCMag_GetData(uint8_t *pDataXYZ);;
-uint8_t LSM303DLHCMag_Init(void);;
+/* Init I2C */
 void  I2C_Init();
 void ENABLE_GPIOB_SCA_SCL(void);
+
+/* Configure peripheral */
+uint8_t LSM303DLHCAcc_Init(void);
+uint8_t LSM303DLHCMag_Init(void);;
+
+/* Send and receive data */
 uint8_t  READ_REGISTER(uint16_t DeviceAddr, uint16_t RegisterAddr);
 void  WRITE_REGISTER(uint16_t DeviceAddr, uint16_t RegisterAddr, uint8_t RegisterConfig);
-void LSM303DLHCAcc_GetData(uint8_t *pDataXYZ);
-void ENABLE_LSM303DLHC_INT(void);
-uint8_t LSM303DLHCAcc_Init(void);
-void  I2C_Init_Mag();
-void ENABLE_GPIOB_SCA_SCL_MAG(void);
-void ENABLE_LSM303DLHC_INT_MAG(void);
-uint8_t LSM303DLHCMag_Init(void);
-void LSM303DLHCMag_GetData(uint8_t *pDataXYZ);
 
+/* Fill array with data */
+void LSM303DLHC_GetData_Mag(uint8_t *pDataXYZ);
+void LSM303DLHC_GetData_Acc(uint8_t *pDataXYZ);
 #endif

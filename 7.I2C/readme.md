@@ -1,112 +1,321 @@
 # Understanding I2C
-# Ressource needed
-https://www.st.com/content/ccc/resource/technical/document/reference_manual/4a/19/6e/18/9d/92/43/32/DM00043574.pdf/files/DM00043574.pdf/jcr:content/translations/en.DM00043574.pdf
-
+Here is a good explaination about how SPI works:
 https://learn.sparkfun.com/tutorials/i2c?_ga=2.195885420.157008010.1585558187-952891226.1585558187
 
-## I2C Initialization flowchart (RTFM 825/1141 Figure 295)
-=> Clear PE bit in I2C_CR1
-=> Configure ANOFF and DNF (Analog noise filter and Digital Noise Filter)
-=> Configure PRESC/SDADEL/SCLDEL/SCLH/SCLL in I2C_TIMIGR
-=> Configure NOSTRETCH in I2C_CR1
-=> Sel PE bit in I2C_CR1
-=> end
+If you read carefully this article you should now be comfortable with the
+principle. You can refer to this article if you are lost.
+Now let's start the programming part!
+
+# How to program it ?
+## What are we looking for ?
+We are looking for informations to configure our I2C communication bus.We need 
+to configure (write) and get data (read) from our LS303HLDC sensor.
+We manage the communication (Master).
+
+## Exploring device documentation
+### User manual
+First of all, let's take a look at the User Manual. \
+No information about I2C but some information abour our sensor
+
+	page 19
+	6.7 ST MEMS E-compass (ST MEMS LSM303DLHC)
+
+We have no choice to use I2C to communicate with the sensor.
+We have to find which I2C "channel" is used by the sensor.
+
+	page 22
+	6.12 Extension connectors
+
+According to the User Manual
+
+GPIOB
+- PB6 => SCL
+- PB7 => SDA
+
+GPIOE
+- PE0 => INT1
+- PE1 => DRDY/INT2
+- PE2 => DRDY
+- PE4 => INT1
+- PE5 => INT2
 
 
-## I2C Data transfert (RTFM 826/1141)
-### Reception
-if RXNE == 0
-	=> Data are copied to I2C_RXDR
-else
-	=> Previous received data has not yet been read
+### DataSheet
+Do we have a I2C bus inteface in our device ?
+According to the DataSheet, yes. We have 2 bus interfaces with various 
+operation mode and configuration possibilities.
+As for UART we need to use our GPIOx as alternate function to manage I2C communication.
 
-### Transmission
-if TXE == 0
-	=> data are copied to shift register
-else
-	=> no data is written yet to I2C_TXDR
+	page 47
+	Table 15. Alternate functions for port B
+
+For I2C and GPIOB corresponding alternate function is AF4.
+We need to configure GPIOB register accordingly. This is a part we have done many time before so let's jump on the new part.
+
+### Reference manual
+### Finding the right informations
+I2C documentation is
+
+	page 816
+	28 Inter-integrated circuit (I2C) interface
+
+There is a lot of documentation, but we will focus on our goals:
+
+	Configure I2C
+	Configure Sensor
+	Retrieve data from Sensor
+
+We focus on master(our device)-slave(the sensor) communication.
+
+Take your time and read
+
+	page 819
+	28.4.3 Mode selection
+
+It's important to understand that the communication is managed by the software.
+ We start communication by stting the start bit and end it by setting the stop 
+ bit.
+
+Let's start with the initialization part.
+
+#### How to initialize I2C
+
+	page 821
+	28.4.4 I2C initialization
+
+Here there are important information.
+Don;4t forget to enable the I2C clock.
+Software reset by clearing the PE bit.
+I2C is enabled zhen PE bit is set.
+
+I will pass on noise filterm just keeping the analog filter as suggestion by 
+default.
+
+And here is my nemesis
+
+	page 822
+	I2C timings
+
+I2C timing configuration, if you have an oscilloscope or if you want to 
+understand this part, I encourage you. But for now I pass, don't worry they 
+give us the right configuration for our device in another part of the 
+documentation.
+
+Anf finally
+
+	page 825
+	Figure 295. I2C initialization flowchart
+
+This is what we are looking for.
+Now let's focus the communication flow.
+
+#### How to transmit/receive data
+We are lucky with this onem it's on the next page
+
+	page 826
+	28.4.6 Data transfer
+
+##### Reception
+We use the I2C_RXDR to receive data.
+We learn two important things:
+
+- We have to wait the RXNE bit to be set (Not Empty=yes => there is something 
+to read)
+- Then we have to read the I2C_RXDR register to get the data.
+
+##### transmission
+We use the I2C_TXDR to transmit data.
+We learn two important things:
+
+- We have to wait the TXE bit to be set (Empty=yes => previous data has been 
+send, we can write data to the register)
+- Then we have to read the I2C_TXDR register to get the data.
+
+##### Hardware transfert
+There is a nice feature with the I2C
+
+	page 827
+	Hardware transfer management
+
+The hardware can count how many bytes we transfert and stop when it's done. 
+We will use this feature later so take your time to read this part.
+
+Now there is still 2 important part to understand.
+- I2C master mode transmitter
+- I2C master mode receiver
 
 
-### I2C Hardware transfert management
-Way to close communication:
-=> NACK, STOP, ReSTART in master mode
-=> ACK control in slave receiver mode
-=> PEC generation/checking when SMBus feature is supported
+#### I2C master mode
+I2C use a specific communication flow we have to follow if we want to get our 
+data.
+Here we focus on the Master-slave communication flow as the master.
+You should find
 
-Number of bytes to be transfered: I2C_CR2 NBYTES[7:0] bit field
-How to end after n bytes are transfered:
-=> AUTOEND == 1 bit field in I2C_CR2
-	automatically send STOP when NBYTES are transfered
-=> NO AUTOEND == 0 bit field in I2C_CR2
-	I2C_ISR_TCR is set when Transfert Complete R? TCR is cleared by software when NBYTES is written to a non-zero value
+	page 837
+	I2C master mode
 
-## I2C master mode
-=> The master clock must be configured by setting SCLH and SCLL in I2C_TIMINGR register
-NEED CALCUL FOR CLOCK
+Here again a bunch of informations about clock, as I said, we use the value 
+given by our Reference Manual later. You could customize it later.
+Scroll down to 
 
-### Master communication initialization
-MUST program I2C_CR2 before start:
-=> adressing mode (7bits or 10 bits)
-=> Slave adress to be send: SADD[9:0]
-=> Transfert direction: read == 1, write == 0
-=> Number of bytes to be transfered: NBYTES[7:0]
+	page 839
+	Master communication initialization (address phase)
 
-=> set START bit in I2C_CR2 all above can't be changed after this
+This is an IMPORTANT part, read it carefully this is what we use for the 
+coding part. And the `Note` too.
+We don't use 10 bits addressing for now so we skip this part.
+Let focus on the 2 last important parts before coding
 
-=> Wait bus is free BUSY == 0
+- Master Transmitter
+- Master Receiver
 
-=> start bit is reset after address has been send
+##### Master Transmitter (write)
+We have to know how to implement transmission function because before using 
+our peripheral we have to configure it.
 
-### Master transmitter
-the TXIS flag is set after each byte transmission
-TXIS generate an event if TXIE is set in I2C_CR1.
-TXIS is cleared when I2C_TXDR register is written
+	page 841
+	Master transmitter
 
-the number of event TXIS correspond to NBYTES value
+Two important things here:
 
-The TXIS flag is not set when a NACK is received.
-• When RELOAD=0 and NBYTES data have been transferred:
-	– In automatic end mode (AUTOEND=1), a STOP is automatically sent.
-	– In software end mode (AUTOEND=0), the TC flag is set and the SCL line is
-	stretched low in order to perform software actions:
+- We stop the communication with setting the STOP bit when the Transfert 
+Complete flag is set
+- Hardware send auto stop after bytes are transfered if AUTOEND bit is set
 
-	A RESTART condition can be requested by setting the START bit in the I2C_CR2
-	register with the proper slave address configuration, and number of bytes to be
-	transferred. Setting the START bit clears the TC flag and the START condition is
-	sent on the bus.
+We find the transfert sequence flowchart
 
-	A STOP condition can be requested by setting the STOP bit in the I2C_CR2
-	register. Setting the STOP bit clears the TC flag and the STOP condition is sent on
-	the bus
-
-If a NACK is received: the TXIS flag is not set, and a STOP condition is automatically
-sent after the NACK reception. the NACKF flag is set in the I2C_ISR register, and an
-interrupt is generated if the NACKIE bit is set.
+	page 842
+	Figure 309. Transfer sequence flowchart for I2C master transmitter for 
+	N≤255 bytes
 
 
-### Master receiver
-In the case of a read transfer, the RXNE flag is set after each byte reception, after the 8th
-SCL pulse. An RXNE event generates an interrupt if the RXIE bit is set in the I2C_CR1
-register. The flag is cleared when I2C_RXDR is read.
-If the total number of data bytes to be received is greater than 255, reload mode must be
-selected by setting the RELOAD bit in the I2C_CR2 register. In this case, when
-NBYTES[7:0] data have been transferred, the TCR flag is set and the SCL line is stretched
-low until NBYTES[7:0] is written to a non-zero value.
-• When RELOAD=0 and NBYTES[7:0] data have been transferred:
-– In automatic end mode (AUTOEND=1), a NACK and a STOP are automatically
-sent after the last received byte.
-– In software end mode (AUTOEND=0), a NACK is automatically sent after the last
-received byte, the TC flag is set and the SCL line is stretched low in order to allow
-software actions:
-A RESTART condition can be requested by setting the START bit in the I2C_CR2
-register with the proper slave address configuration, and number of bytes to be
-transferred. Setting the START bit clears the TC flag and the START condition,
-followed by slave address, are sent on the bus.
-A STOP condition can be requested by setting the STOP bit in the I2C_CR2
-register. Setting the STOP bit clears the TC flag and the STOP condition is sent on
-the bus.
+##### Master Receiver (read)
+This is how we receive data from the peripheral.
+We have the same information but clearer.
+Here we undertsand that when byte is receive the RXNE bit is set until we read 
+it.
+
+We also have a communication flowchart
+
+	page 846
+	Figure 312. Transfer sequence flowchart for I2C master receiver for N≤255 bytes
 
 
+##### Master TIMING
+And finally we find how to configure the timing
+
+	page 849
+	28.4.9 I2C_TIMINGR register configuration examples
+	Table 147. Examples of timings settings for f I2CCLK = 8 MHz
+
+We have gatehered all informations we need to code. From here you should be able to code everything. If notm just read below how to do it.
+
+
+### LSM303DLHC DataSheet
+When we use a sensor, we need to check its documentation to.
+We need to understand how to configure it and how we can communicate.
+Here we know we need to communicate with I2Cm so we have to retrieve some information. Looking for information about I2C we end up
+
+	page 19
+	5.1 I2C serial interface
+
+There is more detailled informations about I2C communication. 
+
+
+## How to code
+### Coding function
+### Finding the right configuration
+#### GPIOB
+GPIOB MODER => Alternate function
+GPIOB TYPER => OUtput Push Pull
+GPIOB SPEED => Medium ( < 10Mhz)
+GPIOB PUPDR => Pull-up (hight by default according to the bus diagram we saw earlier)
+
+#### I2C
+We have to code 3 function here:
+- I2C_init
+- I2C_write
+- I2C_read
+
+##### I2C_init
+We already have gathered all information we need. \
+Just a quick remember
+
+	page 821
+	28.4.4 I2C initialization
+
+	page 825
+	Figure 295. I2C initialization flowchart
+
+	page 849
+	28.4.9 I2C_TIMINGR register configuration examples
+	Table 147. Examples of timings settings for f I2CCLK = 8 MHz
+
+
+Everything is explained, just rigourously follow the steps.
+For the example code i chosed to keep default value for ANOFF, DNF and NOSTRETCH
+
+##### I2C_write
+Same as pevious section, quick remember
+
+
+	page 841
+	Master transmitter
+
+	page 842
+	Figure 309. Transfer sequence flowchart for I2C master transmitter for 
+	N≤255 bytes
+
+Same as previous, just follow rigourously the flowchart.
+
+##### I2C_read
+Same as pevious section, quick remember
+
+
+	page 845
+	Master transmitter
+
+	page 846
+	Figure 312. Transfer sequence flowchart for I2C master receiver for N≤255 bytes
+
+Same as previous, just follow rigourously the flowchart.
+
+##### How to make them work
+This is were it become more difficult. \
+An I2C communication is always composed of 2 frame.
+For now I advise you to use byte per byte (NBYTE = 1) transmission.
+/!\ Important note: configure the CR2 register in a single assignation /!\
+
+###### Write to peripheral memory
+
+I2C_write
+	- You ask to write to the peripheral addresses
+	- You store register address in the TXDR
+
+I2C_write
+	- You ask to write to the peripheral addresses
+	- You store the register configuration in the TDR
+
+###### Read to peripheral memory
+
+I2C_write
+	- You ask to write to the peripheral addresses
+	- You store register address in the TXDR
+
+I2C_read
+	- You ask to read from the peripheral addresses
+	- You read the data given by previous register in the RXDR
+
+###### Way to code it
+There is a lot of way to code itmm the flowchart describe in the Reference Manual is not the only way. In my source code I have used slightly different way.
+If you have an oscilloscope, it's easy to see what is wrong, but if you don't I encourage you to use debug information like in my example.
+
+With this information you should be able to get the WHOAMI value for example.
+
+#### LSM303DLHC
+
+
+#### other ressources
 After the START condition (ST) a slave address is sent, once a
 slave acknowledge (SAK) has been returned, an 8-bit sub-address (SUB) is transmitted; the
 7 LSBs represent the actual register address while the MSB enables address autoincrement. If the MSB of the SUB field is ‘1’, the SUB (register address) is automatically
