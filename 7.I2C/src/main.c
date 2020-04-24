@@ -35,14 +35,21 @@ int main(void)
 {
 	uint8_t data[6] = {0};
 
+	// Debug
 	ITM_init();
 	TIM6_enable();
-	LSM303DLHCMag_Init();
-	LSM303DLHCAcc_Init();
+
+	// I2C project
+	I2C_Init();
+	ENABLE_GPIOB_SCA_SCL();
+	LSM303DLHC_Config();
 	while (1)
 	{
-		LSM303DLHC_GetData_Acc(&data[0]);
+		//LSM303DLHC_GetData_Acc(&data[0]);
 		//LSM303DLHC_GetData_Mag(&data[0]);
+		LSM303DLHC_GetData_MR(&data[0], 
+						      ACC_I2C_ADDRESS, 
+						   	  LSM303DLHC_OUT_X_L_A);
 		_write(0, "DATA\n", 5);
 		int a = 0;
 		while (a < 6)

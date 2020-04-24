@@ -93,8 +93,7 @@ void  I2C_Init();
 void ENABLE_GPIOB_SCA_SCL(void);
 
 /* Configure peripheral */
-uint8_t LSM303DLHCAcc_Init(void);
-uint8_t LSM303DLHCMag_Init(void);;
+void LSM303DLHC_Config(void);
 
 /* Send and receive data */
 uint8_t  READ_REGISTER(uint16_t DeviceAddr, uint16_t RegisterAddr);
@@ -103,4 +102,7 @@ void  WRITE_REGISTER(uint16_t DeviceAddr, uint16_t RegisterAddr, uint8_t Registe
 /* Fill array with data */
 void LSM303DLHC_GetData_Mag(uint8_t *pDataXYZ);
 void LSM303DLHC_GetData_Acc(uint8_t *pDataXYZ);
+void LSM303DLHC_GetData_MR(uint8_t *tab, 
+						   uint8_t device_addr, 
+						   uint8_t register_addr_start);
 #endif

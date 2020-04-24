@@ -38,8 +38,7 @@ DIR_OBJ = obj
 FILE_ASM = startup_stm32f303xc.s
 
 FILE_SRC = main.c \
-		   i2c_acc.c \
-		   i2c_mag.c \
+		   i2c.c \
 		   itm.c \
 		   timer.c \
 		   system_stm32f3xx.c \
