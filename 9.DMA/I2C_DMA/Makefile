@@ -13,7 +13,7 @@ CORTEX_M = 4
 CORE = CM$(CORTEX_M)
 
 # Project name
-NAME = LEDS-$(CORE)
+NAME = DMA_I2C-$(CORE)
 
 # Compiler, Linker & Debugger
 CC = arm-none-eabi-gcc
@@ -38,7 +38,10 @@ DIR_OBJ = obj
 FILE_ASM = startup_stm32f303xc.s
 
 FILE_SRC = main.c \
-		   leds.c \
+		   dma.c \
+		   i2c.c \
+		   itm.c \
+		   timer.c \
 		   system_stm32f3xx.c \
 
 FILE_OBJ = $(FILE_SRC:.c=.o)

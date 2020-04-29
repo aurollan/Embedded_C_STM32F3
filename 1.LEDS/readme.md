@@ -144,7 +144,7 @@ register addresses.
 If you read carefully the GPIO register yu should have find 2 way to switch on 
 LEDS:
 
-- Writing to the Output Data Regiser
+- Writing to the Output Data Register
 - Writing to the 0...15 bit of the Bit Set Reset Register
 
 #### Build switch off function

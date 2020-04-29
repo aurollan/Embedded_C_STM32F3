@@ -2,7 +2,7 @@
 
 void setup_user_button_interrupt()
 {
-	/* necessary ? */
+	/* necessary ?  yes to configure SYSCFG EXTI*/
 	RCC->APB2ENR |= 1;
 
  //  ISER[8];  /*  (R/W)  Interrupt Set Enable Register           */

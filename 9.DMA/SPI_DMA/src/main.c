@@ -11,30 +11,37 @@
 /*                                                        /                   */
 /* ************************************************************************** */
 
-#include "spi.h"
+#include "dma.h"
+
+void			ft_print_hexa(uint8_t data)
+{
+	char	hex_char;
+
+	if (((data & 0b11110000) >> 4) > 9)
+		hex_char = ((data & 0b11110000) >> 4) + 55;
+	else
+		hex_char = ((data & 0b11110000) >> 4) + 48;
+	_write(0, &hex_char, 1);
+	if ((data & 0b1111) > 9)
+		hex_char = (data & 0b1111) + 55;
+	else
+		hex_char = (data & 0b1111) + 48;
+	_write(0, &hex_char, 1);
+}
+
+uint8_t data[6];
 
 int main(void)
 {
-	uint8_t data[6];
 
 	ITM_init();
 	TIM6_enable();
+	setup_dma1_SPI1_rx((uint32_t)&data[0]);
 	L3GD20Gyro_Init();
-
 	L3GD20Gyro_write_register(0x20, 0x0F);
 	L3GD20Gyro_write_register(0x23, 0x30);
 
-	while(1)
-	{
-		data[0] = L3GD20Gyro_read_register(0x28); //2000 DPS
-		data[1] = L3GD20Gyro_read_register(0x29); //2000 DPS
-		data[2] = L3GD20Gyro_read_register(0x2a); //2000 DPS
-		data[3] = L3GD20Gyro_read_register(0x2b); //2000 DPS
-		data[4] = L3GD20Gyro_read_register(0x2c); //2000 DPS
-		data[5] = L3GD20Gyro_read_register(0x2d); //2000 DPS
-		print_data(&data[0], 6);
-		delay(60000);
-	}
+	while(1) {};
 	return 1;
 }
 

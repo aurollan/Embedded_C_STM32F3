@@ -10,10 +10,11 @@ A nice video from Fastbit Embedded Brain Academy: \
 https://www.youtube.com/watch?v=2cdHEbA7FgU&list=PLERTijJOmYrA6iGZaWGyEJXpjzY0lRTC3&index=8
 
 # How to program it ?
+## What we want to do ?
 We need to enable DMA to handle data transfert from our Accelerometer, 
 magnetometer and gyroscopte to a data array.
 
-Gyrom acceleo and magneto send 6 bytes data
+Gyro, accelero and magneto send 6 bytes data
 
 	2 bytes for X
 	2 bytes for Y
@@ -25,8 +26,8 @@ available. And we need to do it continuously.
 
 ## Exploring device documentation
 ### Datasheet
-As usualm we start our journey with the DataSheet. \
-A quick llok leads us to 
+As usual, we start our journey with the DataSheet. \
+A quick look leads us to 
 
 	page 20
 	3.11 Direct memory access (DMA)
@@ -35,7 +36,7 @@ We learn 3 important informations:
 
 - We can use it for peripheral to memory transfert
 - there are 12 channels
-- available for SPI and I2C
+- available for main peripherals including SPI and I2C
 	
 ### User manual
 There is no information about DMA in this part.
@@ -50,8 +51,8 @@ We end up
 
 We learn few interesting informations about DMA capacities of our device
 
-	We have 12 channels split in 2 DMA.
-	DMA1 has 7 channels and DMA2 has 5, otherwise they are identical.
+- We have 12 channels split in 2 DMA.
+- DMA1 has 7 channels and DMA2 has 5, otherwise they are identical.
 
 But we need to find how to configure our DMA
 
@@ -87,7 +88,7 @@ And it's enought for the general informations.
 will be moved from/ to this address to/ from the memory after the peripheral 
 event.
 
-	Add the peripheral address OUT_X_L
+	Add the I2C/SPI Receiver Data Register
 	
 2. Set the memory address in the DMA_CMARx register. The data will be written to or
 read from this memory after the peripheral event.
@@ -108,13 +109,18 @@ mode, peripheral & memory data size, and interrupt after half and/or full transf
 DMA_CCRx register
 
 	Set memory increment mode
-	Set Peripheral increment mode
-	Enable circular mode
-	We transfert data byte per byte (8 bits)
-	Read from peripheral
+	Set Enable circular mode
+	Set enable Transfert Complete Interrupt
+	All other values are default one
 
 6. Activate the channel by setting the ENABLE bit in the DMA_CCRx register.
 
-	Enable the channel
+	Set Enable the DMA channel
 
 ### Coding function
+#### DMA1_Channel7_IRQHandler
+Here we have to implement our interrupt function to see if it works.
+This is mandatory if you use interrupt because you have to clear the interrupt 
+flag to resume your program flow. \
+Then you can do what you need to. \
+Here we just print data.

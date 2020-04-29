@@ -11,30 +11,50 @@
 /*                                                        /                   */
 /* ************************************************************************** */
 
-#include "spi.h"
+#include "dma.h"
+
+void			ft_print_hexa(uint8_t data)
+{
+	char	hex_char;
+
+	if (((data & 0b11110000) >> 4) > 9)
+		hex_char = ((data & 0b11110000) >> 4) + 55;
+	else
+		hex_char = ((data & 0b11110000) >> 4) + 48;
+	_write(0, &hex_char, 1);
+	if ((data & 0b1111) > 9)
+		hex_char = (data & 0b1111) + 55;
+	else
+		hex_char = (data & 0b1111) + 48;
+	_write(0, &hex_char, 1);
+}
+
+// data array is global so we can print it in our interrupt function.
+uint8_t data[6] = {0};
 
 int main(void)
 {
-	uint8_t data[6];
-
+	// Debug
 	ITM_init();
 	TIM6_enable();
-	L3GD20Gyro_Init();
 
-	L3GD20Gyro_write_register(0x20, 0x0F);
-	L3GD20Gyro_write_register(0x23, 0x30);
+	// I2C project
+	I2C_Init();
+	ENABLE_GPIOB_SCA_SCL();
+	LSM303DLHC_Config();
 
-	while(1)
+	_write(0, "DMA LAUNCHED\n", 13);
+	// DMA project
+	I2C_DMARX_init();
+	setup_dma1_i2c1_rx((uint32_t)(&data[0]));
+	// LSM303DLHC_GetData_MR_DMA(ACC_I2C_ADDRESS);
+	_write(0, "WAIT FOR INT\n", 13);
+	while (1)
 	{
-		data[0] = L3GD20Gyro_read_register(0x28); //2000 DPS
-		data[1] = L3GD20Gyro_read_register(0x29); //2000 DPS
-		data[2] = L3GD20Gyro_read_register(0x2a); //2000 DPS
-		data[3] = L3GD20Gyro_read_register(0x2b); //2000 DPS
-		data[4] = L3GD20Gyro_read_register(0x2c); //2000 DPS
-		data[5] = L3GD20Gyro_read_register(0x2d); //2000 DPS
-		print_data(&data[0], 6);
-		delay(60000);
+		LSM303DLHC_GetData_MR_DMA2(ACC_I2C_ADDRESS, 
+						   	  LSM303DLHC_OUT_X_L_A);
+		delay(10000);
 	}
-	return 1;
+	return (0);
 }
 
