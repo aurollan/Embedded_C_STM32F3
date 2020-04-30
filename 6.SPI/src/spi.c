@@ -69,92 +69,25 @@ void	L3GD20Gyro_Init(void)
 	enable_GPIOA_af();
 	GPIOE->BSRR |= (1<<3); //Brining PE3 to 1 to select the CS of the SPI. We want to bring it to 1 so that we can go though the configuration phase.
 
-
- //  SPI1->I2SCFGR &= 0xF7FF;
-
-	// 30.5.7 Configuration of SPI
-    // SpiHandle.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
-    // SpiHandle.Init.CRCPolynomial = 7;
-	// 1. Write proper GPIO registers: Configure GPIO for MOSI, MISO and SCK pins.
-	/* 2. Write to the SPI_CR1 register */
-	// a) Configure the serial clock baud rate using the BR[2:0] bits (Note: 4).
-	//SPI1->CR1 |= ((uint16_t)(0x0 << 3));
-	// SPI1->CR1 |= ((uint16_t)(0x2 << 3));
 	SPI1->CR1 |= ((uint16_t)(0x0 << 3));
- //  SPI1->CR1 |= SPI_CR1_BR_1; //Bode rate equal to 72MHz / 8 . We do this because the gyroscope can't go faster than 10MHz.
-	// b) Configure the CPOL and CPHA bits combination to define one of the four
-	// relationships between the data transfer and the serial clock
 	/* CPOL 0 when idle */
 	/* CPHA 0 when idle */
 	SPI1->CR1 &= ~((uint16_t)(1 << 1));
 	SPI1->CR1 &= ~((uint16_t)(1 << 0));
 
-	// c) Select simplex or half-duplex mode by configuring RXONLY or BIDIMODE and
-	// We don't need to bother with or GPIOE availability wire for now so we
 	// will keep full duplex
-	/* BIDIMODE output disable */
 	SPI1->CR1 &= ~((uint16_t)(1 << 15));
 	/* BIDIOE output disable in BIDIMODE 1 transmit; 0 receive */
 	SPI1->CR1 &= ~((uint16_t)(1 << 14));
 
-	// d) Configure the LSBFIRST bit to define the frame format (Note: 2).
-	// We are in little endian so we want to read our data that way
-//	SPI1->CR1 |= (uint16_t)(1 << 7);
-	
-	// e) Configure the CRCL and CRCEN bits if CRC is needed (while SCK clock signal is
-	// at idle state).
-	// No need for now
-	// f) Configure SSM and SSI (Notes: 2 & 3).
-	// No nedd for now
-
 	SPI1->CR1 |= SPI_CR1_SSM | SPI_CR1_SSI;
- //  SPI1->CR1 |= SPI_CR1_SSI | SPI_CR1_SSM | SPI_CR1_MSTR; //Selecting software driven and master mode.
-	// g) Configure the MSTR bit (in multimaster NSS configuration, avoid
-	// conflict state on NSS if master is configured to prevent MODF error).
-	/* Master mode selected but useless because there is only one master */
 	SPI1->CR1 |= (uint16_t)(1 << 2);
-
-	/* 3. write to SPI_CR2 register: */
-	// a) Configure the DS[3:0] bits to select the data length for the transfer.
 	/* Clearing data size value */
 	SPI1->CR2 &= ~((uint16_t)(0xF << 8));
 	/* Seting data size to 8 bits */
 	SPI1->CR2 |= (uint16_t)(0x7 << 8);
- //  SPI1->CR2 |= SPI_CR2_DS_2 | SPI_CR2_DS_1 | SPI_CR2_DS_0; //Configuration to 8-bit  0111.
-
-
-	// b) Configure SSOE (Notes: 1 & 2 & 3).
-	// We set CPHA to 1
-
-	// c) Set the FRF bit if the TI protocol is required (keep NSSP bit cleared in TI mode).
-	// Make sur we stay in Motorola mode
 	SPI1->CR2 &= ~((uint16_t)(1 << 4));
-
-	// d) Set the NSSP bit if the NSS pulse mode between two data units is required (keep
-	// CHPA and TI bits cleared in NSSP mode).
-	// Not needed for now
-
-	// e) Configure the FRXTH bit. The RXFIFO threshold must be aligned to the read
-	// access size for the SPIx_DR register.
-	// We ask for 8 bits read (1 byte)
 	SPI1->CR2 |= (uint16_t)(1 << 12);
- //  SPI1->CR2 |= SPI_CR2_FRXTH; //RXNE event is generated ifthe FIFO level is greater than or equal to 1/4 (8-bit)
-	
-	// f) Initialize LDMA_TX and LDMA_RX bits if DMA is used in packed mode.
-	// Not needed
-
-	// 4. Write to SPI_CRCPR register: Configure the CRC polynomial if needed.
-	// Not needed
-
-	// 5. Write proper DMA registers: Configure DMA streams dedicated for SPI Tx and Rx in
-	// DMA registers if the DMA streams are used.
-	// Not needed
-
-	// 30.5.8
-	// Procedure for enabling SPI
-	// The master at full-duplex (or in any transmit-only mode) starts to communicate when the
-	// SPI is enabled and TXFIFO is not empty, or with the next write to TXFIFO.
-	/* Enable SPI AFTER configuration */
 	SPI1->CR1 |= (uint16_t)(1 << 6);
 }
 
