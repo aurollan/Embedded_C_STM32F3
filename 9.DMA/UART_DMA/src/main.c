@@ -12,6 +12,9 @@
 /* ************************************************************************** */
 
 #include "uart.h"
+#include "dma_uart.h"
+
+uint8_t data[6] = {0};
 
 int main(void)
 {
@@ -20,6 +23,8 @@ int main(void)
 	GPIOA_config();
 	GPIOA_connect_PIN9_PIN10();
 	USART_output("USART IS WORKING");
-	//echo_back();
+	USART1->CR3 |= (1 << 6);
+	setup_dma1_UART_rx((uint32_t)&data[0]);
+	while (1) {};
 	return (0);
 }

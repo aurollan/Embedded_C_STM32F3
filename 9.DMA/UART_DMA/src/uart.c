@@ -18,8 +18,8 @@ void GPIOA_connect_PIN9_PIN10()
 
 void GPIOA_config()
 {
-	GPIOA->MODER |= GPIO_Mode_AF << 9 * 2; // alternate function mode
-	GPIOA->MODER |= GPIO_Mode_AF << 10 * 2; // alternate function mode
+	GPIOA->MODER |= GPIO_Mode_AF  << 9 * 2; // alternate function mode
+	GPIOA->MODER |= GPIO_Mode_AF  << 10 * 2; // alternate function mode
 	GPIOA->OTYPER |= GPIO_OType_PP << 9;       /*!< GPIO port output type register in push pull mode  0x00 */
 	GPIOA->OTYPER |= GPIO_OType_PP << 10;       /*!< GPIO port output type register in push pull mode  0x00 */
 	GPIOA->OSPEEDR |= GPIO_OSPEEDER_OSPEEDR3 << 9 * 2;      /*!< GPIO port output speed register to maximum speed */

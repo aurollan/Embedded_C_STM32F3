@@ -20,10 +20,15 @@ Now let's start the programming part!
 
 # How to programm it ?
 ## Exploring device peripherals
-### Datasheet
+### Datasheet (1/2)
 Do we have a device with at least an UART bus to use ?\
 First step is taking a look at the datasheet.\
- You should end up on page 27 of your datasheet.\
+ You should end up on 
+ 
+	page 27
+	3.20 Universal synchronous/asynchronous receiver transmitter (USART)
+	3.21 Universal asynchronous receiver transmitter (UART)
+
  According to the datasheet we have:
 
  	- 3 USART (Synchronous/Asynchronous) receiver transmitter
@@ -35,20 +40,21 @@ First step is taking a look at the datasheet.\
 		- UART4
 		- UART5
 
-USART can do both so we use any USART bus.
+USART can do both so we can use any USART bus.
 
 ### User Manual
 We need to know which GPIO is used to manage communication.\
 Let's check the User Manual for Extension connectors.\
 You should find the following information for the UART1 bus:
 
-User Manual page 23-24:
+	page 23/24:
+	6.12 Extension connectors
 
-	- PA8 => USART_CK
-	- PA9 => USART_TX
-	- PA10 => USART_RX
-	- PA11 => USART_CTS
-	- PA12 => USART_RTS
+- PA8 => USART_CK
+- PA9 => USART_TX
+- PA10 => USART_RX
+- PA11 => USART_CTS
+- PA12 => USART_RTS
 
 You should find those pins too:
 
@@ -69,9 +75,21 @@ Of course you can use anyone you want to and. If you have 3 other
 peripheral that need an USART for synchronous communication you should use 
 UART4 or UART5 but here we don't. 
 
-## Configuring device peripherals
+If you read it carefully you should have notice the `Alternate function` 
+column. It indicate us that we need to configure our GPIO accordingly.
+To know which `Alternate function` we need, we have to go back to the Datasheet.
+
+### Datasheet (2/2)
+A quick `ctrl-f` search for `Alternate functions` and we find
+
+	page 45
+	Table 14. Alternate functions for port A
+
+And that's e are looking for. We know which alternate function match with 
+USART1 on our pin.
+Now let's jump on the Reference Manual to configuration informations.
+
 ### Reference Manual
-#### Undertsanding what you have to do
 Before coding anything we need to understand how UART communication is 
 implemented in our device.\
 This is were the Reference Manual is mandatory. \
@@ -103,7 +121,8 @@ If you have fully understand what we need you should be able to implement an
 UART communication protocol by yourself from that point. If you don't it's ok 
 just continue reading.
 
-#### Undertsanding what you need
+## Configuring device peripherals
+#### Finding the right configuration
 According to 
 
 	page 888
@@ -124,7 +143,6 @@ We don't use:
 	- RS485 Hardware control mode
 
 
-#### Finding the right configuration
 If you read carefully the link in the "How UART bus works ?" section, you
  should already know how a frame is composed, but to be clear I will repeat it:
 
@@ -283,7 +301,7 @@ If you read carefully
 	page 888
 	29.5 USART functional description
 
-You should have notice that there is a RDR (Transmit Data Register) and a 
+You should have notice that there is a RDR (Receive Data Register) and a 
 status register.
 
 Then read
@@ -300,8 +318,41 @@ register.
 If you get stuck read again carefully, or check the code in the "src" 
 repository.
 
-## Communication woth your computer
-download minicom.
-using the FTDI connector
-wiring your micricontroller
-enjoy
+## Communication with your computer
+As I said in the first part, UART communication is not used anymore by 
+computer. Now we have to use a UART-USB converter to receive and send data with
+ UART.
+This is why we need the FTDI.
+
+### Wiring
+To use the FTDI you need to wire your device to it:
+ - connect ground from FTDI to any ground pin on your device
+ - connect PA10 to FTDI RXI
+ - connect PA9 to FTDI TXO
+
+Then connect your FTDI to your computer using USB cable.
+
+### Computer software for Linux
+We use minicom to communicate with the device throught FTDI module.
+
+	sudo apt-get install minicom
+
+We need to configure our minicom sofware according to our UART device 
+configuration.
+Create a minicom.dlf file on root.
+
+	$ cat ~/.minirc.dfl
+	pu baudrate 9600
+	pu bits 8
+	pu parity N
+	pu stopbits 1
+	pu rtscts No
+	pu xonxoff No
+
+Then run
+
+	$ minicom -D /dev/ttyUSB0 -b 9600
+
+You can now send and receive information with minicom and UART.
+
+Enjoy!
