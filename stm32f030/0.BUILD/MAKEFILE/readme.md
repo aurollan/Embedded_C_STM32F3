@@ -2,54 +2,67 @@
 
 Building an embedded executable require following files from CMSIS ARM library:
 - header files:
-	stm32f30x.h			=>	Contains all defined MACRO we will use
-	stm32f30x_it.h		=>	Contains interrupt funcion declaration needed by the interruption table
-	system_stm32f30x.h	=>	Contains the system init function declaration
-	core_cm4.h			=>	Used by stm32f30x.h
-	core_cmFunc.h		=>	Used by core_cm4.h
-	core_cmInstr.h		=>	Used by core_cm4.h
-	core_cmSimd.h		=>	Used by core_cm4.h
+	- stm32f30x.h			=>	Contains all defined MACRO we will use
+	- stm32f30x_it.h		=>	Contains interrupt funcion declaration needed 
+	by the interruption table
+	- system_stm32f30x.h	=>	Contains the system init function declaration
+	- core_cm4.h			=>	Used by stm32f30x.h
+	- core_cmFunc.h		=>	Used by core_cm4.h
+	- core_cmInstr.h		=>	Used by core_cm4.h
+	- core_cmSimd.h		=>	Used by core_cm4.h
 	
 - sources files:
-	system_stm32f30x.c	=>	Contains the syste; init function definition
+	- system_stm32f30x.c	=>	Contains the syste; init function definition
 
 - a linker script file (used during linking phase with ld):
-	STM32F303VC_FLASH.ld
+	- STM32F103XB_FLASH.ld
 
-- a startup fonction file (not necessarily a file but usually)
-	startup_stm32f30x.s	
+- a startup fonction file (not necessarily a file but usually):
+	- startup_stm32f103xb.s
 
 There is a readme file for each part.
 
 # PROJECT CONFIG
-STM32F3 use an ARM cortex M4 (not M3 as the name suggest).
+STM32F1 use an ARM cortex M3 (not M1 as the name suggest).
 
-/!\ Warning
+/!\ Warning /!\\ \
 I use arm-gcc and arm-ld separately but using only GCC may avoid you some
 trouble if you are not comfortable with compilation process.
 If you need more information about the toolchain, please refer to
-readme_toolchain.md. /!\
+readme_toolchain.md. \
+/!\ Warning /!\\ \
 
 # GCC COMPILATION FLAGS
-
 ## ARM ARCH
 Link to find all option below:
-https://gcc.gnu.org/onlinedocs/gcc/ARM-Options.html
+
+	https://gcc.gnu.org/onlinedocs/gcc/ARM-Options.html
 
 ##### Why do i have to set all this options ?
-It's called cross-compilation.
-Because we will use arm-gcc toolchain to compile an executable for a specific target. 
+Because we will use arm-gcc toolchain to compile an executable for a specific 
+target. \
+It's called cross-compilation. \
 We have to tell arm-gcc information so it can made an appropriate executable.
 
 ### -mthumb
-Mixing ARM and THUMB Instruction Sets.
+##### What is Thumb ?
+Thumb is simply 16-bits instruction sets used by your Micro_processor to
+execute your program.
+
+##### Why do we use the thumb set instruction if there is an ARM ?
+A good answer:
+
+	https://www.embedded.com/introduction-to-arm-thumb/
+
+Mixing ARM and THUMB Instruction Sets. \
 In most low-end ARM microcontrollers the 16-bit THUMB instruction set offers
 both better code density and actually better performance when executed from
-ROM, even though the 16-bit THUMB instruction set is less powerful than the
-32-bit ARM instruction set. This allows gcc to use any combination of ARM
-and THUMB instruction sets for optimal performance.
+ROM (FLASH), even though the 16-bit THUMB instruction set is less powerful 
+than the 32-bit ARM instruction set. This allows gcc to use any combination 
+of ARM and THUMB instruction sets for optimal performance.
 
--mthumb / -marm
+#### How ?
+-mthumb / -marm \
 Select between generating code that executes in ARM and Thumb states. The
 default for most configurations is to generate code that executes in ARM state,
 but the default can be changed by configuring GCC with the --with-mode=state
@@ -58,12 +71,6 @@ You can also override the ARM and Thumb mode for each function by using the
 target("thumb") and target("arm") function attributes (see ARM Function
 Attributes) or pragmas (see Function Specific Option Pragmas).
 
-##### What is Thumb ?
-Thumb is simply 16-bits instruction sets used by your Micro_processor to
-execute your program.
-##### Why do we use the thumb set instruction if there is an ARM ?
-A good answer:
-https://www.embedded.com/introduction-to-arm-thumb/
 
 ### -mcpu=cortex-m
 This specifies the name of the target ARM processor. GCC uses this name to
@@ -72,33 +79,43 @@ the ARM processor type for which to tune for performance (as if specified by
 -mtune). Where this option is used in conjunction with -march or -mtune, those
 options take precedence over the appropriate part of this option.
 
-##### How do i know Cortex reference ?
-On every documentation concerning your microcontroller like:
-https://www.st.com/content/ccc/resource/technical/document/user_manual/8a/56/97/63/8d/56/41/73/DM00063382.pdf/files/DM00063382.pdf/jcr:content/translations/en.DM00063382.pdf
+##### How do I know Cortex reference ?
+On every documentation concerning your microcontroller like your Datasheet 
+(see DOC repository)
+
+	Datasheet
+	page 1
 
 
 ### -mlittle-endian
 Generate code for a processor running in little-endian mode. This is the
 default for all standard configurations.
 
-##### How do i know endianness ?
-On your reference manual.
-Page 51 - Memory organization - Introduction
-https://www.st.com/content/ccc/resource/technical/document/reference_manual/4a/19/6e/18/9d/92/43/32/DM00043574.pdf/files/DM00043574.pdf/jcr:content/translations/en.DM00043574.pdf
+##### How do I know endianness ?
+On your reference manual (see DOC repository).
+
+	Page 51
+	Memory organization
+	Introduction
 
 ##### What "little endian" mean ?
-Simply a memory organisation policy when storing value. For more information:
-https://en.wikipedia.org/wiki/Endianness
+Simply a memory organisation policy when storing value. \
+For more information:
+
+	https://en.wikipedia.org/wiki/Endianness
 
 ##### Why use "little endian" vs "big endian" ?
 According to ARM you can use both.
-https://developer.arm.com/docs/dui0553/a/the-cortex-m4-processor/memory-model/memory-endianness
-And here is why we tend to use little-endian.
-https://www.quora.com/Is-ARM-big-endian-or-little-endian
 
+	https://developer.arm.com/docs/dui0553/a/the-cortex-m4-processor/memory-model/memory-endianness
+
+And here is why we tend to use little-endian.
+
+	https://www.quora.com/Is-ARM-big-endian-or-little-endian
 
 ### -mthumb-interwork
-https://github.com/gcc-mirror/gcc/blob/master/gcc/config/arm/README-interworking
+	https://github.com/gcc-mirror/gcc/blob/master/gcc/config/arm/README-interworking
+
 Generate code that supports calling between the ARM and Thumb instruction sets.
 Without this option, on pre-v5 architectures, the two instruction sets cannot
 be reliably used inside one program. The default is -mno-thumb-interwork, since
@@ -107,16 +124,20 @@ configurations this option is meaningless.
 
 ##### Why use mthumb-interwork ?
 From gcc 's github page:
-https://github.com/gcc-mirror/gcc/blob/master/gcc/config/arm/README-interworking
+
+	https://github.com/gcc-mirror/gcc/blob/master/gcc/config/arm/README-interworking
+
 Maybe useless for us because we don't use extern code....
 
 ## DEBUG
-https://gcc.gnu.org/onlinedocs/gcc/Debugging-Options.html
+Source:
+
+	https://gcc.gnu.org/onlinedocs/gcc/Debugging-Options.html
 
 ##### Why use debugging option ?
-With this flags set, debugging symbol will be added to executable.
-We will use them for step by step debugging with GDB when we encounter bugs or unexpected
-behavior.
+With this flags set, debugging symbol will be added to executable. \
+We will use them for step by step debugging with GDB when we encounter bugs 
+or unexpected behavior.
 
 ### -g or -g1/2/3
 Debug option and level of debug symbol
@@ -128,13 +149,15 @@ better in GDB but probably makes other debuggers crash or refuse to read the
 program. If you want to control for certain whether to generate the extra
 information, use -gstabs+, -gstabs, -gxcoff+, -gxcoff, or -gvms (see below).
 
-### ggdb
+### -ggdb
 Produce debugging information for use by GDB. This means to use the most
 expressive format available (DWARF, stabs, or the native format if neither of
 those are supported), including GDB extensions if at all possible.
 
 ## FLOATING POINT
-https://gcc.gnu.org/onlinedocs/gcc/ARM-Options.html
+Source:
+
+	https://gcc.gnu.org/onlinedocs/gcc/ARM-Options.html
 
 ##### Why use floating point flags ?
 We have to tell gcc how we will handle floating point operation.
@@ -143,8 +166,8 @@ so we have to tell gcc how our microcontroller will handle this.
 Maybe useless for know because we don't do floating point operation yet.
 
 ### -mfloat-abi=name
-Specifies which floating-point ABI to use. Permissible values are: ‘soft’,
-‘softfp’ and ‘hard’.
+Specifies which floating-point ABI to use. \
+Permissible values are: ‘soft’, ‘softfp’ and ‘hard’.
 
 Specifying ‘soft’ causes GCC to generate output containing library calls for
 floating-point operations. ‘softfp’ allows the generation of code using
@@ -160,13 +183,10 @@ entire program with the same ABI, and link with a compatible set of libraries.
 'hard' or 'softfp' if you have an FPU, 'soft' if you don't.
 'hard' use FPU-specific calling convention so you need to know if your device
 has an FPU unit. You can find this information on the company website or in the
-device manual:
+device reference manual or simply in the device Datasheet (See DOC repository).
 
-https://www.st.com/en/microcontrollers-microprocessors/stm32f3-series.html
-
-https://www.st.com/content/ccc/resource/technical/document/reference_manual/4a/19/6e/18/9d/92/43/32/DM00043574.pdf/files/DM00043574.pdf/jcr:content/translations/en.DM00043574.pdf
-
-Or simply in the device Datasheet (See Documentation).
+	Datasheet
+	page 1
 
 ### -mfpu=name (-mfpu=fpv4-sp-d16)
 This specifies what floating-point hardware (or hardware emulation) is
@@ -195,32 +215,40 @@ Specific Option Pragmas).
 
 ##### How do you know the mfpu value is 'fpv4-sp-d16' ?
 Here is a post where it's well explained.
-https://stackoverflow.com/questions/19464556/how-to-link-gcc-options-to-the-arm-mcu-fpu-datasheet
+
+	https://stackoverflow.com/questions/19464556/how-to-link-gcc-options-to-the-arm-mcu-fpu-datasheet
 
 ##### Floating-point is a mess ?
 Check this link:
-https://embeddedartistry.com/blog/2017/10/11/demystifying-arm-floating-point-compiler-options/
+
+	https://embeddedartistry.com/blog/2017/10/11/demystifying-arm-floating-point-compiler-options/
 
 Or this one from ST:
-https://www.st.com/content/ccc/resource/technical/document/user_manual/group1/cd/29/43/c5/36/c0/40/bb/Newlib_nano_readme/files/newlib-nano_readme.pdf/jcr:content/translations/en.newlib-nano_readme.pdf
+
+	https://www.st.com/content/ccc/resource/technical/document/user_manual/group1/cd/29/43/c5/36/c0/40/bb/Newlib_nano_readme/files/newlib-nano_readme.pdf/jcr:content/translations/en.newlib-nano_readme.pdf
 
 
 ## MACRO
-https://gcc.gnu.org/onlinedocs/gcc/Preprocessor-Options.html
+Source:
+
+	https://gcc.gnu.org/onlinedocs/gcc/Preprocessor-Options.html
+
 ### DEF PREPROCESSOR MACRO
 DEF: Custom macros (-DMACRO equals to #define MACRO)
 -D name 
 Predefine name as a macro, with definition 1.
 
-##### Why define -STM32F303xC ?
-In nost library header file use macro definition according to your hardware.
-This define tells which one you use.
-Another way to do this is uncomment define in header files.
+##### Why define -DSTM32F103xB ?
+In the CMSIS library `#include` are define according to your device.
+We define which device we are using so the CMSIS header are include 
+accordingly.
+Another way to do this is define directly in header files.
 
 ##### Why define -USE_FULL_ASSERT ?
 If you use STM32 library (Std or HAL), each function will check that passed
 argument are actual register that the function use.
-Since we use only CMSIS  library we don't need this yet. But still important to know because you will work with other libraries.
+Since we use only CMSIS  library we don't need this yet. But still important 
+to know because you will work with other libraries.
 
 ### UNDEF PREPROCESSOR MACRO
 -U name
@@ -228,11 +256,15 @@ Cancel any previous definition of name, either built in or provided with
 a -D option.
 Unused here.
 
-
 ## OPTIMIZATION
-https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html
-/!\ WARNING: enabling optimization can lead to unexpected behavior for
-beginner. /!\
+Source:
+
+	https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html
+
+/!\ WARNING /!\\ \
+Enabling optimization can lead to unexpected behavior for
+beginner. \
+/!\ WARNING /!\\
 
 ### -Os
 Optimize for size. -Os enables all -O2 optimizations except those that often
@@ -255,10 +287,11 @@ You chose what you want to optimize:
 - O 1/2/3: Optimize speed
 
 ### -ffunction-sections -fdata-sections
-/!\
-WARNING: use this flag with this LD FLAG:
+/!\ WARNING /!\\ \
+Use this flag with this LD FLAG:
 - --gc-sections 
-/!\
+
+/!\ WARNING /!\\
 
 Place each function or data item into its own section in the output file if the
 target supports arbitrary sections. The name of the function or the name of the
@@ -297,11 +330,14 @@ You can see which functions are deleted by adding this flag to ld:
  -print-gc-sections
 
 Here is a source with a great explenation:
-https://lwn.net/Articles/741494/
 
+	https://lwn.net/Articles/741494/
 
 ## WARNING FLAGS
-https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html
+Source:
+
+	https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html
+
 ##### Why use warning flags ?
 Writing code is error prone, fortunatly some of the error checking is done by
 compiler.
@@ -324,10 +360,10 @@ name is more descriptive.)
 ##### Why use a nano library ?
 Nano library offers function suited for embedded developement.
 
-https://www.st.com/content/ccc/resource/technical/document/user_manual/group1/cd/29/43/c5/36/c0/40/bb/Newlib_nano_readme/files/newlib-nano_readme.pdf/jcr:content/translations/en.newlib-nano_readme.pdf
+	https://www.st.com/content/ccc/resource/technical/document/user_manual/group1/cd/29/43/c5/36/c0/40/bb/Newlib_nano_readme/files/newlib-nano_readme.pdf/jcr:content/translations/en.newlib-nano_readme.pdf
 
-If you need to use nano library change the "--specs="flag in the makefile to
-"--specs=nano.specs".
+Nano lib use lightweight function, see project `5.LIB` to understand how to use 
+libnano in your project.
 
 # LINKER
 
@@ -337,12 +373,14 @@ having to use a linker script makes me understand its importance and also use
 it directly.
 
 ##### What is a gcc tool chain ?
-https://stackoverflow.com/questions/50307733/what-is-a-gcc-toolchain
 
-## SCRIPTS
+	https://stackoverflow.com/questions/50307733/what-is-a-gcc-toolchain
 
-https://gcc.gnu.org/onlinedocs/gcc/Link-Options.html
-https://linux.die.net/man/1/ld
+## LD SCRIPT
+Source:
+
+	https://gcc.gnu.org/onlinedocs/gcc/Link-Options.html
+	https://linux.die.net/man/1/ld
 
 ### --gc-sections | --no-gc-sections
 Enable garbage collection of unused input sections. It is ignored on targets
@@ -364,18 +402,21 @@ this case the root of symbols kept must be explicitely specified either by an
 
 
 ##### Why use this optimization ?
-/!\
-WARNING: use this flag zith at least one of them:
--ffunction-sections
--fdata-sections
-/!\
+/!\ WARNING /!\\ \
+Use this flag with at least one of them:
+- ffunction-sections
+- fdata-sections
+
+/!\ WARNING /!\\ \
+
 To reduce executable size if possible.
 Most of the time you will use .c files given in libraries. Those file contains
 a lot of function and we use only a few of them. In this case we can save space
 with those flags to cut those functions from our executable.
 These optimization are usually used for embedded development. But in our case
 we will build our own function and use all of them so those optimization will
-probably increase our executable size. But still you will see it everywhere so it's important to know.
+probably increase our executable size. But still you will see it everywhere 
+so it's important to know.
 
 You can see which functions are deleted by adding this flag to ld:
  -print-gc-sections
@@ -385,7 +426,7 @@ https://lwn.net/Articles/741494/
 
 ##### Why use a linker script ?
 To tell the ld executable the memory layout of the micro controller.
-More on this on the readme_ld_script.md.
+More on this on the `readme.md` in `stm32f103-bluepill/0.BUILD/LINKER_SCRIPT/`.
 
 ### -T script
 Use script as the linker script. This option is supported by most systems using
@@ -440,14 +481,19 @@ reference to a previous value of the same symbol may not have correct result
 displayed in the link map. This is because the linker discards intermediate
 results and only retains the final value of an expression. Under such
 circumstances the linker will display the final value enclosed by square
-brackets. Thus for example a linker script containing:
-foo = 1
-foo = foo * 4
-foo = foo + 8
+brackets.
+Thus for example a linker script containing: \
+
+	foo = 1
+	foo = foo * 4
+	foo = foo + 8
+
 will produce the following output in the link map if the -M option is used:
- 0x00000001                 foo = 0x1
-[0x0000000c]                foo = (foo * 0x4)
-[0x0000000c]                foo = (foo + 0x8)
+
+	 0x00000001                 foo = 0x1
+	[0x0000000c]                foo = (foo * 0x4)
+	[0x0000000c]                foo = (foo + 0x8)
+
 See Expressions for more information about expressions in linker scripts.
 
 
@@ -461,5 +507,3 @@ argument to the option. For example, -Wl,-Map,output.map passes -Map output.map
 to the linker. When using the GNU linker, you can also get the same effect
 with -Wl,-Map=output.map.
 
-# Library nano (--specs=nano.specs --specs=rdimon.specs --specs=nosys.specs)
-SP_FLAGS = --specs=nosys.specs

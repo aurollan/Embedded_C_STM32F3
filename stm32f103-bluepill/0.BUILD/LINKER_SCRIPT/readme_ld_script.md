@@ -7,7 +7,8 @@ I will go from general to detailed informations.
 
 ### ld ? Never heard about.
 ld is the name of the linker executable. \
-You find it on every GNU/Linux distribution usually we use it without knowing. \
+You find it on every GNU/Linux distribution usually we use it 
+without knowing. \
 It's a tool used (called) by the GCC toolchain to build your executable. \
 But why we use it ?
 
@@ -54,11 +55,11 @@ Currently the linker script in each project come from:
 
 STM32Cube3D for F3 available in manufacturer website: \
 	
-	https://www.st.com/content/st_com/en/products/embedded-software/mcu-mpu-embedded-software/stm32-embedded-software/stm32cube-mcu-mpu-packages/stm32cubef3.html
+	https://www.st.com/content/st_com/en/products/embedded-software/mcu-mpu-embedded-software/stm32-embedded-software/stm32cube-mcu-mpu-packages/stm32cubef1.html
 
 Folder path:
 
-	STM32Cube_FW_F3_V1.11.0/Projects/
+	STM32Cube_FW_F1_V1.11.0/Projects/
 
 It comes from manufacturer website so we can rely on them. \
 Note that most of the STM32Fx ld_script are the same expect for the MEMORY 
@@ -69,7 +70,7 @@ enough trouble with your code later ;). \
 ## This looks really complicated. Do I need to know this ?
 It's seems complicated and you don't have to understand it right know if you
 need/want to dive into code quickly. \
-But i think it's important to understand at least some generality because it 
+But I think it's important to understand at least some generality because it 
 highlights some of the most important idea/notion in software. This ld script 
 is heavily commented so you can undestand what it does with a carefull reading.
 
@@ -94,15 +95,16 @@ code is injected in your program. \
 This is not reserved to embedded development.
 
 ### Memory
-As said in `STM32F303VC_FLASH_STM32CUBE.ld`
+As said in `STM32F103XB_FLASH.ld`
 
 	line 40 "Specify the memory areas".
 
 When you buy your device you always see some information like:
 
 	Datasheet
-	page 1
-	STM32F303VCT6 microcontroller featuring 256‑Kbyte Flash memory and 48‑Kbyte RAM
+	page 10
+	2.1 Device overview
+	64‑Kbyte Flash memory and 20‑Kbyte RAM
 
 This is were this memory is available from ORIGIN to ORIGIN + LENGTH.
 
@@ -126,7 +128,7 @@ about CCMRAM in "I want to go further section".
 Just remember FLASH and RAM, we will use only them.
 
 
-##### How do i know my device memory layout ?
+##### How do I know my device memory layout ?
 In the device reference manual (see DOC repository):
 
 	Reference Manual
@@ -161,10 +163,10 @@ The linker script will tell the linker executable how to organize each section
 this is why we find all this information in the script.
 
 To put it simply:
-- We put all .text insection from our `*.o` files in one section
-- We put all .rotdata insection from our `*.o` files in one section
-- We put all .data insection from our `*.o` files in one section
-- We put all .bss insection from our `*.o` files in one section
+- We put all .text insection from our `*.o` files in one `text` section
+- We put all .rotdata insection from our `*.o` files in one `rotdata` section
+- We put all .data insection from our `*.o` files in one `data` section
+- We put all .bss insection from our `*.o` files in one `bss` section
 
 Then we mesure their size putting a `start` symbol before and an `end` symbol 
 after. \
