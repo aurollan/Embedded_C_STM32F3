@@ -8,8 +8,8 @@
 #								PROJECT	CONFIG 								   #
 ################################################################################
 
-# Selecting Core (STM32F303VC DISCOVERY IS ARM M4)
-CORTEX_M = 4
+# Selecting Core (STM32F0 DISCOVERY IS ARM M0)
+CORTEX_M = 0
 CORE = CM$(CORTEX_M)
 
 # Project name
@@ -19,6 +19,11 @@ NAME = LEDS-$(CORE)
 CC = arm-none-eabi-gcc
 LD = arm-none-eabi-ld
 DB = arm-none-eabi-gdb
+
+# Launch debug from Linux (Ubuntu/Debian)
+LDB = gdb-multiarch
+# Launch debug from MacOS
+MDB = arm-none-eabi-gdb
 
 # STM32 library path
 DIR_INC = inc
@@ -30,11 +35,11 @@ DIR_OBJ = obj
 #							PROJECT FILES									   #
 ################################################################################
 
-FILE_ASM = startup_stm32f30x.s
+FILE_ASM = startup_stm32f030x8.s
 
 FILE_SRC = main.c \
 		   leds.c \
-		   system_stm32f30x.c \
+		   system_stm32f0xx.c \
 
 FILE_OBJ = $(FILE_SRC:.c=.o)
 FILE_OBJ += $(FILE_ASM:.s=.o)
@@ -53,14 +58,14 @@ ARCH_FLAGS =-mthumb -mcpu=cortex-m$(CORTEX_M) -mlittle-endian -mthumb-interwork
 # Debug flags
 DBG_FLAGS = -g3
 
-# Floating point flags (ARM)
-FP_FLAGS =  -mfloat-abi=hard -mfpu=fpv4-sp-d16
+# Floating point flags (ARM) no hardware floating point support
+FP_FLAGS =  -mfloat-abi=soft 
 
 # Include path flags
 INC_FLAGS = $(addprefix -I , $(DIR_INC))
 
 # DEFINE/Macro flags
-DM_FLAGS =  -DSTM32F303xC -DUSE_FULL_ASSERT
+DM_FLAGS =  -DSTM32F030x8 -DUSE_FULL_ASSERT
 
 # Compiling Optimization flags (add -0s for best optimization flag)
 CO_FLAGS = -ffunction-sections -fdata-sections
@@ -83,10 +88,10 @@ LO_FLAGS = --gc-sections
 MAP_FLAGS = -Map=$(NAME).map
 
 # Linking Script flags
-LS_FLAGS = -T ld_scripts/STM32F303VC_FLASH_Std.ld
+LS_FLAGS = -T ld_scripts/STM32F030R8Tx_FLASH.ld
 
 # All flags for LD linking step
-LD_FLAGS = $(SC_FLAGS) $(LO_FLAGS) $(MF_FLAGS)
+LD_FLAGS = $(LS_FLAGS) $(LO_FLAGS) $(MAP_FLAGS)
 
 ################################################################################
 #								MAKE RULES									   #

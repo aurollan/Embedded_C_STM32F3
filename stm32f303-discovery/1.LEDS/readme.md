@@ -3,14 +3,6 @@ Usually the first thing we learn in embedded development is blinking a led. \
 It's easy, we can actually see the result and it's pretty cool.
 Here we are going to light up one or more leds.
 
-# How LEDS works ?
-Here is a good explaination about how LEDS works:\
-https://learn.sparkfun.com/tutorials/light-emitting-diodes-leds/all
-
-If you read carefully this article you should now be comfortable with the
-principle. \
-You can refer to this article if you are lost. \
-Now let's start the programming part!
 
 # How to program it ?
 We need to find information on the device documentation.
