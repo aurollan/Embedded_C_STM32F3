@@ -15,8 +15,10 @@
 
 int main(void)
 {
+	// Initializing GPIOC PC13
 	init_leds();
-	switch_on_leds();
+	// Turning LED on
+	switch_low_leds();
 	while (1) {};
 	return (0);
 }

@@ -225,4 +225,30 @@ But for know we will focus on our goal. I give you a little shortcup
 
 Here we can find what we are looking for ENable our gpIOPC.
 One last line of code before configuring your GPIOC and we are done. The LED 
-should light up.
+should light up... maybe.
+
+### What's wrong with this LED ??!
+Yeah, I know you code it right but the LED doesn't light up. \
+If you have done it right you certainly see your led blink briefly. \
+Your code is not wrong, this is how you handle LED but not this one. \
+I know this is weird but PC13 has a particularity and of course to keep it 
+simple they made it easy to spot and understand (just kidding).
+Read the following note
+
+	Datasheet
+	page 33
+	Table 11. STM32F030x4/6/8/C pin definitions (continued)
+	Note 1
+
+PC13, PC14 and PC15 must not be used to drive LED so why did they used this 
+pin to manage a LED ?
+I don't know, but I know they have done it the right way and 
+their implementation has a weird consequence on our LED:
+
+	The LED turn on when current is LOW.
+
+Note that we must stay under 2 Mhz too, so we have to set our OSPEEDR 
+register accordingly.
+That's all now you have everything you need to manage this LED.
+
+

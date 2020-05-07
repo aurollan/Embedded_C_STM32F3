@@ -3,23 +3,33 @@
 /* Call before using LEDS */
 void	init_leds(void)
 {
+	// Set IOPCEN to enable GPIOC
 	RCC->AHBENR |= (1 << 19);
-	GPIOC->MODER |= (1 << 26);
+
+	// Output push pull for PC13
 	GPIOC->OTYPER &= ~(1 << 13);
-	GPIOC->OSPEEDR |= (1 << 26);
+	// low speed for PC13 
+	GPIOC->OSPEEDR &= ~(3 << 26);
+	// No PUPDR for PC13
 	GPIOC->PUPDR &= ~(3 << 26);
+	// General purpose output mode for PC13
+	GPIOC->MODER |= (1 << 26);
 }
 
-/* Switch on all leds using ODR or BSRR register chose one because yusing both 
- * is useless */
-void switch_on_leds(void)
+void switch_high_leds(void)
 {
-	// GPIOC->ODR = (1 << 13);
+	// Switch on PC13 with ODR register
+	GPIOC->ODR = (1 << 13);
+	// Switch on PC13 with BSRR register
 	GPIOC->BSRR = (1 << 13);
 }
 
-/* Switch off all leds using BRR register */
-void switch_off_leds(void)
+void switch_low_leds(void)
 {
+	// Switch off PC13 with ODR register
 	GPIOC->ODR &= ~(1 << 13);
+	// Switch off PC13 with BSRR register
+	GPIOC->BSRR = (1 << 26);
+	// Switch off PC13 with BRR register
+	GPIOC->BRR = (1 << 13);
 }

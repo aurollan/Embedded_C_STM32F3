@@ -8,7 +8,7 @@
 #								PROJECT	CONFIG 								   #
 ################################################################################
 
-# Selecting Core (STM32F1 DISCOVERY IS ARM M3)
+# Selecting Core (STM32F0 DISCOVERY IS ARM M0)
 CORTEX_M = 3
 CORE = CM$(CORTEX_M)
 
@@ -65,7 +65,6 @@ FP_FLAGS =  -mfloat-abi=soft
 INC_FLAGS = $(addprefix -I , $(DIR_INC))
 
 # DEFINE/Macro flags
-# Note: According to inc/stm32f1xx.h F103xB header file is for F103C8.
 DM_FLAGS =  -DSTM32F103xB -DUSE_FULL_ASSERT
 
 # Compiling Optimization flags (add -0s for best optimization flag)

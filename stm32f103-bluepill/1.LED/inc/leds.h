@@ -2,7 +2,7 @@
 #define __LEDS_H__
 
 void	init_leds(void);
-void	switch_on_leds(void);
-void	switch_off_leds(void);
+void	switch_high_leds(void);
+void	switch_low_leds(void);
 
 #endif

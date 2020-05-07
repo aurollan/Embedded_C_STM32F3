@@ -12,15 +12,13 @@
 /* ************************************************************************** */
 
 #include "leds.h"
-#include "stm32f1xx.h"
 
 int main(void)
 {
+	// Initializing GPIOC PC13
 	init_leds();
-	switch_on_leds();
-	/* Uncomment function to test but keep in mind that you won't see
-	 * any blinking because it's too fast for our eyes */
-	/* switch_off_leds(); */
+	// Turning LED on
+	switch_low_leds();
 	while (1) {};
 	return (0);
 }
