@@ -270,16 +270,16 @@ void LSM303DLHC_Config(void)
 	/*************************************************************************/
 	/*							ACCELEROMETER								 */
 	/*************************************************************************/
-	// ACCELEROMETER ODR 400hz
+	// ACCELEROMETER ODR 100hz
 	// Enable  x/y/x axes 
-	WRITE_REGISTER(ACC_I2C_ADDRESS, LSM303DLHC_CTRL_REG1_A, 0x77);
+	WRITE_REGISTER(ACC_I2C_ADDRESS, LSM303DLHC_CTRL_REG1_A, 0x57);
 
 	// Continuous update
 	// data LSB at lower address
 	// Full Scale selection +-2g
-	// hight resolution disabled
+	// hight resolution ENABLE (bit 3)
 	// 4-wire interface
-	WRITE_REGISTER(ACC_I2C_ADDRESS, LSM303DLHC_CTRL_REG4_A, 0x00);
+	WRITE_REGISTER(ACC_I2C_ADDRESS, LSM303DLHC_CTRL_REG4_A, 0x00 | (1 << 3));
 	
 	/*************************************************************************/
 	/*							MAGNETOMETER								 */

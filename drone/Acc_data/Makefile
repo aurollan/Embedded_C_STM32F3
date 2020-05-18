@@ -39,6 +39,8 @@ FILE_ASM = startup_stm32f303xc.s
 
 FILE_SRC = main.c \
 		   i2c.c \
+		   syscall.c \
+		   read_data_acc.c \
 		   itm.c \
 		   timer.c \
 		   system_stm32f3xx.c \
@@ -92,8 +94,14 @@ MAP_FLAGS = -Map=$(NAME).map
 # Linking Script flags
 LS_FLAGS = -T ld_scripts/STM32F303VCTx_FLASH.ld
 
+# Nano Library
+NL_FLAGS = --library-path=/usr/lib/arm-none-eabi/newlib/thumb/v7e-m/fpv4-sp/hard/  --library=c_nano -u _printf_float --library=m --library=g
+
+# Linker floating point library
+LFP_FLAGS = --library-path=/usr/lib/gcc/arm-none-eabi/7.3.1/thumb/v7e-m/fpv4-sp/hard/ --library=gcc
+#
 # All flags for LD linking step
-LD_FLAGS = $(LS_FLAGS) $(LO_FLAGS) $(MAP_FLAGS)
+LD_FLAGS = $(LS_FLAGS) $(NL_FLAGS) $(LO_FLAGS) $(MAP_FLAGS) $(LFP_FLAGS)
 
 ################################################################################
 #								MAKE RULES									   #

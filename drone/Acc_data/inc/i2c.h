@@ -105,4 +105,24 @@ void LSM303DLHC_GetData_Acc(uint8_t *pDataXYZ);
 void LSM303DLHC_GetData_MR(uint8_t *tab, 
 						   uint8_t device_addr, 
 						   uint8_t register_addr_start);
+
+typedef struct	s_pos_data
+{
+	int16_t x;
+	int16_t y;
+	int16_t z;
+}				t_pos_data;
+
+typedef struct	s_angle_data
+{
+	float x;
+	float y;
+	float z;
+}				t_angle_data;
+
+/* read data as expected */
+void calibrate_acc(t_pos_data *offset);
+void read_data_acc(uint8_t data[6], t_pos_data offset, t_pos_data *value);
+void convert_to_angle_acc(t_pos_data value,
+								t_angle_data *angle);
 #endif
