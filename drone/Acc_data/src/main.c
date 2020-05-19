@@ -32,6 +32,19 @@ void			ft_print_hexa(uint8_t data)
 	_write(0, &hex_char, 1);
 }
 
+void ft_print(uint8_t data[6])
+{
+		ft_print_hexa(data[1]);
+		ft_print_hexa(data[0]);
+		_write(0, "\n", 1);
+		ft_print_hexa(data[3]);
+		ft_print_hexa(data[2]);
+		_write(0, "\n", 1);
+		ft_print_hexa(data[5]);
+		ft_print_hexa(data[4]);
+		_write(0, "\n", 1);
+}
+
 int main(void)
 {
 	uint8_t data[6];
@@ -55,13 +68,14 @@ int main(void)
 	ENABLE_GPIOB_SCA_SCL();
 	LSM303DLHC_Config();
 
-	calibrate_acc(&offset);
+	// calibrate_acc(&offset);
 	while (1)
 	{
 		LSM303DLHC_GetData_Acc(data);
 		// LSM303DLHC_GetData_MR(data,
 		// 					  ACC_I2C_ADDRESS, 
 		// 				   	  LSM303DLHC_OUT_X_L_A);
+		ft_print(data);
 		// read data
 		read_data_acc(data, offset, &value);
 		convert_to_angle_acc(value, &angle);

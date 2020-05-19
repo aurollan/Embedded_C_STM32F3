@@ -45,13 +45,17 @@ void calibrate_acc(t_pos_data *offset)
 
 void read_data_acc(uint8_t data[6], t_pos_data offset, t_pos_data *value)
 {
-	value->x = ((int16_t)(data[0])) + ((int16_t)(data[1] << 8));
-	value->y = ((int16_t)(data[2])) + ((int16_t)(data[3] << 8));
-	value->z = ((int16_t)(data[4])) + ((int16_t)(data[5] << 8));
+	value->x = ((int16_t)(data[0])) | ((int16_t)(data[1] << 8));
+	value->y = ((int16_t)(data[2])) | ((int16_t)(data[3] << 8));
+	value->z = ((int16_t)(data[4])) | ((int16_t)(data[5] << 8));
 
 	value->x -= offset.x;
 	value->y -= offset.y;
 	value->z -= offset.z;
+
+	value->x >>= 4;
+	value->y >>= 4;
+	value->z >>= 4;
 
 	printf("value->x = [%d]\n", value->x);
 	printf("value->y = [%d]\n", value->y);
@@ -76,7 +80,7 @@ void convert_to_angle_acc(t_pos_data value,
 
 	pitch = atan2(angle->x, (sqrt((angle->z * angle->z) + (angle->y * angle->y)))) * 180 * M_PI;
 	roll = atan2(angle->y, (sqrt((angle->z * angle->z) + (angle->x * angle->x)))) * 180 * M_PI;
-	yaw = atan2(angle->z, (sqrt((angle->x * angle->x) + (angle->x * angle->x)))) * 180 * M_PI;
+	yaw = atan2(angle->z, (sqrt((angle->x * angle->x) + (angle->y * angle->y)))) * 180 * M_PI;
 
 	printf("pitch->x = [%f]\n", pitch);
 	printf("roll = [%f]\n", roll);
