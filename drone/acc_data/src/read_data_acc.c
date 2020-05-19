@@ -68,6 +68,8 @@ void convert_to_angle_acc(t_pos_data value,
 	float pitch;
 	float roll;
 	float yaw;
+	float total_vector;
+
 	// 100 Hz
 	// +-2g
 	// 1 least significant bit =  1 mg
@@ -78,9 +80,20 @@ void convert_to_angle_acc(t_pos_data value,
 	angle->y = value.y * 0.001f;
 	angle->z = value.z * 0.001f; 
 
+	printf("angle->x = [%f]\n", angle->x);
+	printf("angle->y = [%f]\n", angle->y);
+	printf("angle->z = [%f]\n", angle->z);
+
+	total_vector = sqrt((angle->z * angle->z) \
+				 + (angle->y * angle->y) \
+				 + (angle->x * angle->x));
 	pitch = atan2(angle->x, (sqrt((angle->z * angle->z) + (angle->y * angle->y)))) * 180 * M_PI;
 	roll = atan2(angle->y, (sqrt((angle->z * angle->z) + (angle->x * angle->x)))) * 180 * M_PI;
 	yaw = atan2(angle->z, (sqrt((angle->x * angle->x) + (angle->y * angle->y)))) * 180 * M_PI;
+
+	pitch = asin(angle->x/total_vector) * 57.296f;
+	roll = asin(angle->y/total_vector) * (-57.296f);
+	// yaw = asin(angle->z) * 57.296f;
 
 	printf("pitch->x = [%f]\n", pitch);
 	printf("roll = [%f]\n", roll);
