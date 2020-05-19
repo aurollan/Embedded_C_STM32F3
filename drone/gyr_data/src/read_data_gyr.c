@@ -63,6 +63,7 @@ void read_data_gyr(uint8_t data[6], t_pos_data offset, t_pos_data *value)
 void convert_to_angle_gyr(t_angle_data *angle,
 								t_pos_data value)
 {
+	int elapsed_time_ms;
 	// 2000 dps
 	// 1 digit == 8.75 mdps
 	// 1 digit == 0.00875 dps
@@ -71,11 +72,21 @@ void convert_to_angle_gyr(t_angle_data *angle,
 
 	// Put f because default is double float
 	// max digit is 7 for simple float
-	angle->x += value.x * 0.01f * 0.00875f;
-	angle->y += value.y * 0.01f * 0.00875f;
-	angle->z += value.z * 0.01f * 0.00875f; 
+	
+
+	elapsed_time_ms = get_time();
+	printf("Elapsed time = [%d]\n", elapsed_time_ms);
+
+	angle->x += value.x * 0.00875f * (elapsed_time_ms / 1000);
+	angle->y += value.y * 0.00875f * (elapsed_time_ms / 1000);
+	angle->z += value.z * 0.00875f * (elapsed_time_ms / 1000); 
 
 	printf("angle->x = [%f]\n", angle->x);
 	printf("angle->y = [%f]\n", angle->y);
 	printf("angle->z = [%f]\n", angle->z);
+	// disable timer
+	TIM7->CR1 = 0;
+	TIM7->CNT = 0;
+	// set timer
+	TIM7_enable();
 }

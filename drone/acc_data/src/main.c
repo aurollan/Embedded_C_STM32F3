@@ -62,6 +62,7 @@ int main(void)
 	// Debug
 	ITM_init();
 	TIM6_enable();
+	TIM7_enable();
 
 	// I2C project
 	I2C_Init();
@@ -79,7 +80,6 @@ int main(void)
 		// read data
 		read_data_acc(data, offset, &value);
 		convert_to_angle_acc(value, &angle);
-		delay(10000);
 		(void)angle;
 	}
 	return (0);

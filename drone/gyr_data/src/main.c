@@ -53,6 +53,7 @@ int main(void)
 		// read data
 		read_data_gyr(data, offset, &value);
 		convert_to_angle_gyr(&angle, value);
+		delay(1000);
 		(void)angle;
 	}
 	return 1;
