@@ -121,7 +121,7 @@ It's because they redirect us to the `PM0214 programming manual for
 Cortex ® -M4 products`.
 
 ### Cortex M4 Manual
-This is a docimentation dedicated to our Cortex M4F microcontroller.
+This is a documentation dedicated to our Cortex M4F microcontroller.
 
 #### Interrupt and exception
 If we look for Interrupt we end 

@@ -20,9 +20,9 @@ int main(void)
 	while (1)
 	{
 		switch_on_leds();
-		delay(6000);
+		delay(1000);
 		switch_off_leds();
-		delay(6000);
+		delay(1000);
 	}
 	return (0);
 }

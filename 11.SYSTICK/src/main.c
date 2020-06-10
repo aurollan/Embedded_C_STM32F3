@@ -11,19 +11,25 @@
 /*                                                        /                   */
 /* ************************************************************************** */
 
+#include "leds.h"
 #include "timer.h"
+#include "systick.h"
 
 int main(void)
 {
+	/* LED */
 	init_leds();
+
+	/* Delay */
 	TIM6_enable();
- 	NVIC_EnableIRQ(EXTI0_IRQn);
+
+	/* Systick interrupt */
+	init_systick();
+
+	/* LED is always of except for 1s when interrupt occurs */
 	while (1)
 	{
-		switch_on_leds();
-		delay(6000);
 		switch_off_leds();
-		delay(6000);
 	}
 	return (0);
 }

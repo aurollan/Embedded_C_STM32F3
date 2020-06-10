@@ -17,7 +17,7 @@ void TIM6_enable(void)
 void delay(uint16_t ms)
 {
 	/* Set PSC frequency */
-	TIM6->PSC = (uint16_t)799;
+	TIM6->PSC = (uint16_t)7999;
 	/* Value to reach */
 	TIM6->ARR = ms;
 	/* enable clock */

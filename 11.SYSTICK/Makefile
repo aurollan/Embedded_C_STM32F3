@@ -13,7 +13,7 @@ CORTEX_M = 4
 CORE = CM$(CORTEX_M)
 
 # Project name
-NAME = TIMER-$(CORE)
+NAME = SYSTICK-$(CORE)
 
 # Compiler, Linker & Debugger
 CC = arm-none-eabi-gcc
@@ -40,6 +40,7 @@ FILE_ASM = startup_stm32f303xc.s
 FILE_SRC = main.c \
 		   leds.c \
 		   timer.c \
+		   systick.c \
 		   system_stm32f3xx.c \
 
 FILE_OBJ = $(FILE_SRC:.c=.o)

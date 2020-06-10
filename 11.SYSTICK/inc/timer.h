@@ -2,7 +2,6 @@
 #define __TIMER_H__
 
 #include "stm32f303xc.h"
-#include "leds.h"
 
 void	TIM6_enable(void);
 void	delay(uint16_t ms);
