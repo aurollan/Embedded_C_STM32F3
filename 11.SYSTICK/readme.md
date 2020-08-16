@@ -167,12 +167,35 @@ Note that some vendor provide their own `systick_config` function, but it's
 not the case in our project (CMSIS library). If you want to verify this you 
 can check the`inc/stm32f303xc.h` file.
 
+#### How to use interrupt function ?
+Interrupt functions are already implemented by the `asm/startup_stm32f030x8.s`.
+But the file provide weak aliases.
+
+	asm/startup_stm32f030x8.s
+	line 176
+
+This mean that you can override it simply by implementing your own version of 
+target function.
+Even if you can use your own version you must use expected definition:
+
+- return nothing (void)
+- no parameter (void)
+
+You MUST use exactly the same name for a simple reason:
+- The interrupt function call is implemented with that name and you can't 
+change it
+
+Except the 3 points above, you can do whatever you want in this function.
+In this project, we just switch on the led on for 500 ms to actually see the 
+systick interrupt before returning to our main program which turn it off.
+
 ### What is the speed of our clock ?
 Our device max clock speed is 72 Mhz but in this project we use 
 the `src/system_stm32f3xx.c` from STM32 cube repository, setting up 
 our clock speed to 8 Mhz.
 Now you have enought information to make Systick interrupting your program
 flow every x ms.
+
 Enjoy :)
 
 
