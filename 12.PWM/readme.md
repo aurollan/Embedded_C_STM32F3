@@ -2,6 +2,9 @@
 Tutorial explaining how it works:
 https://learn.sparkfun.com/tutorials/pulse-width-modulation/all
 
+Great video tutorial
+https://www.youtube.com/watch?v=qAZjdx71ePc
+
 
 ## Objective
 ###	What we want to do ?
