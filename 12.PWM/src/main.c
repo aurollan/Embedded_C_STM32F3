@@ -19,24 +19,24 @@ int main(void)
 	/* LED */
 	init_leds();
 
-	/* Enable GPIOB */
-	RCC->AHBENR |= RCC_AHBENR_GPIOBEN;
-	/* AF mode for GPIOB 4 */
-	GPIOB->MODER |= (2 << 8);
-	/* medium speed mode for GPIOB 4 */
-	GPIOB->OSPEEDR |= (1 << 8);
+	/* Enable GPIOD */
+	RCC->AHBENR |= RCC_AHBENR_GPIODEN; // ok
+	/* AF2 mode for GPIOD 12 */
+	GPIOD->MODER |= (2 << 24);
+	/* medium speed 0x01 mode for GPIOD 12 */
+	GPIOD->OSPEEDR |= (1 << 24);
 	/* Make sure type is push-pull */
-	GPIOB->OTYPER &= ~(1 << 4);
-	/* Make sure pull down default state ? maybe useless */
-	GPIOB->PUPDR |= (1 << 8);
+	GPIOD->OTYPER &= ~(1 << 12);
+	/* Make sure NoPuPd */
+	GPIOD->PUPDR &= ~(3 << 24);
 	/* Clean value before setting */
-	GPIOB->AFR[0] &= 0x000F0000;
-	/* AF1 TIM16_CH1  Alternate function  GPIOB pin 4*/
-	GPIOB->AFR[0] |= (1 << 16);
+	GPIOD->AFR[1] &= 0x00000000;
+	/* AF1 TIM16_CH1  Alternate function  GPIOD pin 12*/
+	GPIOD->AFR[1] |= (2 << 16);
 
 	/* Delay */
 	TIM16_enable();
-	pwm(20, 2);
+	pwm(20000, 1500);
 
 	switch_on_leds();
 
@@ -44,4 +44,5 @@ int main(void)
 	while (1) {}
 	return (0);
 }
+
 
