@@ -1,4 +1,4 @@
-# [WORK IN PROGRESS] Embedded C development WITHOUT IDE but using Makefile and VIM (Or any Text editor you want) and CMSIS Library (optionnal but reliable).
+# [WORK IN PROGRESS] Embedded C development WITHOUT IDE but using Makefile and VIM (Or any Text editor you want) and CMSIS Library.
 This repository contains all the resources that I used to learn how to develop
  on micro controller.
 I explain all choices made to build my project (Why and How).

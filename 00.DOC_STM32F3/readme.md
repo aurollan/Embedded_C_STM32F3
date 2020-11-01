@@ -1,3 +1,25 @@
+# STEP 00: Documentation
+First step in our project: get the right documentation.
+We need at least the Reference Manual and the Datasheet of our microcontroller.
+
+This could be usefull for the project and if there is something you don't 
+understand, you will find accurate information in those file.
+
+## Where do I find it ?
+I assume you are using the same microcontroller, or a device from the same 
+product family, so you should find the documentation in this repository.
+
+But it's essential to know where to find this documentation so take a look at 
+ST's website:
+
+	https://www.st.com/en/microcontrollers-microprocessors/stm32f3-series.html#documentation
+
+Don't be afraid to look in the documentation and if you are, I encourage you 
+to read my other tutorial on microcontroller :).
+
+Note: a documentation usually cover a whole product family especially for 
+refence manuals.
+
 # Why I need to understand memory mapping ?
 Working on embedded device imply manipulating a lot of register.
 For example We work on register to configure peripherals, read data from them
