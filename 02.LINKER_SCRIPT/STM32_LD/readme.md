@@ -18,41 +18,55 @@ Of course this is not as simple as I putted it here but yu can get a good
 understanding of why we could use 2 different instructions sets.
 
 Now we have microcontroller using both and switching between 
-instructions sets. We can use `-mthumb-interwork` to generate code 
+them. We can use `-mthumb-interwork` compiler option to generate code 
 handling switch between both instruction sets.
-
-	https://developer.arm.com/documentation/dui0204/j/arm-and-thumb-instructions/branch-and-control-instructions/b--bl--bx--blx--and-bxj
-
-As said in 
-
- 	https://www.embedded.com/building-bare-metal-arm-systems-with-gnu-part-3/
-
-The .glue_7t and.glue_7 sections contain the “call veneers” between THUMB and 
-ARM code and are accessed frequently by every call between ARM and THUMB. It's 
-typically advantageous to place this smallamount of hot-spot code in RAM.
-
-And you can understand how this is implemented in this documentation from ARM
+This is why we "need" those sections. As said in 
 
 	https://gcc-help.gcc.gnu.narkive.com/N7q1WzLT/glue-7-and-glue-7t-sections
 
+And 
 
+ 	https://www.embedded.com/building-bare-metal-arm-systems-with-gnu-part-3/
+
+	The .glue_7t and.glue_7 sections contain the “call veneers” between THUMB and 
+	ARM code and are accessed frequently by every call between ARM and THUMB. We 
+	use code containe in this section to "glue" ARM and Thumb instruction set 
+	switch.
+
+And you can understand how this is implemented in this documentation from ARM
+
+	https://developer.arm.com/documentation/dui0204/j/arm-and-thumb-instructions/branch-and-control-instructions/b--bl--bx--blx--and-bxj
 
 ##### eh_frame
-This a section handling code to unwind stack for C function like `Backtrace` 
-and C++ exception handling.
-Here is the most detailled explenaition I found
+This is a particular section used for DWARF-based stack unwiding features.
+Unwinding stack is usefull for debug purpose and exception handling.
+In C the `backtrace` function use it to unwind stack for example.
+In C++ runtime exception handling use this section in the same way.
 
 	https://stackoverflow.com/questions/26300819/why-gcc-compiled-c-program-needs-eh-frame-section
 
-TODO: read this
+Note that in embedded device we use ressources in the most efficiency way, 
+this is "why" we don't have a frame pointer traditionally used for unwinding 
+features. In order to support this feature we store stack unwinding 
+informations in flash data. Those informations are compressed and located in 
+`eh_frame`.
+
+Easy link to understand
 
 	https://stackoverflow.com/questions/63146854/how-does-glibc-backtrace-determine-which-stack-memory-are-the-return-addresses
+
+More detailled informations
+
 	https://fzn.fr/projects/frdwarf/frdwarf-oopsla19.pdf
 
 ##### C++ .preinit/init/finit array
+Library provide some generic function called before and after main.
 You can use function pointer array to call those functions at startup.
 There are used by C++ compiler or by newlib and libc library which provide the 
 function you need to work with this feature.
+More informations here
+
+	https://stackoverflow.com/questions/15265295/understanding-the-libc-init-array
 
 ##### arm ex table
 `.ARM.extab   : { *(.ARM.extab* .gnu.linkonce.armextab.*) } >FLASH`
