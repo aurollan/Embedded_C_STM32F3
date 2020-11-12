@@ -23,8 +23,6 @@ This is where your program REALLY start.
 `Reset_Handler` is the function called when reseting your device. \
 This function is defined in the startup file. It does some work before calling 
 the main function but this part is covered in `03.STARTUP_FILE/`.
-
-Note: Usually we think that `main` function is the entrypoint. But in software 
 development there is a LOT of function called before your main.
 Even on your computer while building your executable GCC, some startup 
 code is injected in your program. \
@@ -142,7 +140,8 @@ This is why you find only "end" symbols in the linker script.
 And that's enought because we just need to get their addresses.
 
 Key for reading the script:
-- `_e` = end
+- `_s*` = start address of section
+- `_e*` = end address of section
 - `ALIGN(x)` = insert padding bytes until current location becomes aligned on 
   x-byte boundary. For stm32 we are aligned on 32 bits => 4 bytes.
 - `.` = last used address
