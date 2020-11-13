@@ -14,10 +14,11 @@ Long story short:
 
 ### Startup ?
 When you load your program, it is stored in FLASH memory (memory that keep value
-when device shutdown).
+when device is shutdown).
 When your device is plugged, first called function is Reset_handler.
 This is the function in the startup file.
-When shutting down, all data stored in RAM is lost but our startup function is read from FLASH and at start it will be called.
+When shutting down, all data stored in RAM is lost but our startup function 
+is read from FLASH and at start it will be called again.
 
 ## Where do your file come from ?
 Currently startup file in each project come from:
@@ -47,3 +48,6 @@ You need to understand how we start a device:
 - Then this function call systeminit() function for clock system initialization
 - Finally it call the main function
 
+## This isn't enough information ?
+Check the `03.STARTUP_FILE/OWN/readme.md` to find detailled information and 
+starting C code.
