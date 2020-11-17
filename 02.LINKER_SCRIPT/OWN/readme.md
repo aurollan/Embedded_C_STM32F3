@@ -147,6 +147,12 @@ Key for reading the script:
 - `.` = last used address
 - `\>FLASH/RAM/etc...` = Put those data in this memory declared earlier.
 
+- LOADADDR(section) Return the absolute load address of the named section. This is normally the same as ADDR, but it may be different if the AT keyword is used in the section definition (see section Optional Section Attributes).
+
+	Source for instruction
+	https://ftp.gnu.org/old-gnu/Manuals/ld-2.9.1/html_chapter/ld_3.html
+
+
 ##### You missed `AT` attribute
 To put it simply [RAM]`AT`[FLASH] means:
 Load it to [FLASH] address but will be copied to [RAM] address at startup.
