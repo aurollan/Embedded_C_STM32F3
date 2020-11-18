@@ -145,7 +145,7 @@ See `02.LINKER_SCRIPT`project.
 
 b	LoopFillZerobss
 As seen earlier, this is simply a branch/jump without any conditional check 
-to the named "function". 
+to the named "function"/label. 
 
 
 ## LoopFillZerobss
@@ -160,5 +160,55 @@ bcc	FillZerobss
 
 ## FillZerobss:
 movs	r3, #0
-simply 
-	str	r3, [r2], #4
+
+`str` instruction informations:
+
+	https://developer.arm.com/documentation/dui0552/a/the-cortex-m3-instruction-set/memory-access-instructions/ldr-and-str--immediate-offset
+
+simply mov or copy the value in the register. Now r3 value is 0
+
+str	r3, [r2], #4
+Like previously this instruction copy the value in r3 to address stored on r2.
+Then increment r2 by 4.
+Note that register store 4 byte value, and memory is align on 4 byte by linker.
+This is why we can safely copy 4 byte each time.
+
+## Calling you function
+Then we just call SystemInit function and main.
+
+Your Main function should NEVER return. But if it does, you fall in the 
+next instruction:
+
+bx lr
+
+  https://developer.arm.com/documentation/dui0204/j/arm-and-thumb-instructions/branch-and-control-instructions/b--bl--bx--blx--and-bxj
+
+Which is a branch and exchange instruction set. According to lr we will switch 
+to/from Thumb to/fron ARM.
+Here is a nice answer explaining this:
+
+	https://stackoverflow.com/questions/27084857/what-does-bx-lr-do-in-arm-assembly-language
+
+And then we simply continue our execution to then Default_Handler which 
+contains and infinite loop.
+
+b  Infinite_Loop
+branch/jump to Infinite_Loop label again and again...
+
+## .isr_vector...
+Finally we see a list of weird instruction with its own section, *.o and size.
+This is an array of pointer to function called by hardware like interrupt or 
+exception handler.
+
+If your hardware trigger an interrupt, it will get the function pointed by the 
+address in this array. We can't change this, all places are defined by hardware.
+
+## ... and weak aliases
+And finally we define weak function all redirecting to Default_Handler (an infinite loop). The `weak` alias make sure that if you don't define a function there is a function that will be called. But if you define a function, your function will erase the weak function and YOUR function will be called.
+Of course your function must have the same name.
+
+And now you have all you need to build your own startup file. Enjoy :)
+
+
+
+
