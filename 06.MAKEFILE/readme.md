@@ -4,7 +4,7 @@ Building an embedded executable require following files from CMSIS ARM library:
 - header files:
 	- stm32f30x.h			=>	Contains all defined MACRO we will use
 	- stm32f30x_it.h		=>	Contains interrupt funcion declaration needed 
-	by the interruption table
+								by the interruption table
 	- system_stm32f30x.h	=>	Contains the system init function declaration
 	- core_cm4.h			=>	Used by stm32f30x.h
 	- core_cmFunc.h		=>	Used by core_cm4.h
