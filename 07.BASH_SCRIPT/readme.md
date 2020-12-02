@@ -1,4 +1,4 @@
-# TOOL CHAIN
+# Commands and script
 Working in embedded development require a specific toolchain.\
 There is a lot of tools we can use and we work with the following:
 
@@ -6,26 +6,6 @@ There is a lot of tools we can use and we work with the following:
 - openocd (flashing and debugging)
 - minicom (UART)
 - itmdump (ITM)
-
-## arm-none-eabi
- The toolchain used to build our executable. 
-
-### Why arm-none-eabi-gcc ?
-- arm: target architecture
-- none: no vendor
-- No OS is specified (bare metal programming)
-- eabi: complies embedded-application binary interface
-- gcc: call the compiler in this case
-
-##### Why eabi is specified ?
-Because we target an Embedded abi we want to use this specific optimized binary
-interface for our project.\
-Reference: https://en.wikipedia.org/wiki/Application_binary_interface
-
-##### How is the command line build ?
-The name is build with a target triplet convention not only used in embedded 
-development.\
-Reference: https://wiki.osdev.org/Target_Triplet
 
 ## arm-none-eabi-gdb (MacOsX) / gdb-multiarch (Linux)
 Simply the gdb ARM debugger. We use it to load executable on the device through
@@ -77,6 +57,15 @@ Just start the program which should stop at main given our previous breakpoint.
 
 ## openocd
 Software used to debug and flash.
+-f interface
+
+    The interface configuration file of the hardware we use to flash and debug (SWI)
+
+-f target
+
+    The targeted device configuration file
+
+http://openocd.org/doc/html/GDB-and-OpenOCD.html
 
 ## minicom
 Software used to get UART data from device.

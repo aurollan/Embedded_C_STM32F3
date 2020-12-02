@@ -39,3 +39,23 @@ Now you can compile your project like any C project using `arm-none-eabi-gcc`
 as your compiler and use the text editor or IDE you want.
 But we have done only one step. We can compile our project but how can we flash
  it on our device ? This is the next step.
+
+## arm-none-eabi
+ The toolchain used to build our executable. 
+
+### Why arm-none-eabi-gcc ?
+- arm: target architecture
+- none: no vendor
+- No OS is specified (bare metal programming)
+- eabi: complies embedded-application binary interface
+- gcc: call the compiler in this case
+
+##### Why eabi is specified ?
+Because we target an Embedded abi we want to use this specific optimized binary
+interface for our project.\
+Reference: https://en.wikipedia.org/wiki/Application_binary_interface
+
+##### How is the command line build ?
+The name is build with a target triplet convention not only used in embedded 
+development.\
+Reference: https://wiki.osdev.org/Target_Triplet

@@ -34,9 +34,7 @@ APB2 domains is 72 MHz. The maximum allowed frequency of the APB1 domain is 36 M
 APB2 => 72 Mhz
 APB1 => 36 Mhz
 
-
-
-page 130
+    page 130 
 
 The HSE Crystal can be switched on and off using the HSEON bit in the Clock control
 register (RCC_CR).
@@ -46,7 +44,8 @@ Calibration
 RC oscillator frequencies can vary from one chip to another due to manufacturing process
 variations, this is why each device is factory calibrated by ST for 1% accuracy at T A =25°C.
 
-page 131
+    page 131
+
 To modify the PLL configuration, proceed as follows:
 1. Disable the PLL by setting PLLON to 0.
 2. Wait until PLLRDY is cleared. The PLL is now fully stopped.

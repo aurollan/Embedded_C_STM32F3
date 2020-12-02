@@ -1,5 +1,5 @@
-# MAKEFILE FLAGS
-
+# MANDATORY files
+## Header file
 Building an embedded executable require following files from CMSIS ARM library:
 - header files:
 	- stm32f30x.h			=>	Contains all defined MACRO we will use
@@ -7,29 +7,32 @@ Building an embedded executable require following files from CMSIS ARM library:
 								by the interruption table
 	- system_stm32f30x.h	=>	Contains the system init function declaration
 	- core_cm4.h			=>	Used by stm32f30x.h
-	- core_cmFunc.h		=>	Used by core_cm4.h
+	- core_cmFunc.h		    =>	Used by core_cm4.h
 	- core_cmInstr.h		=>	Used by core_cm4.h
-	- core_cmSimd.h		=>	Used by core_cm4.h
+	- core_cmSimd.h		    =>	Used by core_cm4.h
 	
+## Source file
 - sources files:
-	- system_stm32f30x.c	=>	Contains the syste; init function definition
+	- system_stm32f30x.c	=>	Contains the system init function definition
 
+## Linker script
 - a linker script file (used during linking phase with ld):
 	- STM32F103XB_FLASH.ld
 
+## Startup file
 - a startup fonction file (not necessarily a file but usually):
 	- startup_stm32f103xb.s
 
-There is a readme file for each part.
+There is a readme file for each of those part that we covered earlier.
 
-# PROJECT CONFIG
-STM32F1 use an ARM cortex M3 (not M1 as the name suggest).
+# MAKEFILE FLAGS
+STM32F3 use an ARM cortex M4 (not M3 as the name suggest).
 
 /!\ Warning /!\\ \
 I use arm-gcc and arm-ld separately but using only GCC may avoid you some
 trouble if you are not comfortable with compilation process.
 If you need more information about the toolchain, please refer to
-readme_toolchain.md. \
+`04.COMPILE_TOOL/readme.md`. \
 /!\ Warning /!\\ \
 
 # GCC COMPILATION FLAGS
@@ -40,9 +43,9 @@ Link to find all option below:
 
 ##### Why do i have to set all this options ?
 Because we will use arm-gcc toolchain to compile an executable for a specific 
-target. \
+target it doesn't know anything about. \
 It's called cross-compilation. \
-We have to tell arm-gcc information so it can made an appropriate executable.
+We have to tell arm-gcc information so it can made the appropriate executable.
 
 ### -mthumb
 ##### What is Thumb ?
@@ -114,6 +117,7 @@ And here is why we tend to use little-endian.
 	https://www.quora.com/Is-ARM-big-endian-or-little-endian
 
 ### -mthumb-interwork
+
 	https://github.com/gcc-mirror/gcc/blob/master/gcc/config/arm/README-interworking
 
 Generate code that supports calling between the ARM and Thumb instruction sets.
@@ -369,8 +373,7 @@ libnano in your project.
 
 ##### Why separate compiling steps and linking steps ?
 For learning purpose. Linker is often a program we don't use directly and
-having to use a linker script makes me understand its importance and also use 
-it directly.
+having to use a linker script makes me understand its importance and how it works.
 
 ##### What is a gcc tool chain ?
 
@@ -410,7 +413,7 @@ Use this flag with at least one of them:
 /!\ WARNING /!\\ \
 
 To reduce executable size if possible.
-Most of the time you will use .c files given in libraries. Those file contains
+Most of the time you will use functions stored in libraries. Those file contains
 a lot of function and we use only a few of them. In this case we can save space
 with those flags to cut those functions from our executable.
 These optimization are usually used for embedded development. But in our case
@@ -426,7 +429,7 @@ https://lwn.net/Articles/741494/
 
 ##### Why use a linker script ?
 To tell the ld executable the memory layout of the micro controller.
-More on this on the `readme.md` in `stm32f103-bluepill/0.BUILD/LINKER_SCRIPT/`.
+More on this on the `readme.md` in `02.LINKER_SCRIPT/`.
 
 ### -T script
 Use script as the linker script. This option is supported by most systems using
@@ -460,7 +463,7 @@ loaded.
 ## MAP FILE
 ##### Why do we need a map file ?
 Human readable map of the executable use mostly for debug purposes.
-It contains all information about memory mapping. We can find sectionsm variable...
+It contains all information about memory mapping. We can find sections, variable...
 
 ### -Map=mapfile
 Print a link map to the file mapfile. See the description of the -M option, above

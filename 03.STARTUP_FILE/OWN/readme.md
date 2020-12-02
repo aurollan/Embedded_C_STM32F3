@@ -184,7 +184,7 @@ bx lr
   https://developer.arm.com/documentation/dui0204/j/arm-and-thumb-instructions/branch-and-control-instructions/b--bl--bx--blx--and-bxj
 
 Which is a branch and exchange instruction set. According to lr we will switch 
-to/from Thumb to/fron ARM.
+to/from Thumb to/from ARM.
 Here is a nice answer explaining this:
 
 	https://stackoverflow.com/questions/27084857/what-does-bx-lr-do-in-arm-assembly-language
